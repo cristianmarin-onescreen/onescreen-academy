@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s04 · Distinto</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  @font-face { font-family: "Nevis"; src: url("assets/fonts/Nevis.ttf") format("truetype"); font-weight: 700; font-display: block; }
+  #s04 { position: absolute; inset: 0; --cy: #7df0ff; --gy: #aebbd6; }
+  #s04 .abs { position: absolute; }
+  /* velo gris: la herramienta "tradicional" se ve apagada */
+  #s04 #s04-veil { position: absolute; inset: 0; -webkit-backdrop-filter: grayscale(.85) brightness(.74); backdrop-filter: grayscale(.85) brightness(.74); background: rgba(10,18,44,.22); }
+  #s04 #s04-bloom { position: absolute; left: 260px; top: 90px; width: 1400px; height: 900px; opacity: 0; border-radius: 50%;
+    background: radial-gradient(circle, rgba(125,240,255,.5) 0%, rgba(90,150,255,.22) 38%, rgba(90,150,255,0) 66%); }
+  #s04 #s04-ring { position: absolute; left: 760px; top: 340px; width: 400px; height: 400px; border-radius: 50%; border: 3px solid var(--cy); opacity: 0; box-shadow:  0 0 40px 6px rgba(255,255,255,.07); }
+
+  /* titulos */
+  #s04 .ac-title .ln { text-align: center; }
+  #s04 .ac-title .ln.g em { background: linear-gradient(90deg, #c9d4ec, #8fa2c8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #s04 .ac-title .ln.g { color: #d5deef; }
+  #s04 #s04-hero { position: absolute; left: 0; width: 1920px; top: 440px; height: 200px; overflow: hidden; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 160px; letter-spacing: -0.045em; line-height: 1; opacity: 0; padding-top: 18px; transform-origin: 960px 100px; }
+  #s04 #s04-hero span { display: inline-block; background: linear-gradient(90deg, #a9c8ff 0%, #7df0ff 55%, #ffffff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding: 0 8px 14px; }
+
+  /* BEAT 1: wave + libreta */
+  #s04 #s04-b1 { position: absolute; inset: 0; transform-origin: 960px 540px; }
+  #s04 #s04-w1 { position: absolute; left: 160px; top: 500px; width: 440px; height: 120px; display: flex; align-items: center; justify-content: space-between; opacity: 0; }
+  #s04 .bar { width: 7px; height: 6px; border-radius: 4px; background: #9fb1d4; flex: none; }
+  #s04 #s04-w1cap { position: absolute; left: 160px; top: 650px; width: 440px; font-family: "Manrope"; font-weight: 700; font-size: 26px; color: #aebbd6; opacity: 0; }
+  #s04 #s04-nb { left: 820px; top: 330px; width: 940px; height: 500px; opacity: 0; }
+  #s04 #s04-nb .hd { position: absolute; left: 44px; top: 32px; display: flex; align-items: center; gap: 16px; color: #cdd7ee; font-family: "Rubik"; font-weight: 600; font-size: 30px; letter-spacing: -0.02em; }
+  #s04 #s04-nb .hd svg { color: #aebbd6; }
+  #s04 #s04-nb .rule { position: absolute; left: 44px; right: 44px; top: 100px; height: 2px; background: rgba(255,255,255,.18); }
+  #s04 .row { position: absolute; left: 44px; right: 44px; height: 54px; display: flex; align-items: center; gap: 22px; font-family: "Manrope"; font-weight: 600; font-size: 33px; color: #c3cee6; white-space: nowrap; clip-path: inset(0 100% 0 0); }
+  #s04 .row b { font-weight: 800; font-size: 22px; color: #8497bd; width: 74px; flex: none; }
+  #s04 #s04-stamp { position: absolute; left: 1380px; top: 756px; padding: 10px 22px; border: 3px dashed #aebbd6; border-radius: 8px; font-family: "Rubik"; font-weight: 600; font-size: 30px; letter-spacing: -0.01em; color: #cbd5ec; opacity: 0; transform: rotate(-5deg); background: rgba(10,20,50,.35); }
+  #s04 .ac-pk.s04g { box-shadow:  0 0 18px 6px rgba(255,255,255,.07), 0 0 40px 6px rgba(255,255,255,.07); }
+
+  /* BEAT 2: sentidos y video */
+  #s04 .sense { left: 160px; width: 400px; height: 220px; opacity: 0; }
+  #s04 #s04-ear { top: 300px; }
+  #s04 #s04-eye { top: 560px; }
+  #s04 .sense .ic { position: absolute; left: 28px; top: 26px; width: 78px; height: 78px; border-radius: 22px; display: grid; place-items: center; background: rgba(125,240,255,.2); color: var(--cy); }
+  #s04 #s04-eye .ic { background: rgba(143,180,255,.22); color: #b5ceff; }
+  #s04 .sense .tx { position: absolute; left: 126px; top: 32px; }
+  #s04 .sense .ac-lbl { font-size: 40px; }
+  #s04 .sense .ac-sub { font-size: 22px; margin-top: 6px; }
+  #s04 #s04-w2 { position: absolute; left: 30px; right: 30px; top: 128px; height: 70px; display: flex; align-items: center; justify-content: space-between; }
+  #s04 #s04-w2 .bar { background: var(--cy); box-shadow:  0 0 10px rgba(255,255,255,.07); width: 6px; }
+  #s04 .eyescan { position: absolute; left: 30px; right: 30px; top: 138px; height: 52px; display: flex; flex-direction: column; justify-content: space-between; }
+  #s04 .eyescan i { display: block; height: 4px; border-radius: 3px; background: rgba(181,206,255,.38); }
+  #s04 #s04-fg { position: absolute; inset: 0; opacity: 0; transform-origin: 1245px 590px; }
+  #s04 #s04-frame { left: 730px; top: 300px; width: 1030px; height: 580px; border-radius: 30px; }
+  #s04 #s04-screen { position: absolute; left: 754px; top: 324px; width: 982px; height: 440px; border-radius: 18px; background: rgba(3,12,56,.55); border: 1.5px solid rgba(255,255,255,.2); }
+  #s04 #s04-prgt { position: absolute; left: 754px; top: 782px; width: 982px; height: 4px; background: rgba(255,255,255,.2); border-radius: 3px; }
+  #s04 #s04-prg { position: absolute; left: 754px; top: 782px; width: 982px; height: 4px; background: var(--cy); border-radius: 3px; transform-origin: 0 50%; transform: scaleX(0); box-shadow:  0 0 12px rgba(255,255,255,.07); }
+  #s04 #s04-play { position: absolute; left: 776px; top: 806px; color: #fff; opacity: .85; }
+  #s04 #s04-w3 { position: absolute; left: 850px; top: 796px; width: 860px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+  #s04 #s04-w3 .bar { background: var(--cy); width: 6px; box-shadow:  0 0 10px rgba(255,255,255,.07); }
+  #s04 #s04-slide { position: absolute; left: 780px; top: 356px; width: 430px; height: 376px; border-radius: 14px; background: linear-gradient(160deg, #f2f7ff, #d3e2ff); box-shadow:  0px 16px 34px rgba(0,0,0,0.25); opacity: 0; }
+  #s04 #s04-slide .t { position: absolute; left: 28px; top: 28px; font-family: "Rubik"; font-weight: 700; font-size: 38px; letter-spacing: -0.03em; color: #0b2a8f; }
+  #s04 #s04-slide .b { position: absolute; left: 28px; font-family: "Manrope"; font-weight: 700; font-size: 24px; color: #27449a; display: flex; align-items: center; gap: 14px; white-space: nowrap; }
+  #s04 #s04-slide .b i { width: 11px; height: 11px; border-radius: 50%; background: #3976ff; flex: none; }
+  #s04 #s04-schem { position: absolute; inset: 0; opacity: 0; }
+  #s04 .nd { position: absolute; left: 1370px; width: 220px; height: 62px; border-radius: 16px; display: grid; place-items: center; font-family: "Rubik"; font-weight: 600; font-size: 28px; letter-spacing: -0.02em; background: rgba(255,255,255,.14); border: 1.5px solid rgba(255,255,255,.42); }
+  #s04 #s04-det { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; filter: drop-shadow(0 0 8px rgba(255,255,255,.07))); }
+
+  /* BEAT 3/4: tablero con fichas */
+  #s04 #s04-board { position: absolute; inset: 0; transform-origin: 960px 540px; }
+  #s04 #s04-note { left: 520px; top: 250px; width: 880px; height: 600px; border-radius: 34px; opacity: 0; }
+  #s04 #s04-board .chip { position: absolute; left: 0; top: 0; height: 72px; display: flex; align-items: center; padding-left: 30px; font-family: "Rubik"; font-weight: 500; font-size: 36px; letter-spacing: -0.02em; color: #fff; opacity: 0; white-space: nowrap; }
+  #s04 .chip.hub { justify-content: center; padding-left: 0; font-weight: 600; }
+  #s04 .chip .bg { position: absolute; inset: 0; width: auto; height: auto; border-radius: 18px; }
+  #s04 .chip span { position: relative; }
+  #s04 .chip .dot { position: absolute; left: 10px; top: 30px; width: 12px; height: 12px; border-radius: 50%; background: var(--cy); box-shadow:  0 0 10px rgba(255,255,255,.07); opacity: 0; }
+  #s04 .gh { position: absolute; font-family: "Manrope"; font-weight: 800; font-size: 25px; color: #a9c8ff; opacity: 0; letter-spacing: .01em; }
+  #s04 #s04-ul { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+  #s04 #s04-check { position: absolute; left: 1362px; top: 217px; width: 76px; height: 76px; border-radius: 50%; background: linear-gradient(145deg, #bff7ff, #5fd6ff); color: #052a7a; display: grid; place-items: center; opacity: 0; box-shadow:  0 0 40px 6px rgba(255,255,255,.07); }
+  #s04 #s04-check svg { stroke-width: 4; }
+  #s04 #s04-chring { position: absolute; left: 1362px; top: 217px; width: 76px; height: 76px; border-radius: 50%; border: 3px solid var(--cy); opacity: 0; }
+  #s04 #s04-person { position: absolute; left: 1250px; top: 280px; width: 440px; height: 560px; overflow: visible; }
+  #s04 #s04-person path, #s04 #s04-person circle.dr { fill: none; stroke: url(#s04-pg); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+  #s04 #s04-clock { position: absolute; left: 1196px; top: 398px; width: 84px; height: 84px; opacity: 0; }
+</style>
+
+<div id="s04" class="ac-root" data-composition-id="s04-distinto" data-width="1920" data-height="1080">
+  <div id="s04-veil"></div>
+  <div id="s04-bloom"></div>
+  <div id="s04-ring"></div>
+
+  <div class="ac-title" id="s04-titles"></div>
+  <div id="s04-hero"><span>entiende</span></div>
+
+  <svg class="ac-links" id="s04-links1" viewBox="0 0 1920 1080"></svg>
+
+  <div id="s04-b1">
+    <svg class="ac-links" id="s04-links0" viewBox="0 0 1920 1080"></svg>
+    <div id="s04-w1"></div>
+    <div id="s04-w1cap">el audio de la clase</div>
+    <div class="ac-glass" id="s04-nb">
+      <div class="hd" id="s04-nbhd"></div>
+      <div class="rule"></div>
+    </div>
+    <div id="s04-stamp">solo transcribe</div>
+  </div>
+
+  <div class="ac-glass sense" id="s04-ear"></div>
+  <div class="ac-glass sense" id="s04-eye"></div>
+
+  <div id="s04-fg">
+    <div class="ac-glass" id="s04-frame"></div>
+    <div id="s04-screen"></div>
+    <div id="s04-prgt"></div><div id="s04-prg"></div>
+    <div id="s04-play"></div>
+    <div id="s04-w3"></div>
+    <div id="s04-slide">
+      <div class="t">El ecosistema</div>
+      <div class="b" style="top:112px"><i></i>Depredadores y presas</div>
+      <div class="b" style="top:182px"><i></i>Especies en peligro</div>
+      <div class="b" style="top:252px"><i></i>Conservaci&oacute;n del h&aacute;bitat</div>
+    </div>
+    <div id="s04-schem">
+      <div class="nd" style="top:372px">Planta</div>
+      <div class="nd" style="top:500px">Presa</div>
+      <div class="nd" style="top:628px">Depredador</div>
+      <svg class="ac-links" id="s04-arrows" viewBox="0 0 1920 1080"></svg>
+    </div>
+    <svg id="s04-det" viewBox="0 0 1920 1080"></svg>
+  </div>
+
+  <div id="s04-board">
+    <svg class="ac-links" id="s04-links2" viewBox="0 0 1920 1080"></svg>
+    <div class="ac-glass" id="s04-note"></div>
+    <svg id="s04-ul" viewBox="0 0 1920 1080"></svg>
+    <div class="gh" id="s04-gh1" style="left:600px;top:438px">Cadena alimentaria</div>
+    <div class="gh" id="s04-gh2" style="left:980px;top:438px">Protecci&oacute;n</div>
+    <div id="s04-check"></div><div id="s04-chring"></div>
+  </div>
+
+  <svg id="s04-person" viewBox="0 0 440 560">
+    <defs><linearGradient id="s04-pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a9c8ff"/><stop offset="1" stop-color="#7df0ff"/></linearGradient></defs>
+    <circle class="dr" id="s04-p-head" cx="180" cy="150" r="48" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+    <path id="s04-p-body" d="M158 196 L158 232 C158 258 148 270 116 288 C60 322 40 440 40 540 M202 196 L202 232 C202 258 212 270 244 288 C300 322 320 440 320 540" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+    <path id="s04-p-neck" d="M0 0" opacity="0"/>
+    <path id="s04-p-book" d="M92 410 C128 392 160 392 180 410 C200 392 232 392 268 410 L268 484 C232 466 200 466 180 484 C160 466 128 466 92 484 Z M180 410 L180 484" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+    <path id="s04-p-arm" d="M262 380 C300 392 332 380 352 346" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+    <circle class="dr" id="s04-p-lens" cx="392" cy="276" r="40" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+    <path id="s04-p-handle" d="M366 306 L352 346" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+  </svg>
+  <svg id="s04-clock" viewBox="0 0 84 84">
+    <circle id="s04-ck-ring" cx="42" cy="42" r="36" fill="none" stroke="#7df0ff" stroke-width="5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+    <g id="s04-ck-hand" style="transform-origin:42px 42px"><path d="M42 42 L42 18" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/></g>
+    <path d="M42 42 L58 50" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/>
+  </svg>
+</div>
+
+<script>
+(function () {
+  const S = "s04", B = "b04", D = AC.sceneDur(S);
+  const $ = (id) => document.getElementById("s04-" + id);
+  const c = (w, n) => AC.cue(S, B, w, n);
+  const tl = gsap.timeline({ paused: true });
+  const to = (t, v, at) => tl.to(t, Object.assign({ lazy: false }, v), at);
+  const fr = (t, a, b, at) => tl.fromTo(t, a, Object.assign({ lazy: false }, b), at);
+
+  // ---------- tiempos de la voz (locales) ----------
+  const tHerr = c("herramienta"), tDe = c("de"), tNotas = c("notas"), tTrad = c("tradicional");
+  const tEsc1 = c("escucha", 0), tEscribe = c("escribe"), tNada = c("nada");
+  const tSuper = c("Supernotes"), tDa = c("da"), tUn = c("un"), tPaso = c("paso"), tAdic = c("adicional");
+  const tEnt = c("entiende"), tEsc2 = c("escucha", 1), tVe = c("ve"), tDiap = c("diapositiva"), tEsq = c("esquema");
+  const tCompr = c("comprende"), tCont = c("contexto"), tOrg = c("organiza");
+  const tPers = c("persona"), tTiempo = c("tiempo"), tEstud = c("estudiarla");
+
+  // ---------- titulos (palabra a palabra, en su cue) ----------
+  const titles = $("titles");
+  function mkTitle(id, cls, parts) {
+    const ln = document.createElement("div"); ln.className = "ln " + (cls || ""); ln.id = "s04-" + id;
+    ln.innerHTML = parts.map((p, i) => '<span class="w" id="s04-' + id + "-" + i + '">' + (p.em ? "<em>" + p.t + "</em>" : p.t) + "</span>").join(" ");
+    titles.appendChild(ln); return ln;
+  }
+  function showTitle(id, parts) {   // parts: [{t, em, at}]
+    tl.set("#s04-" + id, { opacity: 1 }, Math.max(0, parts[0].at - .06));
+    parts.forEach((p, i) => fr("#s04-" + id + "-" + i, { yPercent: 170 }, { yPercent: 0, duration: 1.0, ease: "power3.out" }, p.at));
+  }
+  function hideTitle(id, n, at, dur) {
+    const sel = []; for (let i = 0; i < n; i++) sel.push("#s04-" + id + "-" + i);
+    to(sel, { yPercent: -170, duration: dur || .7, ease: "power3.in", stagger: .05 }, at);
+    tl.set("#s04-" + id, { opacity: 0 }, at + (dur || .7) + .05 * n + .02);
+  }
+  const T1 = [{ t: "Herramienta", at: tHerr }, { t: "de", at: tDe }, { t: "notas", at: tNotas }, { t: "tradicional", em: 1, at: tTrad }];
+  const T2 = [{ t: "SuprNotes", at: tSuper }, { t: "da", at: tDa }, { t: "un", at: tUn }, { t: "paso", at: tPaso }, { t: "adicional", em: 1, at: tAdic }];
+  const T5 = [{ t: "Comprende", at: tCompr }, { t: "y", at: tCont }, { t: "organiza", em: 1, at: tOrg }];
+  const T6 = [{ t: "Como", at: 17.5 }, { t: "una", at: 17.66 }, { t: "persona", at: tPers }, { t: "que", at: 18.38 }, { t: "la", at: 18.7 }, { t: "estudi&oacute;", em: 1, at: tEstud }];
+  mkTitle("t1", "g", T1); mkTitle("t2", "", T2); mkTitle("t5", "", T5); mkTitle("t6", "", T6);
+
+  // ---------- onda de audio (determinista: funcion del tiempo) ----------
+  function mkBars(parent, n) { const a = []; for (let i = 0; i < n; i++) { const b = document.createElement("div"); b.className = "bar"; parent.appendChild(b); a.push(b); } return a; }
+  function driveWave(bars, t0, t1, amp, fi) {
+    const p = { t: 0 }, n = bars.length;
+    tl.to(p, { t: 1, duration: t1 - t0, ease: "none", lazy: false, onUpdate: () => {
+      const tt = t0 + p.t * (t1 - t0);
+      const up = Math.min(1, (tt - t0) / .7), dn = Math.min(1, (t1 - tt) / .6);
+      const ease = (x) => x * x * (3 - 2 * x), env = ease(Math.max(0, Math.min(up, dn)));
+      for (let i = 0; i < n; i++) {
+        const x = i / (n - 1), shape = .3 + .7 * Math.sin(Math.PI * x);
+        const v = .25 + .75 * Math.abs(Math.sin(i * .62 + tt * 5.2 * fi) * Math.cos(i * .21 - tt * 2.6 * fi));
+        bars[i].style.height = (6 + amp * env * shape * v) + "px";
+      }
+    } }, t0);
+  }
+  const w1 = mkBars($("w1"), 40), w3 = mkBars($("w3"), 60);
+
+  // ---------- contenido estatico ----------
+  const nb = $("nb");
+  $("nbhd").innerHTML = AC.svg("texto", 38) + "<span>Transcripci&oacute;n</span>";
+  const LINES = [["00:12", "los depredadores cazan para alimentarse"], ["00:19", "cuando desaparecen, el ecosistema cambia"], ["00:26", "algunas especies est&aacute;n en peligro"]];
+  LINES.forEach((l, i) => { const r = document.createElement("div"); r.className = "row"; r.id = "s04-row" + i; r.style.top = (140 + i * 100) + "px"; r.innerHTML = "<b>" + l[0] + "</b><span>" + l[1] + "</span>"; nb.appendChild(r); });
+
+  const EAR = '<svg class="ac-ico" viewBox="0 0 48 48" width="52" height="52"><path d="M14 23a10 10 0 0120 0c0 6-6 8-6 13a5 5 0 01-9.5 2.2"/><path d="M20 23a4 4 0 018 0c0 2.4-2.2 3.2-3.2 5"/></svg>';
+  $("ear").innerHTML = '<div class="ic">' + EAR + '</div><div class="tx"><div class="ac-lbl">O&iacute;do</div><div class="ac-sub">lo que se escucha</div></div><div id="s04-w2"></div>';
+  $("eye").innerHTML = '<div class="ic">' + AC.svg("ojo", 52) + '</div><div class="tx"><div class="ac-lbl">Ojo</div><div class="ac-sub">lo que se ve</div></div><div class="eyescan"><i style="width:92%"></i><i style="width:64%"></i><i style="width:80%"></i></div>';
+  // reconstruir w2 (se acaba de recrear dentro de ear)
+  const w2b = mkBars($("w2"), 28);
+  $("play").innerHTML = AC.svg("video", 40);
+  $("check").innerHTML = AC.svg("check", 44);
+
+  // ---------- fichas de concepto ----------
+  const board = $("board");
+  const CH = [
+    { k: "eco", t: "ecosistema", w: 290, hub: 1, o: [990, 409], m: [960, 560], l: [960, 332] },
+    { k: "pla", t: "planta", w: 200, o: [1480, 403], m: [530, 420], l: [600 + 100, 520] },
+    { k: "pre", t: "presa", w: 190, o: [1480, 531], m: [560, 730], l: [600 + 95, 610] },
+    { k: "dep", t: "depredador", w: 280, o: [1480, 659], m: [960, 830], l: [600 + 140, 700] },
+    { k: "esp", t: "especie en peligro", w: 410, o: [995, 562], m: [1400, 410], l: [980 + 205, 520] },
+    { k: "con", t: "conservaci&oacute;n", w: 310, o: [995, 632], m: [1400, 730], l: [980 + 155, 610] }
+  ];
+  CH.forEach((h) => {
+    const d = document.createElement("div"); d.className = "chip" + (h.hub ? " hub" : ""); d.id = "s04-c-" + h.k; d.style.width = h.w + "px";
+    d.innerHTML = '<div class="ac-glass bg"></div><i class="dot"></i><span>' + h.t + "</span>";
+    board.appendChild(d); gsap.set(d, { xPercent: -50, yPercent: -50 });
+  });
+  const CHD = {}; CH.forEach((h) => (CHD[h.k] = h));
+
+  // =====================================================================
+  // BEAT 1 — herramienta tradicional: escucha y escribe, nada mas (apagado)
+  // =====================================================================
+  showTitle("t1", T1);
+  fr("#s04-nb", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.4, ease: "power3.out" }, tNotas - .1);
+  fr("#s04-w1", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1.4, ease: "power3.out" }, tNotas - .1);
+  fr("#s04-w1cap", { opacity: 0 }, { opacity: .85, duration: 1.2, ease: "power2.out" }, tNotas + .4);
+  // escucha: la onda se mueve y manda paquetes (grises) a la libreta
+  driveWave(w1, tEsc1, tNada + .9, 96, 1);
+  const L0 = [600, 560, 690, 560, 730, 580, 820, 580];
+  const l0 = AC.link(tl, $("links0"), L0, tEsc1 + .2, 1.0, "#9fb1d4");
+  [0, .75, 1.5].forEach((dt) => { const p = AC.packet(tl, $("b1"), L0, tEsc1 + .5 + dt, 1.1, "power1.inOut"); p.classList.add("s04g"); });
+  // escribe: las lineas de texto plano se escriben despacio
+  [0, 1, 2].forEach((i) => fr("#s04-row" + i, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power2.inOut" }, tEscribe + .05 + i * .38));
+  // nada mas: sello quieto y plano
+  fr("#s04-stamp", { opacity: 0, scale: 1.25 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power3.out" }, tNada + .05);
+  // respiro de la libreta gris hasta SuprNotes
+  hideTitle("t1", T1.length, tSuper - .15, .6);
+
+  // =====================================================================
+  // BEAT 2 — SuprNotes da un paso adicional: entiende
+  // =====================================================================
+  to("#s04-veil", { opacity: 0, duration: 1.8, ease: "power2.inOut" }, tSuper);
+  showTitle("t2", T2);
+  // la libreta gris se retira antes de la palabra clave
+  to("#s04-b1", { opacity: 0, scale: .94, duration: 1.1, ease: "power2.inOut" }, tPaso);
+  // entiende: palabra heroe + pulso de luz
+  tl.set("#s04-hero", { opacity: 1 }, tEnt - .06);
+  fr("#s04-hero span", { yPercent: 170 }, { yPercent: 0, duration: 1.3, ease: "power3.out" }, tEnt - .05);
+  tl.set("#s04-ring", { opacity: .9, scale: .35 }, tEnt);
+  to("#s04-ring", { scale: 3.4, opacity: 0, duration: 1.7, ease: "power2.out" }, tEnt + .01);
+  fr("#s04-bloom", { opacity: 0, scale: .7 }, { opacity: .8, scale: 1, duration: 1.4, ease: "power2.out" }, tEnt);
+  to("#s04-bloom", { opacity: .34, duration: 1.8, ease: "power2.inOut" }, tEnt + 1.7);
+  hideTitle("t2", T2.length, tEnt + .05, .7);
+  // la palabra sube al lugar del titulo
+  to("#s04-hero", { y: -416, scale: .475, duration: 1.2, ease: "power2.inOut" }, 8.75);
+
+  // oido (escucha): aparece al centro y luego pasa a la izquierda
+  fr("#s04-ear", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3, ease: "power3.out" }, tEsc2 + .05);
+  driveWave(w2b, tEsc2 + .2, tCompr - .1, 52, 1);
+  // ojo (ve) + marco de video
+  fr("#s04-eye", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3, ease: "power3.out" }, tVe + .15);
+  fr("#s04-fg", { y: 60, scale: .94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 1.4, ease: "power3.out" }, tVe);
+  driveWave(w3, tVe + 1.0, tCompr - .1, 50, 1.1);
+  to("#s04-prg", { scaleX: .72, duration: tCompr - tVe - 1.4, ease: "none" }, tVe + 1.2);
+  // hilos de luz sentido -> video
+  const LE = [560, 410, 650, 410, 650, 823, 730, 823];
+  const LY = [560, 670, 640, 670, 650, 600, 730, 600];
+  const le = AC.link(tl, $("links1"), LE, tVe + 1.3, 1.0, "#7df0ff");
+  const ly = AC.link(tl, $("links1"), LY, tVe + 1.3, 1.0, "#b5ceff");
+  AC.packet(tl, $("links1").parentNode, LE, tVe + 1.6, 1.0, "power1.inOut");
+  AC.packet(tl, $("links1").parentNode, LY, tVe + 1.9, 1.0, "power1.inOut");
+  // diapositiva
+  fr("#s04-slide", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }, tDiap + .05);
+  // esquema
+  fr("#s04-schem", { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1.2, ease: "power3.out" }, tEsq + .05);
+  const arrows = $("arrows");
+  [[1480, 442, 1480, 492], [1480, 570, 1480, 620]].forEach((a, i) => {
+    const p = [a[0], a[1], a[0], a[1] + 16, a[2], a[3] - 16, a[2], a[3]];
+    AC.link(tl, arrows, p, tEsq + .6 + i * .35, .8, "#bcd6ff");
+  });
+  // cajas de deteccion que se dibujan (el ojo lee)
+  const det = $("det"), NS = "http://www.w3.org/2000/svg";
+  function box(x, y, w, h, at, dur) {
+    const r = document.createElementNS(NS, "rect");
+    r.setAttribute("x", x); r.setAttribute("y", y); r.setAttribute("width", w); r.setAttribute("height", h); r.setAttribute("rx", 10);
+    r.setAttribute("fill", "none"); r.setAttribute("stroke", "#7df0ff"); r.setAttribute("stroke-width", 3.5); r.setAttribute("stroke-linecap", "round");
+    r.setAttribute("pathLength", 1); r.setAttribute("stroke-dasharray", 1); r.setAttribute("stroke-dashoffset", 1);
+    det.appendChild(r); to(r, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, at); return r;
+  }
+  box(800, 374, 386, 70, tDiap + .85, 1.0);
+  box(800, 458, 392, 248, tEsq + .3, 1.0);
+  box(1338, 352, 284, 362, tEsq + .5, 1.0);
+
+  // =====================================================================
+  // BEAT 3 — comprende el contexto y organiza: fichas -> mapa -> estructura
+  // =====================================================================
+  const tOut = tCompr + .05;
+  to("#s04-fg", { opacity: 0, scale: .96, y: 20, duration: 1.1, ease: "power2.inOut" }, tOut);
+  to("#s04-ear", { x: -70, opacity: 0, duration: 1.1, ease: "power2.inOut" }, tOut);
+  to("#s04-eye", { x: -70, opacity: 0, duration: 1.1, ease: "power2.inOut" }, tOut);
+  to(le, { opacity: 0, duration: .8 }, tOut);
+  to(ly, { opacity: 0, duration: .8 }, tOut);
+  to("#s04-hero span", { yPercent: -170, duration: .7, ease: "power3.in" }, tCompr - .15);
+  tl.set("#s04-hero", { opacity: 0 }, tCompr + .7);
+  showTitle("t5", T5);
+  // fichas: salen de la diapositiva y del esquema hacia sus lugares del mapa
+  CH.forEach((h, i) => fr("#s04-c-" + h.k, { x: h.o[0], y: h.o[1], scale: .4, opacity: 0 }, { x: h.m[0], y: h.m[1], scale: 1, opacity: 1, duration: 1.4, ease: "power3.out" }, tCompr + .05 + i * .1));
+  // hilos de luz del contexto
+  const links2 = $("links2");
+  const E = [["eco", "pla"], ["eco", "pre"], ["eco", "dep"], ["eco", "esp"], ["eco", "con"], ["pla", "pre"], ["pre", "dep"], ["esp", "con"]];
+  const hh = { eco: [145, 36], pla: [100, 36], pre: [95, 36], dep: [140, 36], esp: [205, 36], con: [155, 36] };
+  function trim(a, b, ha) { const dx = b[0] - a[0], dy = b[1] - a[1]; const k = Math.min(ha[0] / Math.max(Math.abs(dx), .01), ha[1] / Math.max(Math.abs(dy), .01)) + .05 / Math.hypot(dx, dy) * 24; return [a[0] + dx * k, a[1] + dy * k]; }
+  const lks = [];
+  E.forEach((e, i) => {
+    const a = CHD[e[0]].m, b = CHD[e[1]].m, p1 = trim(a, b, hh[e[0]]), p2 = trim(b, a, hh[e[1]]);
+    const P = [p1[0], p1[1], p1[0] + (p2[0] - p1[0]) / 3, p1[1] + (p2[1] - p1[1]) / 3, p1[0] + 2 * (p2[0] - p1[0]) / 3, p1[1] + 2 * (p2[1] - p1[1]) / 3, p2[0], p2[1]];
+    lks.push(AC.link(tl, links2, P, tCont - .1 + i * .06, .95, "#9fd4ff"));
+    if (i === 3 || i === 0) AC.packet(tl, board, P, tCont + 1.0 + i * .05, 1.0, "power1.inOut");
+  });
+  // organiza: la libreta de vidrio aparece, los hilos se apagan y las fichas se acomodan
+  fr("#s04-note", { opacity: 0, scale: .95 }, { opacity: 1, scale: 1, duration: 1.2, ease: "power3.out" }, tOrg + .05);
+  to(lks, { opacity: 0, duration: .8, ease: "power2.in" }, tOrg + .35);
+  CH.forEach((h, i) => {
+    const t0 = tOrg + .5 + (h.hub ? 0 : .15 + i * .09);
+    to("#s04-c-" + h.k, { x: h.l[0], y: h.l[1], scale: h.hub ? 1.3 : 1, duration: 1.3, ease: "power2.inOut" }, t0);
+    to("#s04-c-" + h.k + " .bg", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, t0 + .2);
+    if (!h.hub) to("#s04-c-" + h.k + " .dot", { opacity: 1, duration: .9, ease: "power2.out" }, t0 + .5);
+  });
+  to("#s04-gh1", { opacity: 1, duration: 1.0, ease: "power2.out" }, tOrg + 1.5);
+  to("#s04-gh2", { opacity: 1, duration: 1.0, ease: "power2.out" }, tOrg + 1.6);
+  const ul = document.createElementNS(NS, "path");
+  ul.setAttribute("d", "M580 392 L1340 392"); ul.setAttribute("stroke", "#7df0ff"); ul.setAttribute("stroke-width", 3); ul.setAttribute("fill", "none"); ul.setAttribute("stroke-linecap", "round");
+  ul.setAttribute("pathLength", 1); ul.setAttribute("stroke-dasharray", 1); ul.setAttribute("stroke-dashoffset", 1); ul.setAttribute("opacity", ".85");
+  $("ul").appendChild(ul); to(ul, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut" }, tOrg + 1.3);
+
+  // =====================================================================
+  // BEAT 4 — como una persona que se tomo el tiempo de estudiarla
+  // =====================================================================
+  hideTitle("t5", T5.length, 16.9, .6);
+  showTitle("t6", T6);
+  to("#s04-board", { x: -400, scale: .86, duration: 1.4, ease: "power2.inOut" }, tPers - .1);
+  const pp = (id, at, dur) => to("#s04-p-" + id, { strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, at);
+  pp("head", tPers, 1.1); pp("body", tPers + .25, 1.4); pp("book", tPers + .8, 1.2); pp("arm", tPers + 1.0, 1.0); pp("lens", tPers + 1.3, 1.0); pp("handle", tPers + 1.8, .5);
+  // el tiempo
+  fr("#s04-clock", { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .9, ease: "power3.out" }, tTiempo);
+  to("#s04-ck-ring", { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, tTiempo);
+  fr("#s04-ck-hand", { rotation: 0 }, { rotation: 360, duration: 1.3, ease: "power2.inOut", svgOrigin: "42 42" }, tTiempo);
+  // estudiada: check sobre la libreta
+  fr("#s04-check", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .9, ease: "back.out(1.8)" }, tEstud);
+  tl.set("#s04-chring", { opacity: .8, scale: 1 }, tEstud + .1);
+  to("#s04-chring", { scale: 2.3, opacity: 0, duration: 1.3, ease: "power2.out" }, tEstud + .11);
+
+  window.__timelines["s04-distinto"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

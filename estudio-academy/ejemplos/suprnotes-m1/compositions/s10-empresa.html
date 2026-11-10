@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s10 · Empresa</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s10empresa { position: absolute; inset: 0; overflow: hidden; --mint: #3eeabc; --cy: #7df0ff; }
+  #s10empresa .ac-title { top: 112px; }
+
+  /* luces propias */
+  #s10empresa .s10-aura { position: absolute; left: 580px; top: 200px; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(62,234,188,.30) 0%, rgba(62,234,188,.10) 40%, rgba(62,234,188,0) 68%); opacity: 0; }
+  #s10empresa .s10-aura2 { position: absolute; left: 1180px; top: 280px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(125,240,255,.26), rgba(125,240,255,0) 66%); opacity: 0; }
+  #s10empresa .s10-aura0 { position: absolute; left: 460px; top: 250px; width: 1000px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(125,240,255,.30), rgba(125,240,255,0) 66%); opacity: 0; }
+
+  /* skyline */
+  #s10empresa #s10-sky { position: absolute; left: 560px; top: 330px; width: 800px; height: 550px; opacity: 1; overflow: visible; }
+  #s10empresa #s10-sky .ln1 { fill: none; stroke: #c7dcff; stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; filter: drop-shadow(0 0 7px rgba(255,255,255,.07))); }
+  #s10empresa #s10-sky .gr { fill: none; stroke: rgba(190,220,255,.5); stroke-width: 1.4; }
+  #s10empresa #s10-sky .fl { fill: url(#s10-gl); opacity: 0; }
+  #s10empresa #s10-sky .wn { fill: rgba(125,240,255,.8); opacity: 0; filter: drop-shadow(0 0 6px rgba(255,255,255,.07))); }
+
+  /* oficina (tarjeta grande) */
+  #s10empresa #s10-off { left: 680px; top: 380px; width: 560px; height: 340px; opacity: 0; border-color: rgba(125,240,255,.55); }
+  #s10empresa #s10-off .tg { position: absolute; left: 34px; top: 30px; display: flex; align-items: center; gap: 14px; font-family: "Manrope"; font-weight: 700; font-size: 22px; color: var(--cy); }
+  #s10empresa #s10-off .tg svg { width: 38px; height: 38px; }
+  #s10empresa #s10-off .tt { position: absolute; left: 34px; top: 100px; font-family: "Rubik"; font-weight: 700; font-size: 56px; letter-spacing: -0.035em; white-space: nowrap; }
+  #s10empresa #s10-off .av { position: absolute; top: 218px; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; border: 3px solid rgba(8,30,120,.9); opacity: 0; }
+  #s10empresa #s10-off .av svg { width: 40px; height: 40px; }
+  #s10empresa #s10-off .eq { position: absolute; left: 290px; top: 236px; font-family: "Manrope"; font-weight: 700; font-size: 22px; opacity: .8; }
+
+  /* chip RR. HH. */
+  #s10empresa #s10-rh { left: 810px; top: 300px; width: 340px; height: 110px; opacity: 0; display: flex; align-items: center; gap: 16px; padding: 0 22px; border-color: rgba(125,240,255,.55); }
+  #s10empresa #s10-rh .ic { width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; flex: none; background: linear-gradient(145deg, #7df0ff, #2f7bff); box-shadow:  0 0 22px rgba(255,255,255,.07); }
+  #s10empresa #s10-rh .ic svg { width: 34px; height: 34px; }
+  #s10empresa #s10-rh .ac-lbl { font-size: 25px; white-space: nowrap; }
+  #s10empresa #s10-rh .ac-sub { font-size: 17px; margin-top: 3px; }
+
+  /* fuentes */
+  #s10empresa .src { left: 160px; width: 540px; opacity: 0; }
+  #s10empresa .src .hd { position: absolute; left: 24px; top: 22px; width: 56px; height: 56px; border-radius: 17px; display: grid; place-items: center; background: linear-gradient(145deg, #7df0ff, #2f7bff); box-shadow:  0 0 22px rgba(255,255,255,.07); }
+  #s10empresa .src .hd svg { width: 34px; height: 34px; }
+  #s10empresa .src .hn { position: absolute; left: 98px; top: 20px; font-family: "Rubik"; font-weight: 600; font-size: 29px; letter-spacing: -0.02em; white-space: nowrap; }
+  #s10empresa .src .hs { position: absolute; left: 98px; top: 58px; font-family: "Manrope"; font-weight: 600; font-size: 18px; opacity: .72; white-space: nowrap; }
+  #s10empresa #s10-ply { top: 300px; height: 220px; }
+  #s10empresa #s10-ply .tm { position: absolute; right: 26px; top: 28px; font-family: "Rubik"; font-weight: 600; font-size: 26px; display: flex; align-items: center; gap: 10px; font-variant-numeric: tabular-nums; }
+  #s10empresa #s10-ply .rec { width: 14px; height: 14px; border-radius: 50%; background: #ff5fa8; box-shadow:  0 0 14px 4px rgba(255,255,255,.07); }
+  #s10empresa #s10-ply .wv { position: absolute; left: 26px; top: 108px; width: 488px; height: 70px; }
+  #s10empresa #s10-ply .wv.b2 { clip-path: inset(0 100% 0 0); }
+  #s10empresa #s10-ply .wv i { position: absolute; bottom: 0; width: 6px; border-radius: 3px; transform: translateY(0); }
+  #s10empresa #s10-ply .wv.b1 i { background: rgba(255,255,255,.3); top: auto; }
+  #s10empresa #s10-ply .wv.b2 i { background: linear-gradient(180deg, #ffffff, #7df0ff); box-shadow:  0 0 8px rgba(255,255,255,.07); }
+  #s10empresa #s10-ply .pg { position: absolute; left: 26px; top: 192px; width: 488px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.2); }
+  #s10empresa #s10-ply .pf { position: absolute; left: 26px; top: 192px; width: 488px; height: 4px; border-radius: 2px; background: var(--cy); transform-origin: 0 50%; transform: scaleX(0); }
+  #s10empresa #s10-o { left: 402px; top: 512px; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; font-family: "Rubik"; font-weight: 700; font-size: 28px; opacity: 0; z-index: 4; }
+  #s10empresa #s10-man { top: 560px; height: 300px; }
+  #s10empresa #s10-man .ix { position: absolute; left: 28px; width: 484px; height: 40px; display: flex; align-items: center; font-family: "Manrope"; font-weight: 700; font-size: 21px; opacity: 0; }
+  #s10empresa #s10-man .ix b { font-family: "Rubik"; font-weight: 700; width: 44px; color: var(--cy); }
+  #s10empresa #s10-man .ix .dt { flex: 1; border-bottom: 2.5px dotted rgba(255,255,255,.4); margin: 0 12px; transform: translateY(5px); }
+  #s10empresa #s10-man .ix em { font-style: normal; font-family: "Rubik"; font-weight: 600; opacity: .85; }
+  #s10empresa #s10-man .ix .mk { position: absolute; left: -10px; right: -10px; top: 2px; bottom: 2px; border-radius: 10px; background: rgba(62,234,188,.22); border: 1.5px solid rgba(62,234,188,.7); opacity: 0; }
+
+  /* archivo aprobado */
+  #s10empresa #s10-hub { left: 790px; top: 450px; width: 380px; height: 300px; opacity: 0; border-color: rgba(62,234,188,.6); background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(5,22,100,.62)); box-shadow:  0px 16px 34px rgba(0,0,0,0.28), 0 0 50px 2px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.45); }
+  #s10empresa #s10-hub .ic { position: absolute; left: 28px; top: 24px; width: 64px; height: 64px; border-radius: 19px; display: grid; place-items: center; background: linear-gradient(145deg, #7df0ff, #2f7bff); box-shadow:  0 0 24px rgba(255,255,255,.07); }
+  #s10empresa #s10-hub .ic svg { width: 38px; height: 38px; }
+  #s10empresa #s10-hub .sl { position: absolute; right: 28px; top: 22px; width: 68px; height: 68px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(145deg, #7ff5d6, #12b98d); box-shadow:  0 0 28px rgba(255,255,255,.07), inset 0 0 0 4px rgba(255,255,255,.35); opacity: 0; }
+  #s10empresa #s10-hub .sl svg { width: 40px; height: 40px; fill: none; stroke: #fff; stroke-width: 5.5; stroke-linecap: round; stroke-linejoin: round; }
+  #s10empresa #s10-hub .t { position: absolute; left: 28px; top: 104px; font-family: "Rubik"; font-weight: 700; font-size: 33px; letter-spacing: -0.03em; white-space: nowrap; }
+  #s10empresa #s10-hub .s { position: absolute; left: 28px; top: 150px; font-family: "Manrope"; font-weight: 600; font-size: 19px; opacity: 1; white-space: nowrap; }
+  #s10empresa #s10-hub .br { position: absolute; left: 28px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.22); }
+  #s10empresa #s10-hub .ps { position: absolute; left: 28px; top: 246px; font-family: "Manrope"; font-size: 20px; white-space: nowrap; }
+
+  /* marcador compartido */
+  #s10empresa .hl { position: relative; display: inline-block; isolation: isolate; }
+  #s10empresa .hl .m { position: absolute; left: -7px; right: -7px; top: 2px; bottom: 1px; border-radius: 7px; background: linear-gradient(90deg, rgba(8,128,118,.95), rgba(14,110,170,.9)); box-shadow:  0 0 14px rgba(255,255,255,.07); transform-origin: 0 50%; transform: scaleX(0); z-index: -1; }
+  #s10empresa .hl b { font-weight: 800; color: #fff; }
+
+  /* guia */
+  #s10empresa #s10-gp { left: 815px; top: 292px; width: 330px; height: 142px; opacity: 0; border-color: rgba(125,240,255,.6); }
+  #s10empresa #s10-gp .ic { position: absolute; left: 18px; top: 14px; width: 40px; height: 40px; display: grid; place-items: center; color: var(--cy); }
+  #s10empresa #s10-gp .ic svg { width: 36px; height: 36px; }
+  #s10empresa #s10-gp .t { position: absolute; left: 66px; top: 17px; font-family: "Rubik"; font-weight: 600; font-size: 25px; letter-spacing: -0.02em; white-space: nowrap; }
+  #s10empresa #s10-gp .br { position: absolute; left: 20px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.24); }
+  #s10empresa #s10-gp .ps { position: absolute; left: 20px; top: 102px; font-family: "Manrope"; font-size: 17px; white-space: nowrap; }
+  #s10empresa .cl { position: absolute; left: 0; top: 0; width: 150px; height: 84px; margin: -42px 0 0 -75px; border-radius: 16px; opacity: 0; z-index: 6;
+    background: linear-gradient(145deg, rgba(190,235,255,.5), rgba(62,234,188,.22)); border: 1.5px solid rgba(190,240,255,.85); box-shadow:  0 0 30px 4px rgba(255,255,255,.07); }
+  #s10empresa .cl svg { position: absolute; left: 14px; top: 12px; width: 26px; height: 26px; color: #fff; }
+  #s10empresa .cl i { position: absolute; left: 14px; height: 7px; border-radius: 4px; background: rgba(255,255,255,.7); }
+
+  /* personas nuevas */
+  #s10empresa .pc { left: 1330px; width: 430px; height: 190px; opacity: 0; background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(5,22,100,.62)); }
+  #s10empresa .pc .av { position: absolute; left: 22px; top: 20px; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; box-shadow:  0 0 22px rgba(255,255,255,.07); }
+  #s10empresa .pc .av svg { width: 36px; height: 36px; }
+  #s10empresa .pc .nm { position: absolute; left: 104px; top: 20px; font-family: "Rubik"; font-weight: 600; font-size: 27px; letter-spacing: -0.02em; }
+  #s10empresa .pc .nv { position: absolute; left: 104px; top: 58px; font-family: "Manrope"; font-weight: 700; font-size: 19px; color: #b6fbe9; display: flex; align-items: center; gap: 8px; }
+  #s10empresa .pc .nv:before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--mint); box-shadow:  0 0 10px rgba(255,255,255,.07); }
+  #s10empresa .pc .sp { position: absolute; left: 18px; top: 100px; width: 394px; height: 72px; border-radius: 16px; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.28); opacity: 0; }
+  #s10empresa .pc .sp svg { position: absolute; left: 14px; top: 9px; width: 24px; height: 24px; color: var(--cy); }
+  #s10empresa .pc .sp .n { position: absolute; left: 48px; top: 8px; font-family: "Rubik"; font-weight: 600; font-size: 18px; }
+  #s10empresa .pc .sp .ps { position: absolute; left: 16px; top: 38px; font-family: "Manrope"; font-size: 18px; white-space: nowrap; }
+  #s10empresa .pc .sg { position: absolute; inset: -4px; border-radius: 19px; border: 2.5px solid var(--mint); box-shadow:  0 0 22px 2px rgba(255,255,255,.07); opacity: 0; }
+
+  /* cuestionario */
+  #s10empresa #s10-ck { left: 160px; top: 300px; width: 540px; height: 300px; opacity: 0; }
+  #s10empresa #s10-ck .hd { position: absolute; left: 26px; top: 20px; width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(145deg, #7df0ff, #2f7bff); }
+  #s10empresa #s10-ck .hd svg { width: 28px; height: 28px; }
+  #s10empresa #s10-ck .hn { position: absolute; left: 86px; top: 22px; font-family: "Rubik"; font-weight: 600; font-size: 28px; letter-spacing: -0.02em; }
+  #s10empresa #s10-ck .ct { position: absolute; right: 26px; top: 24px; font-family: "Rubik"; font-weight: 700; font-size: 26px; color: var(--mint); font-variant-numeric: tabular-nums; }
+  #s10empresa #s10-ck .rw { position: absolute; left: 22px; width: 496px; height: 60px; border-radius: 16px; display: flex; align-items: center; gap: 18px; padding-left: 14px; font-family: "Manrope"; font-weight: 700; font-size: 23px; }
+  #s10empresa #s10-ck .rw .bg { position: absolute; inset: 0; border-radius: 16px; background: rgba(62,234,188,.2); border: 1.5px solid rgba(62,234,188,.6); opacity: 0; }
+  #s10empresa #s10-ck .rw .bx { position: relative; width: 36px; height: 36px; border-radius: 11px; border: 2.5px solid rgba(255,255,255,.55); display: grid; place-items: center; flex: none; }
+  #s10empresa #s10-ck .rw .bx .f { position: absolute; inset: -2.5px; border-radius: 11px; background: linear-gradient(145deg, #7ff5d6, #12b98d); box-shadow:  0 0 18px rgba(255,255,255,.07); opacity: 0; }
+  #s10empresa #s10-ck .rw .bx svg { position: relative; width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+  #s10empresa #s10-ck .rw span { position: relative; }
+
+  /* chat */
+  #s10empresa #s10-ch { left: 160px; top: 630px; width: 540px; height: 290px; opacity: 0; }
+  #s10empresa #s10-ch .hd { position: absolute; left: 24px; top: 14px; display: flex; align-items: center; gap: 12px; font-family: "Rubik"; font-weight: 600; font-size: 23px; color: #fff; }
+  #s10empresa #s10-ch .hd svg { width: 32px; height: 32px; color: var(--cy); }
+  #s10empresa #s10-ch .q { position: absolute; right: 22px; top: 58px; padding: 12px 20px; border-radius: 20px 20px 6px 20px; font-family: "Manrope"; font-weight: 700; font-size: 21px; background: linear-gradient(145deg, #4f8dff, #2a5fe0); box-shadow:  0 0 24px rgba(255,255,255,.07); opacity: 0; }
+  #s10empresa #s10-ch .a { position: absolute; left: 22px; top: 122px; width: 478px; padding: 12px 18px 14px; border-radius: 20px 20px 20px 6px; font-family: "Manrope"; font-weight: 600; font-size: 21px; line-height: 1.3; background: rgba(255,255,255,.16); border: 1.5px solid rgba(255,255,255,.34); opacity: 0; }
+  #s10empresa #s10-ch .ci { position: absolute; left: 22px; top: 226px; height: 44px; padding: 0 16px 0 12px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-family: "Manrope"; font-weight: 700; font-size: 19px; background: rgba(62,234,188,.18); border: 1.5px solid rgba(62,234,188,.7); opacity: 0; }
+  #s10empresa #s10-ch .ci svg { width: 26px; height: 26px; color: var(--mint); }
+
+  /* anillo de documentos aprobados */
+  #s10empresa #s10-rg { z-index: 2; }
+  #s10empresa #s10-rg circle.a { fill: none; stroke: var(--mint); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: .85; filter: drop-shadow(0 0 10px rgba(255,255,255,.07))); }
+  #s10empresa #s10-rg circle.b { fill: none; stroke: rgba(62,234,188,.18); stroke-width: 22; opacity: 0; }
+  #s10empresa .rc { width: 76px; height: 76px; border-radius: 22px; display: grid; place-items: center; opacity: 0; z-index: 3; border-color: rgba(125,240,255,.55); }
+  #s10empresa .rc svg { width: 38px; height: 38px; }
+  #s10empresa .rc .bd { position: absolute; right: -10px; top: -10px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(145deg, #7ff5d6, #12b98d); box-shadow:  0 0 16px rgba(255,255,255,.07); opacity: 0; }
+  #s10empresa .rc .bd svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+  #s10empresa #s10-lk { left: 938px; top: 308px; width: 84px; height: 84px; border-radius: 26px; display: grid; place-items: center; opacity: 0; z-index: 3; background: linear-gradient(145deg, #7ff5d6, #12b98d); border: 2px solid rgba(255,255,255,.55); box-shadow:  0 0 40px 6px rgba(255,255,255,.07); }
+  #s10empresa #s10-lk svg { width: 46px; height: 46px; color: #fff; }
+
+  /* fuentes externas */
+  #s10empresa .ex { left: 170px; width: 300px; height: 74px; opacity: 0; display: flex; align-items: center; gap: 16px; padding: 0 22px; border: 2px dashed rgba(255,255,255,.5); z-index: 4; }
+  #s10empresa .ex svg { width: 38px; height: 38px; flex: none; opacity: .9; }
+  #s10empresa .ex .ac-lbl { font-size: 23px; white-space: nowrap; }
+  #s10empresa .sk { position: absolute; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; background: radial-gradient(circle, rgba(255,95,168,.9), rgba(255,95,168,0) 68%); opacity: 0; z-index: 5; }
+
+  /* sello final */
+  #s10empresa #s10-seal { position: absolute; left: 280px; top: 640px; width: 300px; height: 300px; opacity: 0; z-index: 6; }
+  #s10empresa #s10-seal .disc { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 50% 40%, rgba(62,234,188,.34), rgba(10,50,140,.55) 70%); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); box-shadow:  0 0 60px 6px rgba(255,255,255,.07), inset 0 0 0 3px rgba(62,234,188,.9), inset 0 0 0 11px rgba(10,40,120,.5), inset 0 0 0 12px rgba(125,240,255,.55); }
+  #s10empresa #s10-seal svg.tx { position: absolute; inset: 0; width: 300px; height: 300px; }
+  #s10empresa #s10-seal .ct { position: absolute; left: 0; top: 70px; width: 300px; text-align: center; }
+  #s10empresa #s10-seal .ct svg { width: 74px; height: 74px; color: var(--mint); filter: drop-shadow(0 0 12px rgba(255,255,255,.07))); }
+  #s10empresa #s10-seal .ct div { font-family: "Rubik"; font-weight: 700; font-size: 31px; letter-spacing: -0.03em; line-height: 1.02; margin-top: 4px; }
+  #s10empresa #s10-sealburst { position: absolute; left: 280px; top: 640px; width: 300px; height: 300px; border-radius: 50%; border: 4px solid var(--mint); opacity: 0; }
+</style>
+
+<div id="s10empresa" class="ac-root" data-composition-id="s10-empresa" data-width="1920" data-height="1080">
+  <div class="s10-aura0" id="s10-aura0"></div>
+  <div class="s10-aura" id="s10-aura"></div>
+  <div class="s10-aura2" id="s10-aura2"></div>
+
+  <div class="ac-title">
+    <div class="ln" id="s10-t1"><span class="w">El</span> <span class="w">ámbito</span> <span class="w"><em>corporativo</em></span></div>
+    <div class="ln" id="s10-t2"><span class="w">Sesión</span> <span class="w">de</span> <span class="w">inducción</span> <span class="w"><em>o</em></span> <span class="w"><em>manual</em></span></div>
+    <div class="ln" id="s10-t3"><span class="w">Guía,</span> <span class="w">cuestionario</span> <span class="w">y</span> <span class="w"><em>chat</em></span></div>
+    <div class="ln" id="s10-t4"><span class="w">Solo</span> <span class="w">fuentes</span> <span class="w"><em>aprobadas</em></span></div>
+  </div>
+
+  <svg class="ac-links" id="s10-links" viewBox="0 0 1920 1080"></svg>
+  <svg class="ac-links" id="s10-rg" viewBox="0 0 1920 1080"><circle class="b" id="s10-ringb" cx="980" cy="600" r="250"/><circle class="a" id="s10-ring" cx="980" cy="600" r="250" pathLength="1" transform="rotate(-90 980 600)"/></svg>
+
+  <svg id="s10-sky" viewBox="0 0 800 550"></svg>
+
+  <div class="ac-glass" id="s10-off">
+    <div class="tg"><span id="s10-offic"></span>Oficina</div>
+    <div class="tt">Recursos humanos</div>
+    <div class="eq">Equipo de inducción</div>
+  </div>
+  <div class="ac-glass" id="s10-rh">
+    <div class="ic" id="s10-rhic"></div>
+    <div><div class="ac-lbl">Recursos humanos</div><div class="ac-sub">Equipo de inducción</div></div>
+  </div>
+
+  <div class="ac-glass src" id="s10-ply">
+    <div class="hd" id="s10-plyic"></div>
+    <div class="hn">Sesión de inducción</div><div class="hs">Grabación de la sesión</div>
+    <div class="tm"><span class="rec"></span><span id="s10-tm">00:00</span></div>
+    <div class="wv b1" id="s10-wv1"></div><div class="wv b2" id="s10-wv2"></div>
+    <div class="pg"></div><div class="pf" id="s10-pf"></div>
+  </div>
+  <div class="ac-glass" id="s10-o">o</div>
+  <div class="ac-glass src" id="s10-man">
+    <div class="hd" id="s10-manic"></div>
+    <div class="hn">Manual de procesos</div><div class="hs">Documento PDF · 48 páginas</div>
+  </div>
+
+  <div class="ac-glass" id="s10-hub">
+    <div class="ic" id="s10-hubic"></div>
+    <div class="sl" id="s10-seal1"><svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></svg></div>
+    <div class="t">Archivo aprobado</div>
+    <div class="s">Manual de procesos · versión 3</div>
+    <div class="br" style="top:196px;width:300px"></div><div class="br" style="top:216px;width:236px"></div>
+    <div class="ps"><span class="hl"><i class="m" id="s10-hm"></i><b>Vacaciones: avisar 15 días antes</b></span></div>
+  </div>
+
+  <div class="ac-glass" id="s10-gp">
+    <div class="ic" id="s10-gpic"></div><div class="t">Guía de repaso</div>
+    <div class="br" style="top:68px;width:290px"></div><div class="br" style="top:84px;width:220px"></div>
+    <div class="ps"><b style="font-weight:800">Vacaciones: avisar 15 días antes</b></div>
+  </div>
+
+  <div class="ac-glass" id="s10-ck">
+    <div class="hd" id="s10-ckic"></div><div class="hn">Cuestionario</div><div class="ct" id="s10-ct">0/3</div>
+  </div>
+  <div class="ac-glass" id="s10-ch">
+    <div class="hd" id="s10-chic"></div>
+    <div class="q" id="s10-q">¿Cómo solicito mis vacaciones?</div>
+    <div class="a" id="s10-a">Solicítalas en el portal de RR. HH. con 15 días de anticipación.</div>
+    <div class="ci" id="s10-ci"><span id="s10-ciic"></span>Manual de procesos · p. 12</div>
+  </div>
+
+  <div id="s10-seal"><div class="disc"></div>
+    <svg class="tx" viewBox="0 0 300 300"><defs><path id="s10-tp" d="M150 150 m-122 0 a122 122 0 1 1 244 0 a122 122 0 1 1 -244 0"/></defs>
+      <text font-family="Manrope" font-weight="800" font-size="17" letter-spacing="3.4" fill="#bff7ea"><textPath href="#s10-tp" startOffset="0">documentos aprobados · información consistente · documentos aprobados · </textPath></text></svg>
+    <div class="ct"><span id="s10-sealic"></span><div>Fuentes<br>aprobadas</div></div>
+  </div>
+  <div id="s10-sealburst"></div>
+</div>
+
+<script>
+(function () {
+  const S = "s10", B = "b10";
+  const root = document.getElementById("s10empresa"), links = document.getElementById("s10-links");
+  const $ = (id) => document.getElementById("s10-" + id);
+  const NS = "http://www.w3.org/2000/svg";
+  const rnd = AC.seeded(1010);
+  const c = (w, n) => AC.cue(S, B, w, n || 0);
+  const MINT = "#3eeabc", CY = "#7df0ff";
+  const mk = (cls, html, id, style) => { const d = document.createElement("div"); d.className = cls; if (id) d.id = id; if (style) d.style.cssText = style; d.innerHTML = html; root.appendChild(d); return d; };
+
+  // iconos
+  $("offic").innerHTML = AC.svg("edificio", 38); $("rhic").innerHTML = AC.svg("edificio", 34);
+  $("plyic").innerHTML = AC.svg("video", 34); $("manic").innerHTML = AC.svg("doc", 34);
+  $("hubic").innerHTML = AC.svg("doc", 38); $("gpic").innerHTML = AC.svg("guia", 36);
+  $("ckic").innerHTML = AC.svg("cuest", 28); $("chic").innerHTML = AC.svg("chat", 32);
+  $("ciic").innerHTML = AC.svg("doc", 26); $("sealic").innerHTML = AC.svg("escudo", 74);
+
+  // ---------- skyline de lineas de vidrio ----------
+  const sky = $("sky");
+  sky.innerHTML = '<defs><linearGradient id="s10-gl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd6ff" stop-opacity=".30"/><stop offset="1" stop-color="#3976ff" stop-opacity=".04"/></linearGradient></defs>';
+  const G = 520;
+  const BD = [
+    { x: 30,  w: 120, t: 340, d: "M30 520V340H150V520" },
+    { x: 170, w: 130, t: 240, d: "M170 520V268L300 240V520" },
+    { x: 322, w: 150, t: 130, d: "M322 520V130L398 96L472 130V520" },
+    { x: 494, w: 124, t: 222, d: "M494 520V222H618V520" },
+    { x: 640, w: 130, t: 312, d: "M640 520V344L770 312V520" }
+  ];
+  const mkS = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || sky).appendChild(e); return e; };
+  const ground = mkS("path", { d: "M0 520H800", class: "ln1", pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 });
+  const ant = mkS("path", { d: "M398 96V52", class: "ln1", pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 });
+  const bOut = [], bGrid = [], bFill = [], wins = [];
+  BD.forEach((b, i) => {
+    bFill.push(mkS("path", { d: b.d + "Z", class: "fl" }));
+    let g = "";
+    for (let x = b.x + 30; x < b.x + b.w - 5; x += 30) g += "M" + x + " 520V" + (b.t + 24);
+    for (let y = b.t + 48; y < 520; y += 38) g += "M" + b.x + " " + y + "H" + (b.x + b.w);
+    bGrid.push(mkS("path", { d: g, class: "gr", pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 }));
+    bOut.push(mkS("path", { d: b.d, class: "ln1", pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 }));
+    for (let y = b.t + 52, r = 0; y < 500; y += 38, r++) for (let x = b.x + 4, k = 0; x < b.x + b.w - 28; x += 30, k++) if (rnd() < .26) wins.push(mkS("rect", { x: x + 6, y: y + 6, width: 18, height: 26, rx: 3, class: "wn" }));
+  });
+
+  const tl = gsap.timeline({ paused: true });
+  const tCorp = c("corporativo"), tEq = c("equipo"), tGraba = c("graba"), tO = c("o"), tMan = c("manual"), tGen = c("genera");
+  const tGuia = c("guía"), tPers = c("persona"), tCue = c("cuestionario"), tProc = c("procedimientos"), tChat = c("chat");
+  const tDudas = c("dudas"), tSolo = c("solo"), tDoc = c("documentos"), tApr = c("aprobó"), tCons = c("consistente");
+  const tNo = c("no"), tExt = c("fuentes");
+
+  // titulos
+  AC.line(tl, "#s10-t1", .3, 3.3);
+  AC.line(tl, "#s10-t2", 3.85, 7.35);
+  AC.line(tl, "#s10-t3", 7.9, 16.4);
+  AC.line(tl, "#s10-t4", 16.95, null);
+
+  // ================= BEAT 1 · ambito corporativo =================
+  tl.fromTo("#s10-aura0", { opacity: 0 }, { opacity: 1, duration: 1.6, ease: "power2.out" }, .2);
+  tl.to(ground, { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut" }, .3);
+  bOut.forEach((p, i) => {
+    tl.to(p, { strokeDashoffset: 0, duration: 1.5, ease: "power2.inOut" }, .35 + i * .2);
+    tl.to(bGrid[i], { strokeDashoffset: 0, duration: 1.3, ease: "power2.inOut" }, 1.0 + i * .18);
+    tl.to(bFill[i], { opacity: 1, duration: 1.2, ease: "power2.out" }, 1.5 + i * .12);
+  });
+  tl.to(ant, { strokeDashoffset: 0, duration: .9, ease: "power2.out" }, 1.7);
+  wins.forEach((w, i) => tl.to(w, { opacity: .55 + (i % 3) * .15, duration: .7, ease: "power2.out" }, 1.9 + (i / wins.length) * .8));
+  // el edificio se convierte en oficina
+  tl.to("#s10-sky", { opacity: 0, scale: .9, y: 24, transformOrigin: "50% 60%", duration: 1.2, ease: "power2.inOut" }, tEq - .1);
+  tl.fromTo("#s10-off", { opacity: 0, scale: .86, y: 28 }, { opacity: 1, scale: 1, y: 0, duration: 1.3, ease: "expo.out" }, tEq);
+  tl.to("#s10-aura0", { opacity: 0, duration: 1.4, ease: "power2.inOut" }, tEq + .6);
+  const AVC = ["#2f7bff,#7df0ff", "#5c8dff,#4f8dff", "#16b8e8,#3eeabc", "#4f8dff,#a9c8ff"];
+  AVC.forEach((cc, i) => {
+    const a = document.createElement("div"); a.className = "av"; a.id = "s10-oa" + i; a.style.left = (34 + i * 62) + "px";
+    a.style.background = "linear-gradient(145deg," + cc + ")"; a.innerHTML = AC.svg("persona", 40); $("off").appendChild(a);
+    tl.fromTo(a, { opacity: 0, y: 24, scale: .7 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "back.out(1.5)" }, tEq + .95 + i * .2);
+  });
+  // la tarjeta se recoge y sube: queda el chip de RR. HH.
+  tl.to("#s10-off", { y: -195, x: 20, scale: .6, duration: 1.2, ease: "power2.inOut" }, 4.0);
+  tl.to("#s10-off", { opacity: 0, duration: .5, ease: "power2.in" }, 4.45);
+  tl.fromTo("#s10-rh", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: "power2.out" }, 5.0);
+
+  // ================= BEAT 2 · dos fuentes =================
+  tl.fromTo("#s10-ply", { x: -70, opacity: 0, rotateY: 35 }, { x: 0, opacity: 1, rotateY: 0, duration: 1.3, ease: "expo.out" }, tGraba);
+  // onda
+  const nb = 44, wv1 = $("wv1"), wv2 = $("wv2");
+  for (let i = 0; i < nb; i++) {
+    const h = 12 + Math.round((Math.sin(i * .5) * .5 + .5) * 26 + rnd() * 26), l = 2 + i * 11.1;
+    [wv1, wv2].forEach((w) => { const b = document.createElement("i"); b.style.left = l + "px"; b.style.height = h + "px"; b.style.bottom = (35 - h / 2) + "px"; w.appendChild(b); });
+  }
+  tl.to("#s10-wv2", { clipPath: "inset(0 38% 0 0)", duration: 1.5, ease: "power1.inOut" }, tGraba + .7);
+  tl.to("#s10-pf", { scaleX: .62, duration: 1.5, ease: "power1.inOut" }, tGraba + .7);
+  const tm = { v: 0 };
+  tl.to(tm, { v: 38 * 60 + 20, duration: 1.5, ease: "power1.inOut", onUpdate: () => { const s = Math.round(tm.v); $("tm").textContent = String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); } }, tGraba + .7);
+  tl.fromTo("#s10-o", { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .9, ease: "back.out(1.6)" }, tO);
+  tl.fromTo("#s10-man", { x: -70, opacity: 0, rotateY: 35 }, { x: 0, opacity: 1, rotateY: 0, duration: 1.3, ease: "expo.out" }, tMan - .1);
+  const IX = [["1", "Ingreso y accesos", "3"], ["2", "Vacaciones y permisos", "12"], ["3", "Reembolsos", "21"], ["4", "Seguridad y salud", "30"]];
+  IX.forEach((r, i) => {
+    const d = document.createElement("div"); d.className = "ix"; d.id = "s10-ix" + i; d.style.top = (102 + i * 46) + "px";
+    d.innerHTML = '<i class="mk"></i><b>' + r[0] + '</b><span>' + r[1] + '</span><span class="dt"></span><em>' + r[2] + '</em>'; $("man").appendChild(d);
+    tl.fromTo(d, { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: .9, ease: "power3.out" }, tMan + .5 + i * .26);
+  });
+  tl.to("#s10-ix1 .mk", { opacity: 1, duration: .8, ease: "power2.out" }, tMan + 1.8);
+  tl.to("#s10-o", { opacity: 0, scale: .8, duration: .7, ease: "power2.in" }, 7.1);
+
+  // las dos fuentes se funden en el archivo aprobado
+  const HUB = { x: 980, y: 600 };
+  tl.fromTo("#s10-aura", { opacity: 0 }, { opacity: 1, duration: 1.8, ease: "power2.out" }, 7.2);
+  tl.fromTo("#s10-aura2", { opacity: 0 }, { opacity: 1, duration: 2.0, ease: "power2.out" }, 9.6);
+  tl.to("#s10-ply", { x: HUB.x - 430, y: HUB.y - 410, scale: .3, duration: 1.3, ease: "power2.inOut" }, 7.2);
+  tl.to("#s10-ply", { opacity: 0, duration: .6, ease: "power2.in" }, 7.5);
+  tl.to("#s10-man", { x: HUB.x - 430, y: HUB.y - 710, scale: .3, duration: 1.3, ease: "power2.inOut" }, 7.2);
+  tl.to("#s10-man", { opacity: 0, duration: .6, ease: "power2.in" }, 7.5);
+  tl.to("#s10-rh", { opacity: 0, y: -22, duration: .9, ease: "power2.inOut" }, 7.3);
+  tl.fromTo("#s10-hub", { opacity: 0, scale: .84 }, { opacity: 1, scale: 1, duration: 1.3, ease: "expo.out" }, 8.0);
+  // sello de aprobado
+  tl.fromTo("#s10-seal1", { opacity: 0, scale: 2.4, rotate: -18 }, { opacity: 1, scale: 1, rotate: -6, duration: .8, ease: "power3.in" }, 8.6);
+  tl.to("#s10-seal1", { scale: 1.12, duration: .25, ease: "power2.out", yoyo: true, repeat: 1 }, 9.45);
+  tl.fromTo("#s10-hub", { boxShadow: " 0px 16px 34px rgba(0,0,0,0.28), 0 0 50px 2px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.45)" }, { boxShadow: " 0px 16px 34px rgba(0,0,0,0.28), 0 0 60px 6px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.45)", duration: .5, ease: "power2.out", yoyo: true, repeat: 1, immediateRender: false }, 9.4);
+  tl.to("#s10-hm", { scaleX: 1, duration: 1.0, ease: "power2.inOut" }, 9.3);
+
+  // ================= BEAT 3a · guia que se multiplica =================
+  tl.fromTo("#s10-gp", { opacity: 0, y: 40, scale: .7 }, { opacity: 1, y: 0, scale: 1, duration: 1.3, ease: "expo.out" }, tGuia + .35);
+  const PN = [
+    { n: "Camila R.", cc: "#2f7bff,#7df0ff", top: 300 },
+    { n: "Andrés M.", cc: "#5c8dff,#4f8dff", top: 515 },
+    { n: "Valeria P.", cc: "#16b8e8,#3eeabc", top: 730 }
+  ];
+  PN.forEach((p, i) => {
+    const d = mk("ac-glass pc", '<div class="av" style="background:linear-gradient(145deg,' + p.cc + ')">' + AC.svg("persona", 36) + '</div><div class="nm">' + p.n + '</div><div class="nv">Nuevo ingreso</div>' +
+      '<div class="sp" id="s10-sp' + i + '">' + AC.svg("guia", 24) + '<div class="n">Guía de repaso</div><div class="ps"><span class="hl"><i class="m" id="s10-pm' + i + '"></i><b>Vacaciones: avisar 15 días antes</b></span></div><div class="sg" id="s10-sg' + i + '"></div></div>', "s10-pc" + i, "top:" + p.top + "px");
+    tl.fromTo(d, { x: 90, opacity: 0, rotateY: -30 }, { x: 0, opacity: 1, rotateY: 0, duration: 1.1, ease: "expo.out" }, tPers + i * .22);
+  });
+  // lineas hub -> personas
+  const PL = PN.map((p) => { const cy = p.top + 95; return [1170, 600, 1255, 600, 1255, cy, 1330, cy]; });
+  PL.forEach((p, i) => AC.link(tl, links, p, tPers + .1 + i * .15, 1.2, "#7df0ff"));
+  // copias de la guia vuelan a cada persona
+  PN.forEach((p, i) => {
+    const sy = p.top + 136, path = [980, 363, 1200, 340, 1390, sy - 90, 1545, sy];
+    const cl = mk("cl", AC.svg("guia", 26) + '<i style="top:50px;width:100px"></i><i style="top:64px;width:70px"></i>', "s10-cl" + i);
+    const pr = { t: 0 }, t0 = tPers + .4 + i * .18;
+    tl.fromTo(cl, { opacity: 0, scale: 2.0, x: 980, y: 363 }, { opacity: 1, duration: .4, ease: "power2.out" }, t0);
+    tl.to(pr, { t: 1, duration: 1.3, ease: "power2.inOut", onUpdate: () => { const b = AC.bez(path, pr.t); gsap.set(cl, { x: b.x, y: b.y }); } }, t0 + .15);
+    tl.to(cl, { scale: .8, duration: 1.3, ease: "power2.inOut" }, t0 + .15);
+    tl.to(cl, { opacity: 0, duration: .5, ease: "power2.in" }, t0 + 1.2);
+    tl.fromTo("#s10-sp" + i, { opacity: 0, scale: .92 }, { opacity: 1, scale: 1, duration: .9, ease: "power3.out" }, t0 + 1.05);
+    tl.to("#s10-pm" + i, { scaleX: 1, duration: 1.0, ease: "power2.inOut" }, t0 + 1.5);
+  });
+  tl.to("#s10-gp", { opacity: .0, y: 70, scale: .5, duration: 1.3, ease: "power2.inOut" }, tPers + 1.3);
+
+  // ================= BEAT 3b · cuestionario =================
+  tl.fromTo("#s10-ck", { x: -60, opacity: 0, rotateY: 30 }, { x: 0, opacity: 1, rotateY: 0, duration: 1.4, ease: "expo.out" }, tCue + .1);
+  const pCk = [790, 600, 745, 600, 745, 450, 700, 450];
+  const lkCk = AC.link(tl, links, pCk, tCue + .15, 1.1, "#7df0ff");
+  AC.packet(tl, root, pCk, tCue + .5, 1.1);
+  const CK = ["Solicitar vacaciones", "Reportar una incapacidad", "Pedir un reembolso"];
+  const ckT = [12.3, 13.0, 13.7], cnt = { v: 0 };
+  CK.forEach((t, i) => {
+    const r = document.createElement("div"); r.className = "rw"; r.id = "s10-rw" + i; r.style.top = (84 + i * 68) + "px";
+    r.innerHTML = '<i class="bg"></i><div class="bx"><i class="f"></i><svg viewBox="0 0 48 48"><path pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M10 25l9 9 19-20"/></svg></div><span>' + t + '</span>'; $("ck").appendChild(r);
+    tl.fromTo(r, { opacity: 0, x: 24 }, { opacity: 1, x: 0, duration: .9, ease: "power3.out" }, tCue + .7 + i * .22);
+    tl.to("#s10-rw" + i + " .bg", { opacity: 1, duration: .6, ease: "power2.out" }, ckT[i]);
+    tl.to("#s10-rw" + i + " .f", { opacity: 1, duration: .5, ease: "power2.out" }, ckT[i]);
+    tl.to("#s10-rw" + i + " path", { strokeDashoffset: 0, duration: .7, ease: "power2.out" }, ckT[i] + .1);
+    tl.to("#s10-rw" + i + " .bx", { scale: 1.15, duration: .3, ease: "power2.out", yoyo: true, repeat: 1 }, ckT[i] + .1);
+    tl.to(cnt, { v: i + 1, duration: .01, onComplete: () => {}, onUpdate: () => { $("ct").textContent = Math.round(cnt.v) + "/3"; } }, ckT[i] + .3);
+  });
+
+  // ================= BEAT 3c · chat =================
+  tl.fromTo("#s10-ch", { x: -60, opacity: 0, rotateY: 30 }, { x: 0, opacity: 1, rotateY: 0, duration: 1.4, ease: "expo.out" }, tChat);
+  const pCh = [790, 600, 745, 600, 745, 775, 700, 775];
+  const lkCh = AC.link(tl, links, pCh, tChat + .1, 1.1, "#7df0ff");
+  AC.packet(tl, root, pCh, tChat + .5, 1.1);
+  tl.fromTo("#s10-q", { opacity: 0, y: 16, scale: .9, transformOrigin: "100% 100%" }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "expo.out" }, tDudas - .5);
+  tl.fromTo("#s10-a", { opacity: 0, y: 16, scale: .94, transformOrigin: "0% 100%" }, { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "expo.out" }, tDudas + .6);
+  tl.fromTo("#s10-ci", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: .9, ease: "power3.out" }, tDudas + 1.5);
+
+  // ================= BEAT 4 · documentos aprobados =================
+  // las tarjetas de la izquierda se retiran
+  tl.to("#s10-ck", { x: -60, opacity: 0, duration: 1.3, ease: "power2.inOut" }, 18.4);
+  tl.to("#s10-ch", { x: -60, opacity: 0, duration: 1.3, ease: "power2.inOut" }, 18.4);
+  tl.to([lkCk, lkCh], { opacity: 0, duration: 1.0, ease: "power2.inOut" }, 18.4);
+  // anillo
+  const CX = 980, CYY = 600, R = 250;
+  tl.to("#s10-ring", { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, tDoc);
+  tl.to("#s10-ringb", { opacity: 1, duration: 1.6, ease: "power2.out" }, tDoc + .4);
+  const RC = [{ a: 230, ic: "doc" }, { a: -40, ic: "video" }, { a: 40, ic: "doc" }, { a: 90, ic: "video" }, { a: 130, ic: "doc" }];
+  RC.forEach((r, i) => {
+    const x = CX + R * Math.cos(r.a * Math.PI / 180), y = CYY + R * Math.sin(r.a * Math.PI / 180);
+    const d = mk("ac-glass rc", AC.svg(r.ic, 38) + '<div class="bd"><svg viewBox="0 0 48 48"><path pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M10 25l9 9 19-20"/></svg></div>', "s10-rc" + i, "left:" + (x - 38) + "px;top:" + (y - 38) + "px");
+    tl.fromTo(d, { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: 1.0, ease: "back.out(1.5)" }, tDoc + .35 + i * .26);
+    tl.fromTo("#s10-rc" + i + " .bd", { opacity: 0, scale: 2 }, { opacity: 1, scale: 1, duration: .7, ease: "power3.in" }, tApr + .1 + i * .22);
+    tl.to("#s10-rc" + i + " .bd path", { strokeDashoffset: 0, duration: .5, ease: "power2.out" }, tApr + .6 + i * .22);
+  });
+  mk("ac-glass", AC.svg("candado", 46), "s10-lk");
+  tl.fromTo("#s10-lk", { opacity: 0, scale: 1.7, y: -20 }, { opacity: 1, scale: 1, y: 0, duration: .9, ease: "power3.in" }, 20.1);
+  tl.to("#s10-lk", { scale: 1.1, duration: .3, ease: "power2.out", yoyo: true, repeat: 1 }, 21.0);
+
+  // consistente para todos: el mismo pasaje, en el archivo y en cada guia
+  const pulse = (sel, t) => tl.to(sel, { scale: 1.05, duration: .5, ease: "power2.out", yoyo: true, repeat: 1 }, t);
+  tl.fromTo("#s10-hm", { opacity: 1 }, { opacity: 1, duration: .01 }, tCons);
+  tl.to("#s10-hub .hl", { scale: 1.05, duration: .5, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "0% 50%" }, tCons);
+  PL.forEach((p, i) => {
+    AC.packet(tl, root, p, tCons + .35 + i * .05, 1.3, "power2.inOut");
+    tl.fromTo("#s10-sg" + i, { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, tCons + 1.4);
+    tl.to("#s10-sg" + i, { opacity: .55, duration: 1.2, ease: "power2.inOut" }, tCons + 2.4);
+    tl.to("#s10-pc" + i, { scale: 1.03, duration: .5, ease: "power2.out", yoyo: true, repeat: 1 }, tCons + 1.4);
+  });
+
+  // fuentes externas: rebotan en el anillo y no entran
+  const EXT = [{ ic: "globo", t: "Internet abierto", top: 333, cx: 439, cy: 457, py: 494, px: 753 },
+               { ic: "enlace", t: "Enlaces sueltos", top: 443, cx: 416, cy: 563, py: 600, px: 730 },
+               { ic: "texto", t: "Datos sin verificar", top: 553, cx: 439, cy: 669, py: 706, px: 753 }];
+  const tHit = 23.5;
+  EXT.forEach((e, i) => {
+    const d = mk("ac-glass ex", AC.svg(e.ic, 38) + '<div class="ac-lbl">' + e.t + '</div>', "s10-ex" + i, "top:" + e.top + "px");
+    const sk = mk("sk", "", "s10-sk" + i, "left:" + e.px + "px;top:" + e.py + "px");
+    tl.fromTo(d, { x: -40, y: 0, opacity: 0 }, { x: e.cx - 170, y: e.cy - e.top, duration: 1.0, ease: "power2.in" }, tNo - .04 + i * .06);
+    tl.to(d, { opacity: 1, duration: .4, ease: "power2.out" }, tNo - .04 + i * .06);
+    tl.fromTo(sk, { opacity: 0, scale: .3 }, { opacity: 1, scale: 1.2, duration: .35, ease: "power2.out" }, tHit + i * .06 - .02);
+    tl.to(sk, { opacity: 0, scale: 1.8, duration: .8, ease: "power2.out" }, tHit + i * .06 + .33);
+    tl.to(d, { x: 0, y: 0, rotate: (i - 1) * 2, duration: 1.2, ease: "power3.out" }, tHit + i * .06);
+    tl.to(d, { opacity: .38, borderColor: "rgba(255,95,168,.8)", duration: 1.0, ease: "power2.out" }, tHit + .1 + i * .06);
+  });
+  tl.to("#s10-rg", { scale: 1.012, transformOrigin: "980px 600px", duration: .5, ease: "power2.out", yoyo: true, repeat: 1 }, tHit);
+  tl.fromTo("#s10-ringb", { stroke: "rgba(62,234,188,.18)" }, { stroke: "rgba(255,95,168,.35)", duration: .3, ease: "power2.out", yoyo: true, repeat: 1 }, tHit);
+
+  // remate: sello
+  tl.fromTo("#s10-seal", { opacity: 0, scale: 1.55, rotate: -14 }, { opacity: 1, scale: 1, rotate: -4, duration: 1.1, ease: "expo.out" }, 24.15);
+  tl.fromTo("#s10-sealburst", { opacity: .9, scale: 1 }, { opacity: 0, scale: 1.5, duration: 1.0, ease: "power2.out", immediateRender: false }, 24.4);
+
+  window.__timelines["s10-empresa"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

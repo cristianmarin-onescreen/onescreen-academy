@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s09 · Estudiante</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s09 { position: absolute; inset: 0; overflow: hidden; --pk: #ff5fa8; --cy: #7df0ff; --bl: #4f8dff; --rd: #ff7a8a; }
+  #s09 .glow { display: none; position: absolute; left: 510px; top: 70px; width: 900px; height: 900px; border-radius: 50%; filter: blur(80px); opacity: 0; background: #3976ff; }
+
+  /* persona */
+  #s09 .per { left: 890px; top: 450px; width: 140px; height: 140px; border-radius: 50%; display: grid; place-items: center; opacity: 0; }
+  #s09 .per svg { width: 72px; height: 72px; }
+  #s09 .perl { position: absolute; left: 560px; width: 800px; top: 620px; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 46px; letter-spacing: -0.03em; opacity: 0; }
+
+  /* calendario (franja) */
+  #s09 .cal { left: 320px; top: 130px; width: 1280px; height: 180px; display: flex; align-items: center; gap: 22px; padding: 0 36px; opacity: 0; border-radius: 32px; }
+  #s09 .cnt { display: flex; align-items: center; gap: 14px; width: 300px; flex: none; }
+  #s09 .nm { position: relative; width: 86px; height: 124px; overflow: hidden; flex: none; }
+  #s09 .nm span { position: absolute; inset: 0; display: grid; place-items: center; font-family: "Rubik"; font-weight: 700; font-size: 96px; letter-spacing: -0.04em; opacity: 0; }
+  #s09 .cl { position: relative; width: 190px; height: 64px; font-family: "Rubik"; font-weight: 600; font-size: 25px; line-height: 1.12; letter-spacing: -0.02em; }
+  #s09 .cl span { position: absolute; left: 0; top: 50%; transform: translateY(-50%); white-space: nowrap; }
+  #s09 .cl .l2 { opacity: 0; color: #ffc2de; }
+  #s09 .days { position: relative; width: 856px; height: 128px; flex: none; }
+  #s09 .day { position: absolute; top: 0; width: 100px; height: 128px; border-radius: 20px; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.2); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 16px; }
+  #s09 .day .a { font-family: "Manrope"; font-weight: 700; font-size: 20px; opacity: .72; }
+  #s09 .day .n { font-family: "Rubik"; font-weight: 700; font-size: 46px; letter-spacing: -0.03em; line-height: 1.1; }
+  #s09 .day .fl { position: absolute; left: 0; right: 0; bottom: 11px; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 19px; color: #ffd0e5; opacity: 0; }
+  #s09 .mk { position: absolute; left: -3px; top: -3px; width: 106px; height: 134px; border-radius: 23px; border: 3px solid var(--cy); box-shadow:  0 0 24px 4px rgba(255,255,255,.07); opacity: 0; }
+
+  /* fuentes */
+  #s09 .src { top: 410px; width: 340px; height: 230px; opacity: 0; padding: 0; }
+  #s09 .src .il { position: absolute; left: 0; right: 0; top: 16px; height: 150px; display: grid; place-items: center; color: #fff; }
+  #s09 .src .il svg { width: 150px; height: 112px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+  #s09 .src .ac-lbl { position: absolute; left: 0; right: 0; bottom: 20px; text-align: center; font-size: 25px; white-space: nowrap; }
+  #s09 .bar { transform-box: fill-box; transform-origin: 50% 50%; }
+  #s09 .tray { left: 460px; top: 740px; width: 1000px; height: 190px; opacity: 0; }
+  #s09 .tray .tl { position: absolute; left: 36px; top: 0; bottom: 0; width: 330px; display: flex; align-items: center; gap: 18px; }
+  #s09 .tray .tl .ic { width: 64px; height: 64px; border-radius: 18px; display: grid; place-items: center; background: rgba(125,240,255,.2); color: var(--cy); }
+  #s09 .tray .tg { position: absolute; inset: -5px; border-radius: 32px; border: 3px solid var(--cy); box-shadow:  0 0 40px 6px rgba(255,255,255,.07); opacity: 0; pointer-events: none; }
+
+  /* telefono */
+  #s09 .ph { left: 360px; top: 400px; width: 300px; height: 540px; border-radius: 46px; opacity: 0; }
+  #s09 .ph .nt { position: absolute; left: 110px; top: 14px; width: 80px; height: 10px; border-radius: 6px; background: rgba(255,255,255,.4); }
+  #s09 .ph .hd { position: absolute; left: 26px; top: 44px; right: 26px; display: flex; align-items: center; gap: 12px; }
+  #s09 .ph .hd .ic { color: var(--bl); width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: rgba(79,141,255,.28); color: #cfe0ff; }
+  #s09 .ph .hd .ac-lbl { font-size: 26px; }
+  #s09 .fc { transform-style: preserve-3d; position: absolute; left: 25px; top: 118px; width: 250px; height: 230px; opacity: 0; }
+  #s09 .fc .f { position: absolute; inset: 0; border-radius: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px; text-align: center; color: #0b2a8f;
+    background: linear-gradient(150deg, #ffffff, #d9e6ff); box-shadow:  0px 16px 34px rgba(0,0,0,0.25); }
+  #s09 .fc .f.bk { transform: rotateY(180deg); background: linear-gradient(150deg, #eaf2ff, #bcd4ff); }
+  #s09 .fc .k { font-family: "Manrope"; font-weight: 800; font-size: 16px; color: #5b7fd8; margin-bottom: 10px; }
+  #s09 .fc .t { font-family: "Rubik"; font-weight: 700; font-size: 38px; letter-spacing: -0.03em; line-height: 1.05; }
+  #s09 .fc .d { font-family: "Manrope"; font-weight: 700; font-size: 25px; line-height: 1.22; }
+  #s09 .ph .prog { position: absolute; left: 26px; right: 26px; bottom: 38px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.2); }
+  #s09 .ph .prog i { position: absolute; left: 0; top: 0; bottom: 0; width: 24%; border-radius: 4px; background: linear-gradient(90deg, #7df0ff, #4f8dff); }
+  #s09 .ph .cnt2 { position: absolute; left: 26px; bottom: 56px; font-family: "Manrope"; font-weight: 700; font-size: 18px; opacity: .75; }
+
+  /* ruta */
+  #s09 .g3 { position: absolute; inset: 0; }
+  #s09 svg.rt { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+  #s09 .rn { position: absolute; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 50%; display: grid; place-items: center; opacity: 0; border-radius: 50%; }
+  #s09 .rn svg { width: 40px; height: 40px; }
+  #s09 .bus { position: absolute; left: 0; top: 0; width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%; display: grid; place-items: center; opacity: 0; background: radial-gradient(circle at 35% 30%, #fff, #bcd6ff 60%, #4f8dff); color: #0b2a8f; box-shadow:  0 0 26px 6px rgba(255,255,255,.07); }
+  #s09 .bus svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* radar */
+  #s09 .rd { left: 1130px; top: 400px; width: 630px; height: 540px; opacity: 0; }
+  #s09 .rd .hd { position: absolute; left: 30px; top: 26px; display: flex; align-items: center; gap: 14px; }
+  #s09 .rd .hd .ic { width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; background: #16b8e8; color: #fff; }
+  #s09 .rd .hd .ac-lbl { font-size: 30px; }
+  #s09 .rd .hd .ac-sub { font-size: 17px; margin-top: 2px; }
+  #s09 svg.rs { position: absolute; left: 0; top: 70px; width: 630px; height: 470px; overflow: visible; }
+  #s09 .rs text { font-family: "Manrope"; font-weight: 700; font-size: 22px; fill: #fff; }
+  #s09 .rs text.pc { font-family: "Rubik"; font-weight: 600; font-size: 20px; fill: var(--cy); }
+  #s09 .rc { position: absolute; left: 398px; top: 402px; width: 218px; height: 80px; border-radius: 20px; padding: 12px 18px; opacity: 0; border: 1.5px solid rgba(255,122,138,.7); background: linear-gradient(145deg, rgba(255,122,138,.3), rgba(255,122,138,.08)); box-shadow:  0 0 30px rgba(255,255,255,.07); backdrop-filter: blur(20px); }
+  #s09 .rc b { display: block; font-family: "Rubik"; font-weight: 700; font-size: 26px; letter-spacing: -0.02em; color: #ffd5da; }
+  #s09 .rc span { font-family: "Manrope"; font-weight: 700; font-size: 18px; color: #fff; opacity: .85; }
+
+  /* chat */
+  #s09 .ch { left: 200px; top: 350px; width: 1040px; height: 500px; opacity: 0; border-radius: 34px; }
+  #s09 .ch .hd { position: absolute; left: 0; right: 0; top: 0; height: 70px; border-bottom: 1.5px solid rgba(255,255,255,.2); display: flex; align-items: center; gap: 14px; padding: 0 28px; }
+  #s09 .ch .hd .ic { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: var(--pk); color: #fff; }
+  #s09 .ch .hd .ac-lbl { font-size: 26px; }
+  #s09 .ub { position: absolute; right: 32px; top: 88px; width: 700px; padding: 16px 26px; border-radius: 24px; border-top-right-radius: 8px; background: linear-gradient(135deg, #d92f86, #ff5fa8); border: 1.5px solid rgba(255,255,255,.35); box-shadow:  0px 10px 30px rgba(0,0,0,0.25); font-family: "Manrope"; font-weight: 700; font-size: 29px; line-height: 1.3; opacity: 0; }
+  #s09 .ub .c { opacity: 0; }
+  #s09 .av { position: absolute; left: 32px; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #fff 0%, #ffd3e7 26%, #ff5fa8 68%, #c21f78 100%); box-shadow:  0 0 22px 5px rgba(255,255,255,.07); opacity: 0; }
+  #s09 .av svg { width: 24px; height: 24px; fill: #fff; stroke: none; }
+  #s09 .dots { position: absolute; left: 96px; top: 228px; padding: 18px 24px; border-radius: 22px; border-top-left-radius: 8px; background: rgba(255,255,255,.17); border: 1.5px solid rgba(255,255,255,.3); display: flex; gap: 10px; opacity: 0; }
+  #s09 .dots i { width: 12px; height: 12px; border-radius: 50%; background: #fff; }
+  #s09 .ab { position: absolute; left: 96px; top: 214px; width: 880px; padding: 20px 26px 18px; border-radius: 24px; border-top-left-radius: 8px; background: rgba(255,255,255,.17); border: 1.5px solid rgba(255,255,255,.3); opacity: 0; }
+  #s09 .ab p { font-family: "Manrope"; font-weight: 600; font-size: 27px; line-height: 1.32; }
+  #s09 .ab p .ln2 { display: block; opacity: 0; }
+  #s09 .ab p b { color: #9ff3ff; font-weight: 800; }
+  #s09 .cite { margin-top: 14px; display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px 8px 10px; border-radius: 16px; background: rgba(125,240,255,.16); border: 1.5px solid rgba(125,240,255,.55); font-family: "Manrope"; font-weight: 700; font-size: 21px; opacity: 0; }
+  #s09 .cite .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--cy); color: #05307a; }
+  #s09 .cite .ic svg { width: 22px; height: 22px; }
+
+  /* columna derecha del chat */
+  #s09 .sc { position: absolute; left: 1330px; top: 350px; width: 430px; }
+  #s09 .sc .sh { font-family: "Rubik"; font-weight: 600; font-size: 24px; opacity: 0; margin-bottom: 12px; letter-spacing: -0.02em; }
+  #s09 .sch { position: relative; height: 70px; margin-bottom: 14px; display: flex; align-items: center; gap: 16px; padding: 0 20px; opacity: 0; border-radius: 22px; }
+  #s09 .sch .ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: rgba(255,255,255,.16); }
+  #s09 .sch .ac-lbl { font-size: 23px; }
+  #s09 .sch .sg { position: absolute; inset: -4px; border-radius: 26px; border: 3px solid var(--cy); box-shadow:  0 0 34px 6px rgba(255,255,255,.07); opacity: 0; pointer-events: none; }
+  #s09 .net { left: 1330px; top: 640px; width: 430px; height: 210px; opacity: 0; border-radius: 26px; overflow: hidden; }
+  #s09 .net .nh { position: absolute; left: 20px; top: 16px; display: flex; align-items: center; gap: 12px; color: #fff; }
+  #s09 .net .nh .ac-lbl { font-size: 22px; opacity: .9; }
+  #s09 .net .rw { position: absolute; height: 18px; border-radius: 9px; background: rgba(255,255,255,.4); opacity: 0; }
+  #s09 .net .rw.s { height: 10px; background: rgba(255,255,255,.22); }
+  #s09 .net .q { position: absolute; font-family: "Rubik"; font-weight: 700; color: rgba(255,255,255,.55); opacity: 0; }
+
+  /* remate */
+  #s09 .ok { left: 600px; top: 884px; width: 720px; height: 72px; border-radius: 36px; display: flex; align-items: center; justify-content: center; gap: 18px; opacity: 0; }
+  #s09 .ok .cc { width: 44px; height: 44px; border-radius: 50%; background: var(--cy); display: grid; place-items: center; }
+  #s09 .ok .cc svg { width: 28px; height: 28px; fill: none; stroke: #05307a; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+  #s09 .ok .ac-lbl { font-size: 33px; }
+</style>
+
+<div id="s09" class="ac-root" data-composition-id="s09-estudiante" data-width="1920" data-height="1080">
+  <div class="glow" id="s09-glow"></div>
+
+  <!-- ruta + bus (detras del telefono) -->
+  <div class="g3" id="s09-g3">
+    <svg class="rt" viewBox="0 0 1920 1080"><path id="s09-rp" d="M760 850 C900 880 1030 800 960 700 C900 615 880 560 970 500" fill="none" stroke="#bcd6ff" stroke-width="6" stroke-linecap="round" stroke-dasharray="1" pathLength="1" stroke-dashoffset="1" opacity=".85" style="filter: drop-shadow(0 0 10px rgba(255,255,255,.07)))"/></svg>
+    <div class="rn ac-glass" id="s09-st" style="left:760px;top:850px;border-radius:50%"></div>
+    <div class="rn ac-glass" id="s09-ca" style="left:970px;top:500px;border-radius:50%"></div>
+    <div class="bus" id="s09-bus"></div>
+    <div class="ac-glass ph" id="s09-ph">
+      <div class="nt"></div>
+      <div class="hd"><div class="ic" id="s09-phic"></div><div class="ac-lbl">Tarjetas</div></div>
+      <div class="fc" id="s09-fc3"><div class="f"><div class="k">&nbsp;</div></div></div>
+      <div class="fc" id="s09-fc2"><div class="f"><div class="k">&nbsp;</div></div></div>
+      <div class="fc" id="s09-fc1"><div class="f"><div class="k">TÉRMINO</div><div class="t">Depredador</div></div><div class="f bk"><div class="k">DEFINICIÓN</div><div class="d">Animal que caza a otros para alimentarse</div></div></div>
+      <div class="cnt2">1 de 12</div>
+      <div class="prog"><i></i></div>
+    </div>
+  </div>
+
+  <!-- radar -->
+  <div class="ac-glass rd" id="s09-rd">
+    <div class="hd"><div class="ic" id="s09-rdic"></div><div><div class="ac-lbl">Cuestionario</div><div class="ac-sub">Tu dominio por tema</div></div></div>
+    <svg class="rs" id="s09-rs" viewBox="0 0 630 470"></svg>
+    <div class="rc" id="s09-rc"><b>Por reforzar</b><span>Depredador · 30 %</span></div>
+  </div>
+
+  <!-- fuentes -->
+  <div class="ac-glass tray" id="s09-tray"><div class="tg" id="s09-tg"></div>
+    <div class="tl"><div class="ic" id="s09-trayic"></div><div class="ac-lbl">Mis fuentes</div></div></div>
+  <div class="ac-glass src" id="s09-sr0"><div class="il"><svg viewBox="0 0 120 90"><rect x="24" y="6" width="74" height="78" rx="9"/><path d="M24 22h-8M24 40h-8M24 58h-8M24 76h-8"/><path d="M40 26h44M40 40h44M40 54h28"/><path d="M40 68h18" stroke="#7df0ff"/></svg></div><div class="ac-lbl">Mis apuntes</div></div>
+  <div class="ac-glass src" id="s09-sr1"><div class="il"><svg viewBox="0 0 120 90"><rect x="8" y="6" width="104" height="66" rx="9"/><path d="M22 22h38"/><path d="M30 62V46M48 62V36M66 62V42M84 62V28M100 62V50" stroke="#7df0ff"/><path d="M60 72v10M42 84h36"/></svg></div><div class="ac-lbl">Presentación del profesor</div></div>
+  <div class="ac-glass src" id="s09-sr2"><div class="il"><svg viewBox="0 0 120 90" id="s09-wv"></svg></div><div class="ac-lbl">Grabación de la clase</div></div>
+
+  <!-- chat -->
+  <div class="ac-glass ch" id="s09-ch">
+    <div class="hd"><div class="ic" id="s09-chic"></div><div class="ac-lbl">Chat con IA</div></div>
+    <div class="ub" id="s09-ub"></div>
+    <div class="dots" id="s09-dots"><i></i><i></i><i></i></div>
+    <div class="av" id="s09-av" style="top:214px"></div>
+    <div class="ab" id="s09-ab" style="left:96px">
+      <p><span class="ln2" id="s09-a1"><b>Depredador:</b> caza a otras especies</span><span class="ln2" id="s09-a2">para alimentarse. <b>Especie en peligro:</b></span><span class="ln2" id="s09-a3">su población baja y puede desaparecer.</span></p>
+      <div class="cite" id="s09-cite"><div class="ic" id="s09-citeic"></div>Basado en tus apuntes de clase</div>
+    </div>
+  </div>
+  <svg class="ac-links" id="s09-lk" viewBox="0 0 1920 1080" style="z-index:3"></svg>
+  <div class="sc" id="s09-sc">
+    <div class="sh" id="s09-sh">Tus fuentes</div>
+    <div class="ac-glass sch" id="s09-sc0"><div class="sg"></div><div class="ic" data-i="texto"></div><div class="ac-lbl">Mis apuntes</div></div>
+    <div class="ac-glass sch" id="s09-sc1"><div class="ic" data-i="doc"></div><div class="ac-lbl">Presentación</div></div>
+    <div class="ac-glass sch" id="s09-sc2"><div class="ic" data-i="audio"></div><div class="ac-lbl">Grabación</div></div>
+  </div>
+  <div class="ac-glass net" id="s09-net">
+    <div class="nh"><span id="s09-neti"></span><div class="ac-lbl">Lo primero que aparece en internet</div></div>
+  </div>
+
+  <!-- calendario -->
+  <div class="ac-glass cal" id="s09-cal">
+    <div class="cnt"><div class="nm" id="s09-nm"></div><div class="cl"><span class="l1" id="s09-l1">días para<br>el parcial</span><span class="l2" id="s09-l2">hoy es el<br>parcial</span></div></div>
+    <div class="days" id="s09-days"><div class="mk" id="s09-mk"></div></div>
+  </div>
+  <div class="ac-glass per" id="s09-per"></div>
+  <div class="perl" id="s09-perl">Un <span class="ac-em">estudiante</span></div>
+  <div class="ac-glass ok" id="s09-ok"><div class="cc"><svg viewBox="0 0 48 48"><path id="s09-okp" d="M12 25l9 9 16-18" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg></div><div class="ac-lbl">Listo para repasar</div></div>
+</div>
+
+<script>
+(function () {
+  const S = "s09", B = "b09", $ = (id) => document.getElementById(id);
+  const cue = (w, n) => AC.cue(S, B, w, n || 0);
+  const tl = gsap.timeline({ paused: true });
+  const P = 1600;
+
+  /* ---------- construccion ---------- */
+  $("s09-per").innerHTML = AC.svg("persona", 72);
+  $("s09-phic").innerHTML = AC.svg("tarjetas", 24);
+  $("s09-rdic").innerHTML = AC.svg("cuest", 30);
+  $("s09-chic").innerHTML = AC.svg("chat", 26);
+  $("s09-trayic").innerHTML = AC.svg("carpeta", 38);
+  $("s09-citeic").innerHTML = AC.svg("texto", 22);
+  $("s09-neti").innerHTML = AC.svg("globo", 34);
+  $("s09-av").innerHTML = '<svg viewBox="0 0 48 48"><path d="M24 4l4.6 13.4L42 22l-13.4 4.6L24 40l-4.6-13.4L6 22l13.4-4.6z"/></svg>';
+  document.querySelectorAll("#s09 .sch .ic").forEach((e) => { e.innerHTML = AC.svg(e.dataset.i, 26); });
+  $("s09-st").innerHTML = AC.svg("edificio", 40);
+  $("s09-ca").innerHTML = '<svg viewBox="0 0 48 48" width="40" height="40"><path d="M6 24L24 8l18 16M11 20v21h26V20M20 41V29h8v12"/></svg>';
+  $("s09-ca").querySelector("svg").style.cssText = "fill:none;stroke:currentColor;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round";
+  $("s09-bus").innerHTML = '<svg viewBox="0 0 48 48"><rect x="6" y="9" width="36" height="27" rx="7"/><path d="M6 24h36M15 36v5M33 36v5M14 30h2M32 30h2"/></svg>';
+
+  // dias
+  const DAYS = [["Mié", 11], ["Jue", 12], ["Vie", 13], ["Sáb", 14], ["Dom", 15], ["Lun", 16], ["Mar", 17], ["Mié", 18]];
+  DAYS.forEach((d, i) => {
+    const e = document.createElement("div"); e.className = "day"; e.id = "s09-d" + i; e.style.left = (i * 108) + "px";
+    e.innerHTML = '<div class="a">' + d[0] + '</div><div class="n">' + d[1] + '</div>' + (i === 7 ? '<div class="fl" id="s09-fl">Parcial</div>' : "");
+    $("s09-days").insertBefore(e, $("s09-mk"));
+  });
+  // numeros 7..0
+  for (let k = 7; k >= 0; k--) { const s = document.createElement("span"); s.id = "s09-n" + k; s.textContent = k; $("s09-nm").appendChild(s); }
+
+  // onda de audio
+  (function () {
+    const r = AC.seeded(9), hs = [14, 30, 52, 22, 62, 40, 70, 34, 56, 24, 44, 18, 30];
+    let h = "";
+    hs.forEach((v, i) => { h += '<rect class="bar" id="s09-b' + i + '" x="' + (8 + i * 8.6) + '" y="' + (45 - v / 2) + '" width="5" height="' + v + '" rx="2.5" fill="#fff" stroke="none"/>'; });
+    $("s09-wv").innerHTML = h;
+  })();
+
+  // radar
+  const CX = 315, CY = 250, R = 120, SC = [.88, .66, .30, .74]; // arriba, izquierda, abajo, derecha
+  const AX = [[0, -1], [-1, 0], [0, 1], [1, 0]];
+  const pt = (i, f) => [CX + AX[i][0] * R * f, CY + AX[i][1] * R * f];
+  (function () {
+    let h = '<defs><radialGradient id="s09-rg"><stop offset="0" stop-color="#7df0ff" stop-opacity=".55"/><stop offset="1" stop-color="#16b8e8" stop-opacity=".18"/></radialGradient></defs>';
+    [1 / 3, 2 / 3, 1].forEach((f, k) => { h += '<polygon class="ring" id="s09-ring' + k + '" points="' + [0, 1, 2, 3].map((i) => pt(i, f).join(",")).join(" ") + '" fill="none" stroke="rgba(255,255,255,.34)" stroke-width="2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>'; });
+    [0, 1, 2, 3].forEach((i) => { const p = pt(i, 1); h += '<line id="s09-ax' + i + '" x1="' + CX + '" y1="' + CY + '" x2="' + p[0] + '" y2="' + p[1] + '" stroke="rgba(255,255,255,.28)" stroke-width="2" opacity="0"/>'; });
+    h += '<g id="s09-pg" opacity="0"><polygon points="' + [0, 1, 2, 3].map((i) => pt(i, SC[i]).join(",")).join(" ") + '" fill="url(#s09-rg)" stroke="#7df0ff" stroke-width="3.5" stroke-linejoin="round" style="filter:drop-shadow(0 0 12px rgba(255,255,255,.07)))"/>';
+    h += '<circle id="s09-wk" cx="' + pt(2, SC[2])[0] + '" cy="' + pt(2, SC[2])[1] + '" r="44" fill="rgba(255,122,138,.4)" opacity="0"/>';
+    [0, 1, 2, 3].forEach((i) => { const p = pt(i, SC[i]); h += '<circle id="s09-dt' + i + '" cx="' + p[0] + '" cy="' + p[1] + '" r="8" fill="#fff" stroke="#7df0ff" stroke-width="3"/>'; });
+    h += '</g>';
+    const L = [ ["Ecosistema", CX, CY - R - 40, "middle"], ["Especie en", CX - R - 18, CY - 8, "end"], ["Depredador", CX, CY + R + 40, "middle"], ["Conservación", CX + R + 18, CY - 8, "start"] ];
+    L.forEach((l, i) => {
+      h += '<g id="s09-lb' + i + '" opacity="0"><text id="s09-lt' + i + '" x="' + l[1] + '" y="' + l[2] + '" text-anchor="' + l[3] + '">' + l[0] + '</text>';
+      if (i === 1) h += '<text x="' + l[1] + '" y="' + (l[2] + 25) + '" text-anchor="end">peligro</text>';
+      const py = i === 1 ? l[2] + 52 : (i === 0 ? l[2] - 26 : l[2] + 26), px = l[1];
+      h += '<text class="pc" id="s09-pc' + i + '" x="' + px + '" y="' + (i === 3 ? l[2] + 26 : py) + '" text-anchor="' + l[3] + '">0 %</text></g>';
+    });
+    $("s09-rs").innerHTML = h;
+  })();
+
+  // respuesta del chat: texto de la pregunta por letras
+  const Q = "¿Cuál es la diferencia entre estos dos conceptos?";
+  $("s09-ub").innerHTML = Q.split("").map((c) => '<span class="c">' + (c === " " ? "&nbsp;" : c) + '</span>').join("").replace(/(&nbsp;)/g, " ");
+  const CH = Array.from($("s09-ub").querySelectorAll(".c"));
+  CH.forEach((c) => { c.style.whiteSpace = "pre-wrap"; });
+
+  // internet: filas desordenadas
+  (function () {
+    const r = AC.seeded(31), box = $("s09-net"); let h = "";
+    for (let i = 0; i < 6; i++) {
+      const w = 120 + Math.floor(r() * 190), x = 20 + Math.floor(r() * 90), y = 66 + i * 23 + Math.floor(r() * 4), rot = Math.floor(r() * 9 - 4);
+      const e = document.createElement("div"); e.className = "rw" + (i % 2 ? " s" : ""); e.id = "s09-rw" + i;
+      e.style.cssText = "left:" + x + "px;top:" + y + "px;width:" + w + "px;transform:rotate(" + rot + "deg)"; box.appendChild(e);
+    }
+    [["?", 330, 70, 70], ["?", 270, 128, 44], ["!", 372, 138, 52]].forEach((q, i) => {
+      const e = document.createElement("div"); e.className = "q"; e.id = "s09-q" + i; e.textContent = q[0];
+      e.style.cssText = "left:" + q[1] + "px;top:" + q[2] + "px;font-size:" + q[3] + "px;transform:rotate(" + (i * 9 - 8) + "deg)"; box.appendChild(e);
+    });
+  })();
+
+  /* ---------- linea de tiempo ---------- */
+  const T = {
+    est: cue("estudiante"), sem: cue("semana"), parc: cue("parcial"), apu: cue("apuntes"), pres: cue("presentación"), grab: cue("grabación"),
+    sube: cue("sube"), fue: cue("fuentes"), tar: cue("tarjetas"), rep: cue("repasar"), tray: cue("trayecto"), casa: cue("casa"),
+    cues: cue("cuestionario"), prob: cue("probarse"), tod: cue("todavía"), dom: cue("domina"), chat: cue("chat"), preg: cue("preguntar"),
+    cual: cue("cuál"), conc: cueEnd("conceptos"), rec: cue("recibir"), basa: cue("basada"), prop: cue("propio"), no: cue("no", 1), int: cue("Internet")
+  };
+  function cueEnd(w) { return AC.cueEnd(S, B, w, 0); }
+
+  // luz de fondo que cambia de color con cada momento
+  tl.fromTo("#s09-glow", { opacity: 0, scale: .8 }, { opacity: .42, scale: 1, duration: 2.2, ease: "power2.out" }, .3);
+  [[T.parc + .2, "#ff5fa8", 960, 360, 1.8], [8.9, "#4f8dff", 700, 430, 1.8], [12.9, "#16b8e8", 1100, 450, 1.8], [T.chat, "#ff5fa8", 760, 420, 1.8], [24.6, "#7df0ff", 960, 460, 1.6]].forEach((g) => {
+    tl.to("#s09-glow", { backgroundColor: g[1], x: g[2] - 960, y: g[3] - 520, duration: g[4], ease: "power2.inOut" }, g[0]);
+  });
+
+  /* 1 · estudiante */
+  tl.fromTo("#s09-per", { scale: .5, y: 30, opacity: 0, transformPerspective: P }, { scale: 1, y: 0, opacity: 1, duration: 1.4, ease: "expo.out" }, .3);
+  tl.fromTo("#s09-perl", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, T.est - .05);
+  tl.to("#s09-perl", { opacity: 0, y: -16, duration: .9, ease: "power2.in" }, 2.3);
+  tl.to("#s09-per", { x: -720, y: -220, scale: .72, duration: 1.4, ease: "power2.inOut" }, 2.4);
+
+  /* 1b · calendario + cuenta atras */
+  tl.fromTo("#s09-cal", { y: 400, scale: .78, rotateX: 55, opacity: 0, transformPerspective: P }, { y: 300, scale: 1.25, rotateX: 14, rotateY: -8, opacity: 1, duration: 1.6, ease: "power3.out" }, T.sem - .1);
+  tl.to("#s09-d7", { backgroundColor: "rgba(255,95,168,.38)", borderColor: "#ff5fa8", duration: 1.1, ease: "power2.out" }, T.parc);
+  tl.fromTo("#s09-d7", { scale: 1 }, { scale: 1.14, duration: .6, ease: "power2.out", yoyo: true, repeat: 1 }, T.parc);
+  tl.fromTo("#s09-fl", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 1.0, ease: "power3.out" }, T.parc + .15);
+  tl.fromTo("#s09-n7", { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, T.parc + .1);
+  tl.fromTo("#s09-mk", { opacity: 0 }, { opacity: 1, duration: .9, ease: "power2.out" }, T.parc + .8);
+  // sube a la parte superior
+  tl.to("#s09-cal", { y: 0, scale: 1, rotateX: 0, rotateY: 0, duration: 1.5, ease: "power2.inOut" }, 4.14);
+  tl.to("#s09-per", { x: -736, y: -298, scale: .62, duration: 1.5, ease: "power2.inOut" }, 4.14);
+
+  // cuenta atras: 7 -> 0, un dia cada ~3 s
+  const TICK = [6.3, 9.35, 12.4, 15.45, 18.5, 21.55, 24.6];
+  TICK.forEach((t, i) => {
+    const from = 7 - i, to = 6 - i;
+    tl.to("#s09-n" + from, { yPercent: -110, opacity: 0, duration: 1.0, ease: "power2.inOut" }, t);
+    tl.fromTo("#s09-n" + to, { yPercent: 110, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1.0, ease: "power2.inOut" }, t);
+    tl.to("#s09-mk", { x: (i + 1) * 108, duration: 1.1, ease: "power2.inOut" }, t);
+    tl.to("#s09-d" + i, { opacity: .45, duration: 1.0, ease: "power2.inOut" }, t);
+  });
+  // remate de la cuenta: el dia del parcial
+  tl.to("#s09-l1", { opacity: 0, duration: .8, ease: "power2.inOut" }, 24.6);
+  tl.to("#s09-l2", { opacity: 1, duration: .8, ease: "power2.inOut" }, 24.75);
+  tl.to("#s09-mk", { borderColor: "#ff5fa8", boxShadow: " 0 0 30px 6px rgba(255,255,255,.07)", duration: 1.0, ease: "power2.inOut" }, 24.7);
+  tl.to("#s09-n0", { color: "#ff9ac6", duration: 1.0, ease: "power2.inOut" }, 24.8);
+
+  /* 2 · fuentes */
+  const SX = [520, 960, 1400]; SX.forEach((x, i) => { $("s09-sr" + i).style.left = (x - 170) + "px"; });
+  const SW = [T.apu, T.pres, T.grab];
+  SW.forEach((t, i) => {
+    tl.fromTo("#s09-sr" + i, { y: -300, rotateX: -70, scale: .9, opacity: 0, transformPerspective: P }, { y: 0, rotateX: 0, scale: 1, opacity: 1, duration: 1.5, ease: "power3.out" }, t - .05);
+  });
+  // la onda de audio se dibuja de izquierda a derecha
+  for (let i = 0; i < 13; i++) tl.fromTo("#s09-b" + i, { scaleY: .12 }, { scaleY: 1, duration: .7, ease: "power2.out" }, T.grab + .55 + i * .06);
+  // bandeja "Mis fuentes" y las tarjetas bajan a ella
+  tl.fromTo("#s09-tray", { y: 90, opacity: 0, transformPerspective: P }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, 8.0);
+  const TD = [[420, 940], [180, 1140], [-60, 1340]];
+  TD.forEach((d, i) => tl.to("#s09-sr" + i, { x: d[0], y: 315, scale: .55, duration: 1.4, ease: "power2.inOut" }, T.sube + .05 + i * .12));
+  tl.fromTo("#s09-tg", { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, T.fue);
+  tl.to("#s09-tg", { opacity: .3, duration: 1.0, ease: "power2.inOut" }, T.fue + .9);
+
+  /* 3 · tarjetas en el telefono + trayecto */
+  TD.forEach((d, i) => tl.to("#s09-sr" + i, { x: 510 - SX[i], y: 145, scale: .25, opacity: 0, duration: 1.1, ease: "power2.in" }, T.tar + .03 + i * .08));
+  tl.to("#s09-tray", { y: 40, opacity: 0, duration: .9, ease: "power2.in" }, T.tar);
+  tl.fromTo("#s09-ph", { y: 150, rotateY: 28, scale: .92, opacity: 0, transformPerspective: P }, { y: 0, rotateY: 0, scale: 1, opacity: 1, duration: 1.4, ease: "power3.out" }, T.tar + .05);
+  [["#s09-fc3", .46, 20, .82], ["#s09-fc2", .6, 10, .9], ["#s09-fc1", 1, 0, 1]].forEach((c, i) => {
+    tl.fromTo(c[0], { y: 40, opacity: 0, scale: c[3] }, { y: c[2] + (i === 0 ? 24 : i === 1 ? 12 : 0), opacity: c[1], scale: c[3], duration: 1.0, ease: "power3.out" }, T.tar + .75 + (2 - i) * .18);
+  });
+  tl.set("#s09-fc1", { opacity: 1 }, T.tar + 1.5);
+  tl.fromTo("#s09-fc1", { rotateY: 0, transformPerspective: P }, { rotateY: 180, duration: 1.3, ease: "power2.inOut" }, T.rep + .1);
+  // ruta
+  tl.fromTo("#s09-st", { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.0, ease: "back.out(1.5)" }, T.tray - .3);
+  tl.fromTo("#s09-ca", { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.0, ease: "back.out(1.5)" }, T.casa - .05);
+  const rp = $("s09-rp"), rlen = rp.getTotalLength(), pr = { t: 0 }, bus = $("s09-bus");
+  const putBus = () => { const q = rp.getPointAtLength(pr.t * rlen); bus.style.left = q.x + "px"; bus.style.top = q.y + "px"; rp.setAttribute("stroke-dashoffset", String(1 - pr.t)); };
+  tl.set("#s09-bus", { opacity: 1 }, T.tray + .05);
+  tl.to(pr, { t: 1, duration: 1.4, ease: "power2.inOut", onUpdate: putBus }, T.tray + .1);
+  tl.fromTo("#s09-ca", { boxShadow: "0 0 0 0 rgba(125,240,255,0)" }, { boxShadow: " 0 0 44px 6px rgba(255,255,255,.07)", duration: .9, ease: "power2.out", yoyo: true, repeat: 1 }, T.tray + 1.5);
+
+  /* 3b · radar de dominio */
+  tl.fromTo("#s09-rd", { x: 260, rotateY: -40, opacity: 0, transformPerspective: P }, { x: 0, rotateY: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, T.cues);
+  [0, 1, 2].forEach((k) => tl.to("#s09-ring" + k, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut" }, T.cues + .9 + k * .15));
+  tl.to("#s09-ax0, #s09-ax1, #s09-ax2, #s09-ax3", { opacity: 1, duration: 1.0, ease: "power2.out" }, T.cues + 1.0);
+  tl.fromTo("#s09-lb0, #s09-lb1, #s09-lb2, #s09-lb3", { opacity: 0 }, { opacity: 1, duration: 1.0, ease: "power2.out", stagger: .18 }, T.cues + 1.1);
+  tl.fromTo("#s09-pg", { opacity: 0, scale: .05, svgOrigin: CX + " " + CY }, { opacity: 1, scale: 1, svgOrigin: CX + " " + CY, duration: 1.7, ease: "power2.inOut" }, T.prob);
+  const pp = { p: 0 };
+  tl.to(pp, { p: 1, duration: 1.7, ease: "power2.inOut", onUpdate: () => { [0, 1, 2, 3].forEach((i) => { $("s09-pc" + i).textContent = Math.round(SC[i] * 100 * pp.p) + " %"; }); } }, T.prob);
+  // el tema debil se marca en rojo suave
+  tl.to("#s09-dt2", { attr: { fill: "#ff7a8a", stroke: "#ffd5da", r: 11 }, duration: .9, ease: "power2.out" }, T.tod);
+  tl.to("#s09-wk", { opacity: 1, duration: 1.0, ease: "power2.out" }, T.tod);
+  tl.to("#s09-lt2, #s09-pc2", { fill: "#ff9aa6", duration: .9, ease: "power2.out" }, T.tod);
+  tl.fromTo("#s09-rc", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, T.dom);
+
+  /* 4 · todo sale; entra el chat */
+  const EX = 16.15;
+  tl.to("#s09-ph", { x: -260, opacity: 0, duration: 1.2, ease: "power2.inOut" }, EX);
+  tl.to("#s09-g3 .rn, #s09-bus, #s09-rp", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, EX);
+  tl.to("#s09-rd", { x: 280, opacity: 0, duration: 1.2, ease: "power2.inOut" }, EX);
+  tl.fromTo("#s09-ch", { y: 110, rotateX: 30, scale: .94, opacity: 0, transformPerspective: P }, { y: 0, rotateX: 0, scale: 1, opacity: 1, duration: 1.5, ease: "power3.out" }, T.chat - .15);
+  tl.fromTo("#s09-sh", { opacity: 0 }, { opacity: .8, duration: 1.0, ease: "power2.out" }, 17.35);
+  [0, 1, 2].forEach((i) => tl.fromTo("#s09-sc" + i, { x: 70, opacity: 0, rotateY: -25, transformPerspective: P }, { x: 0, opacity: 1, rotateY: 0, duration: 1.1, ease: "power3.out" }, 17.45 + i * .22));
+
+  // pregunta escrita despacio
+  tl.fromTo("#s09-ub", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: "power3.out" }, T.cual - .15);
+  const qp = { n: 0 };
+  tl.to(qp, { n: CH.length, duration: T.conc - T.cual - .05, ease: "none", onUpdate: () => { const k = Math.floor(qp.n + .001); CH.forEach((c, i) => { c.style.opacity = i < k ? "1" : "0"; }); } }, T.cual);
+
+  // respuesta
+  tl.fromTo("#s09-av", { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: .9, ease: "back.out(1.6)" }, T.rec);
+  tl.fromTo("#s09-dots", { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .7, ease: "power3.out" }, T.rec + .05);
+  [0, 1, 2].forEach((i) => tl.fromTo("#s09-dots i:nth-child(" + (i + 1) + ")", { y: 0, opacity: .5 }, { y: -7, opacity: 1, duration: .45, ease: "power2.inOut", yoyo: true, repeat: 3 }, T.rec + .1 + i * .14));
+  tl.to("#s09-dots", { opacity: 0, duration: .5, ease: "power2.in" }, T.rec + 1.35);
+  tl.fromTo("#s09-ab", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 1.0, ease: "power3.out" }, T.rec + 1.4);
+  [1, 2, 3].forEach((n, i) => tl.fromTo("#s09-a" + n, { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: .9, ease: "power3.out" }, T.rec + 1.7 + i * .38));
+  tl.fromTo("#s09-cite", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 1.0, ease: "power3.out" }, T.basa + .25);
+  // la cita se enlaza con la fuente
+  const lk = $("s09-lk");
+  AC.link(tl, lk, [1180, 700, 1270, 700, 1250, 400, 1330, 390], T.prop, 1.1, "#7df0ff", "s09-lkp");
+  tl.fromTo("#s09-sc0 .sg", { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, T.prop + .9);
+  tl.to("#s09-sc0 .sg", { opacity: .35, duration: 1.0, ease: "power2.inOut" }, T.prop + 1.7);
+
+  // internet queda desordenado y se aparta
+  tl.fromTo("#s09-net", { x: 50, y: 40, rotateY: -30, opacity: 0, transformPerspective: P }, { x: 0, y: 0, rotateY: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, T.no - .1);
+  for (let i = 0; i < 6; i++) tl.fromTo("#s09-rw" + i, { x: 40, opacity: 0 }, { x: 0, opacity: 1, duration: .8, ease: "power3.out" }, T.no + .15 + i * .08);
+  for (let i = 0; i < 3; i++) tl.fromTo("#s09-q" + i, { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: "back.out(1.6)" }, T.no + .3 + i * .15);
+  tl.to("#s09-net", { opacity: .24, scale: .93, x: 24, filter: "blur(3px)", duration: 1.0, ease: "power2.inOut" }, 24.35);
+
+  // remate: check "listo para repasar"
+  tl.fromTo("#s09-ok", { y: 24, scale: .92, opacity: 0, transformPerspective: P }, { y: 0, scale: 1, opacity: 1, duration: 1.0, ease: "power3.out" }, 24.6);
+  tl.to("#s09-okp", { strokeDashoffset: 0, duration: .8, ease: "power2.inOut" }, 25.0);
+
+  window.__timelines["s09-estudiante"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

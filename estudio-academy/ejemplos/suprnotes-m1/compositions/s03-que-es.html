@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s03 · Qué es SuprNotes</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Poppins"; src: url("assets/fonts/Poppins-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s03quees { position: absolute; inset: 0; overflow: hidden; }
+  #s03quees .ac-title { top: 112px; }
+  #s03quees #s03-stage { position: absolute; inset: 0; transform-origin: 960px 540px; }
+
+  /* ventana de navegador de vidrio */
+  #s03quees #s03-win { left: 200px; top: 245px; width: 1520px; height: 700px; border-radius: 30px; opacity: 0; overflow: hidden; }
+  #s03quees .s03-page { position: absolute; left: 0; top: 70px; width: 1520px; height: 630px; opacity: 0; background: linear-gradient(180deg, rgba(2,12,72,.30), rgba(2,12,72,.46)); }
+  #s03quees .s03-bar { position: absolute; left: 0; top: 0; width: 1520px; height: 70px; border-bottom: 1.5px solid rgba(255,255,255,.2); background: rgba(255,255,255,.06); }
+  #s03quees .s03-dot { position: absolute; top: 27px; width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,.38); }
+  #s03quees .s03-addr { position: absolute; left: 150px; top: 14px; width: 520px; height: 42px; border-radius: 13px; background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.22); display: flex; align-items: center; gap: 12px; padding: 0 16px; color: #fff; }
+  #s03quees #s03-fav { width: 26px; height: 26px; border-radius: 7px; flex: none; }
+  #s03quees .s03-addr svg { width: 22px; height: 22px; color: #7df0ff; flex: none; }
+  #s03quees .s03-ty { font-family: "Manrope"; font-weight: 700; font-size: 22px; letter-spacing: .01em; white-space: nowrap; display: flex; }
+  #s03quees .s03-ty .c { position: relative; opacity: 0; }
+  #s03quees .s03-ty .c i { position: absolute; right: -2px; top: 2px; bottom: 2px; width: 2px; background: #7df0ff; opacity: 0; }
+  #s03quees .s03-load { position: absolute; left: 0; top: 68px; width: 1520px; height: 3px; opacity: 0; transform-origin: 0 50%; transform: scaleX(0); background: linear-gradient(90deg, #4f8dff, #7df0ff); box-shadow:  0 0 14px rgba(255,255,255,.07); }
+  #s03quees .s03-foot { position: absolute; left: 60px; top: 640px; width: 1400px; height: 60px; border-top: 1.5px solid rgba(255,255,255,.16); display: flex; align-items: center; gap: 16px; }
+  #s03quees .s03-by { font-family: "Manrope"; font-weight: 600; font-size: 22px; opacity: 0; color: rgba(255,255,255,.82); }
+  #s03quees .s03-logo { height: 38px; width: auto; opacity: 0; filter: drop-shadow(0 0 14px rgba(255,255,255,.07))); }
+
+  #s03quees #s03-lockup { position: absolute; left: 640px; top: 530px; display: flex; align-items: center; gap: 48px; opacity: 0; }
+  #s03quees #s03-lockup img { width: 160px; height: 160px; display: block; filter: drop-shadow(0 0 24px rgba(255,255,255,.07))); }
+  #s03quees #s03-lockup span { font-family: "Poppins"; font-weight: 500; font-size: 92px; letter-spacing: 0; line-height: 1; color: #fff; }
+  /* embudo: haces, prisma */
+  #s03quees svg.s03-svgfull { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+  #s03quees #s03-beams path { filter: drop-shadow(0 0 7px rgba(255,255,255,.07)); }
+  #s03quees #s03-halo { position: absolute; left: 570px; top: 365px; width: 520px; height: 520px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, rgba(40,225,205,.62), rgba(30,190,200,.28) 45%, rgba(30,190,200,0) 70%); }
+  #s03quees #s03-ia { position: absolute; left: 730px; top: 616px; width: 200px; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 66px; letter-spacing: -.04em; line-height: 1; color: #fff; opacity: 0; text-shadow:  0 0 22px rgba(255,255,255,.07), 0 0 50px rgba(255,255,255,.07); }
+
+  /* objetos de entrada */
+  #s03quees .s03-obj { position: absolute; opacity: 0; }
+  #s03quees .s03-obj svg { display: block; overflow: visible; }
+  #s03quees .s03-lab { position: absolute; width: 220px; margin-left: -110px; text-align: center; font-family: "Manrope"; font-weight: 700; font-size: 25px; color: rgba(255,255,255,.9); opacity: 0; }
+  #s03quees #s03-o1 { width: 160px; height: 100px; border-radius: 24px; background: linear-gradient(145deg, rgba(255,255,255,.28), rgba(125,240,255,.10)); border: 2.5px solid rgba(255,255,255,.7); box-shadow:  0 0 34px rgba(255,255,255,.07); }
+  #s03quees #s03-o1 b { position: absolute; width: 8px; border-radius: 4px; background: #7df0ff; box-shadow:  0 0 12px rgba(255,255,255,.07); transform-origin: 50% 50%; }
+
+  /* hoja de material de estudio */
+  #s03quees #s03-ghost { opacity: 0; }
+  #s03quees #s03-sheet { left: 1200px; top: 365px; width: 360px; height: 500px; border-radius: 24px; opacity: 0; border-color: rgba(190,225,255,.6); box-shadow:  0px 16px 34px rgba(0,0,0,0.28), 0 0 40px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5); }
+  #s03quees .s03-sec { position: absolute; left: 0; width: 360px; clip-path: inset(0 100% 0 0); }
+  #s03quees .s03-h1 { position: absolute; left: 28px; top: 26px; font-family: "Rubik"; font-weight: 700; font-size: 38px; letter-spacing: -.035em; line-height: 1.1; white-space: nowrap; }
+  #s03quees .s03-h1s { position: absolute; left: 28px; top: 72px; font-family: "Manrope"; font-weight: 600; font-size: 18px; opacity: .72; white-space: nowrap; }
+  #s03quees .s03-ul { position: absolute; left: 28px; top: 104px; width: 190px; height: 5px; border-radius: 3px; background: linear-gradient(90deg, #8fb6ff, #7df0ff); box-shadow:  0 0 14px rgba(255,255,255,.07); }
+  #s03quees .s03-h2 { position: absolute; left: 28px; top: 243px; font-family: "Rubik"; font-weight: 600; font-size: 28px; letter-spacing: -.025em; line-height: 1.1; white-space: nowrap; }
+  #s03quees .s03-bl { position: absolute; left: 28px; display: flex; align-items: center; gap: 12px; font-family: "Manrope"; font-weight: 700; font-size: 22px; white-space: nowrap; }
+  #s03quees .s03-bl u { display: block; width: 9px; height: 9px; border-radius: 50%; flex: none; text-decoration: none; }
+  #s03quees .s03-fc { position: absolute; left: 28px; top: 410px; width: 252px; height: 68px; border-radius: 16px; background: rgba(255,255,255,.14); border: 1.5px solid rgba(255,143,196,.75); box-shadow:  0 0 26px rgba(255,255,255,.07); display: flex; align-items: center; padding: 0 16px 0 20px; font-family: "Manrope"; font-weight: 800; font-size: 18px; white-space: nowrap; }
+  #s03quees .s03-fc:before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 5px; border-radius: 3px; background: #ff5fa8; }
+  #s03quees .s03-div { position: absolute; left: 28px; width: 304px; height: 2px; background: rgba(255,255,255,.28); transform-origin: 0 50%; transform: scaleX(0); }
+  #s03quees .s03-bdg { position: absolute; left: -17px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-family: "Rubik"; font-weight: 700; font-size: 19px; color: #fff; opacity: 0; border: 2px solid rgba(255,255,255,.85); }
+
+  /* partículas */
+  #s03quees .s03-p { position: absolute; left: 0; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; opacity: 0; }
+
+  /* sello */
+  #s03quees #s03-seal { position: absolute; left: 1490px; top: 735px; width: 200px; height: 200px; opacity: 0; filter: drop-shadow(0 0 22px rgba(255,255,255,.07))); }
+  #s03quees #s03-seal text { font-family: "Rubik"; font-weight: 700; fill: #fff; text-anchor: middle; letter-spacing: -.02em; }
+</style>
+
+<div id="s03quees" class="ac-root" data-composition-id="s03-que-es" data-width="1920" data-height="1080">
+  <div class="ac-title">
+    <div class="ln" id="s03-tA"><span class="w">Una</span> <span class="w">aplicación</span> <span class="w"><em>web</em></span></div>
+    <div class="ln" id="s03-tB"><span class="w">Con</span> <span class="w"><em>inteligencia</em></span> <span class="w"><em>artificial</em></span></div>
+    <div class="ln" id="s03-tC"><span class="w">Materiales</span> <span class="w">de</span> <span class="w">estudio</span> <span class="w"><em>estructurados</em></span></div>
+  </div>
+
+  <div id="s03-stage">
+    <!-- ventana -->
+    <div id="s03-win" class="ac-glass">
+      <div class="s03-page" id="s03-page">
+        <i style="position:absolute;left:60px;top:26px;width:96px;height:12px;border-radius:6px;background:rgba(255,255,255,.12)"></i>
+        <i style="position:absolute;left:176px;top:26px;width:70px;height:12px;border-radius:6px;background:rgba(255,255,255,.08)"></i>
+        <i style="position:absolute;left:266px;top:26px;width:82px;height:12px;border-radius:6px;background:rgba(255,255,255,.08)"></i>
+        <i style="position:absolute;left:1446px;top:18px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.14)"></i>
+      </div>
+      <div class="s03-bar">
+        <div class="s03-dot" style="left:30px"></div><div class="s03-dot" style="left:58px"></div><div class="s03-dot" style="left:86px"></div>
+        <div class="s03-addr"><img id="s03-fav" src="assets/sn-app-icon.png" alt=""><div class="s03-ty" id="s03-ty"></div></div>
+      </div>
+      <div class="s03-load" id="s03-load"></div>
+      <div class="s03-foot"><span class="s03-by" id="s03-by">Desarrollada por</span><img class="s03-logo" id="s03-logo" src="assets/logo-white.png" alt="OneScreen"></div>
+    </div>
+
+    <div id="s03-lockup"><img src="assets/sn-app-icon.png" alt="SuprNotes"><span>SuprNotes</span></div>
+    <!-- haces y prisma -->
+    <svg class="s03-svgfull" id="s03-beams" viewBox="0 0 1920 1080"></svg>
+    <svg class="s03-svgfull" id="s03-ghostsvg" viewBox="0 0 1920 1080">
+      <rect id="s03-ghost" x="1200" y="365" width="360" height="500" rx="24" fill="none" stroke="rgba(255,255,255,.42)" stroke-width="2.5" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1"/>
+    </svg>
+    <div id="s03-halo"></div>
+    <svg class="s03-svgfull" id="s03-prism" viewBox="0 0 1920 1080">
+      <defs>
+        <linearGradient id="s03-pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".46"/><stop offset=".6" stop-color="#9fd4ff" stop-opacity=".2"/><stop offset="1" stop-color="#7df0ff" stop-opacity=".12"/></linearGradient>
+      </defs>
+      <path id="s03-pfill" d="M830 470 L965 760 L695 760 Z" fill="url(#s03-pg)" opacity="0"/>
+      <path id="s03-pin" d="M830 520 L923 720 L737 720 Z" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+      <path id="s03-pout" d="M830 470 L965 760 L695 760 Z" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" style="filter:drop-shadow(0 0 12px rgba(255,255,255,.07)))"/>
+    </svg>
+    <div id="s03-ia">IA</div>
+
+    <!-- objetos de entrada -->
+    <div class="s03-obj" id="s03-o0" style="left:320px; top:367px; filter:drop-shadow(0 0 20px rgba(255,255,255,.07)))">
+      <svg viewBox="0 0 100 126" width="100" height="126">
+        <defs><linearGradient id="s03-gd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#8fb6ff" stop-opacity=".12"/></linearGradient></defs>
+        <path d="M12 3H64L97 36V114a9 9 0 0 1-9 9H12a9 9 0 0 1-9-9V12a9 9 0 0 1 9-9Z" fill="url(#s03-gd)" stroke="rgba(255,255,255,.8)" stroke-width="2.5"/>
+        <path d="M64 3V36H97" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path class="dl" d="M20 54H60" stroke="#8fb6ff" stroke-width="8" stroke-linecap="round" fill="none" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+        <path class="dl" d="M20 72H80" stroke="rgba(255,255,255,.75)" stroke-width="5" stroke-linecap="round" fill="none" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+        <path class="dl" d="M20 86H80" stroke="rgba(255,255,255,.75)" stroke-width="5" stroke-linecap="round" fill="none" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+        <path class="dl" d="M20 100H54" stroke="rgba(255,255,255,.75)" stroke-width="5" stroke-linecap="round" fill="none" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+      </svg>
+    </div>
+    <div class="s03-lab" id="s03-l0" style="left:370px; top:498px">Documentos</div>
+
+    <div class="s03-obj" id="s03-o1" style="left:290px; top:550px"></div>
+    <div class="s03-lab" id="s03-l1" style="left:370px; top:658px">Audios</div>
+
+    <div class="s03-obj" id="s03-o2" style="left:300px; top:710px; filter:drop-shadow(0 0 20px rgba(255,255,255,.07)))">
+      <svg viewBox="0 0 140 120" width="140" height="120">
+        <defs><linearGradient id="s03-gv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset="1" stop-color="#ff8fc4" stop-opacity=".14"/></linearGradient></defs>
+        <rect x="4" y="38" width="132" height="78" rx="12" fill="url(#s03-gv)" stroke="rgba(255,255,255,.8)" stroke-width="2.5"/>
+        <path d="M58 62V94L88 78Z" fill="#fff" fill-opacity=".92"/>
+        <g id="s03-clap">
+          <rect x="4" y="12" width="132" height="24" rx="7" fill="rgba(255,255,255,.22)" stroke="rgba(255,255,255,.8)" stroke-width="2.5"/>
+          <path d="M22 13H40L30 35H12ZM58 13H76L66 35H48ZM94 13H112L102 35H84Z" fill="#ff5fa8" fill-opacity=".9"/>
+        </g>
+      </svg>
+    </div>
+    <div class="s03-lab" id="s03-l2" style="left:370px; top:836px">Videos</div>
+
+    <!-- hoja de material estructurado -->
+    <div id="s03-sheet" class="ac-glass">
+      <div class="s03-sec" id="s03-s1" style="top:0; height:235px">
+        <div class="s03-h1">Depredadores</div>
+        <div class="s03-h1s">Clase de biología</div>
+        <div class="s03-ul"></div>
+        <div class="s03-bl" style="top:128px"><u style="background:#8fb6ff;box-shadow: 0 0 10px rgba(255,255,255,.07)"></u>Cadena alimenticia</div>
+        <div class="s03-bl" style="top:162px"><u style="background:#8fb6ff;box-shadow: 0 0 10px rgba(255,255,255,.07)"></u>Presas y depredadores</div>
+        <div class="s03-bl" style="top:196px"><u style="background:#8fb6ff;box-shadow: 0 0 10px rgba(255,255,255,.07)"></u>Equilibrio natural</div>
+      </div>
+      <div class="s03-sec" id="s03-s2" style="top:0; height:400px">
+        <div class="s03-h2">Conservación</div>
+        <div class="s03-bl" style="top:296px"><u style="background:#7df0ff;box-shadow: 0 0 10px rgba(255,255,255,.07)"></u>Especie en peligro</div>
+        <div class="s03-bl" style="top:330px"><u style="background:#7df0ff;box-shadow: 0 0 10px rgba(255,255,255,.07)"></u>Hábitat protegido</div>
+      </div>
+      <div class="s03-sec" id="s03-s3" style="top:0; height:500px">
+        <div class="s03-fc">¿Qué es un depredador?</div>
+      </div>
+      <div class="s03-div" id="s03-d1" style="top:238px"></div>
+      <div class="s03-div" id="s03-d2" style="top:394px"></div>
+      <div class="s03-bdg" id="s03-b1" style="top:23px; background:#2f62e0; box-shadow: 0 0 22px rgba(255,255,255,.07)">1</div>
+      <div class="s03-bdg" id="s03-b2" style="top:241px; background:#0b86b8; box-shadow: 0 0 22px rgba(255,255,255,.07)">2</div>
+      <div class="s03-bdg" id="s03-b3" style="top:427px; background:#c62a78; box-shadow: 0 0 22px rgba(255,255,255,.07)">3</div>
+    </div>
+
+    <div id="s03-pk"></div>
+
+    <!-- sello de calidad -->
+    <svg id="s03-seal" viewBox="0 0 170 170">
+      <defs><radialGradient id="s03-sg" cx=".38" cy=".3" r=".9"><stop offset="0" stop-color="#4a86ff"/><stop offset=".6" stop-color="#2459e0"/><stop offset="1" stop-color="#143aa8"/></radialGradient></defs>
+      <path id="s03-sfill" d="" fill="url(#s03-sg)" opacity="0"/>
+      <path id="s03-sout" d="" fill="none" stroke="#fff" stroke-width="3.5" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+      <circle id="s03-sring" cx="85" cy="85" r="58" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="2.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 85 85)"/>
+      <path id="s03-schk" d="M66 62 L77 73 L102 47" fill="none" stroke="#fff" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+      <text id="s03-st1" x="85" y="102" font-size="20" opacity="0">Alta</text>
+      <text id="s03-st2" x="85" y="126" font-size="21" opacity="0">calidad</text>
+    </svg>
+  </div>
+</div>
+
+<script>
+(function () {
+  const S = "s03", $ = (s) => document.querySelector("#s03quees " + s), $$ = (s) => Array.from(document.querySelectorAll("#s03quees " + s));
+  const tl = gsap.timeline({ paused: true });
+  const D = AC.sceneDur(S);
+  const c = (w, n) => AC.cue(S, "b03", w, n || 0);
+  const rnd = AC.seeded(303);
+
+  // ---- armado del DOM generado ----
+  const TXT = "suprnotes.ai", chars = [];
+  TXT.split("").forEach((ch) => { const s = document.createElement("span"); s.className = "c"; s.innerHTML = ch + "<i></i>"; $("#s03-ty").appendChild(s); chars.push(s); });
+  const BARS = [20, 38, 60, 34, 72, 44, 26, 54, 30];
+  BARS.forEach((h, i) => { const b = document.createElement("b"); b.style.height = h + "px"; b.style.left = (22 + i * 15) + "px"; b.style.top = ((100 - h) / 2 - 2) + "px"; $("#s03-o1").appendChild(b); });
+  // sello festoneado
+  (function () {
+    let d = ""; const N = 160;
+    for (let i = 0; i <= N; i++) { const a = i / N * Math.PI * 2, r = 74 + 4.5 * Math.cos(a * 16); d += (i ? "L" : "M") + (85 + r * Math.cos(a)).toFixed(2) + " " + (85 + r * Math.sin(a)).toFixed(2); }
+    d += "Z"; $("#s03-sout").setAttribute("d", d); $("#s03-sfill").setAttribute("d", d);
+  })();
+
+  // ---- titulos: palabra por palabra en su momento ----
+  function wordsAt(sel, times, tOut) {
+    const ln = $(sel), ws = Array.from(ln.querySelectorAll(".w"));
+    tl.set(ln, { opacity: 1 }, times[0] - 0.001);
+    ws.forEach((w, i) => tl.fromTo(w, { yPercent: 170 }, { yPercent: 0, duration: 1.0, ease: "power3.out" }, times[i]));
+    if (tOut != null) {
+      tl.to(ws, { yPercent: -150, duration: .7, ease: "power2.in", stagger: .06 }, tOut);
+      tl.set(ln, { opacity: 0 }, tOut + .7 + .06 * ws.length);
+    }
+  }
+  wordsAt("#s03-tA", [c("una"), c("aplicación"), c("web")], 3.0);
+  wordsAt("#s03-tB", [c("usa") - .05, c("inteligencia"), c("artificial")], 8.85);
+  wordsAt("#s03-tC", [c("materiales"), c("de"), c("estudio"), c("estructurados")], null);
+
+  // ---- ventana de vidrio flotando en 3D ----
+  tl.fromTo("#s03-win", { opacity: 0, y: 90, scale: .93, rotateX: 38, transformPerspective: 1700, transformOrigin: "50% 100%" }, { opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.5, ease: "expo.out" }, .05);
+  // direccion que se escribe
+  const t0 = .55, dt = .075;
+  chars.forEach((ch, i) => {
+    tl.set(ch, { opacity: 1 }, t0 + i * dt);
+    tl.set(ch.querySelector("i"), { opacity: 1 }, t0 + i * dt);
+    if (i < chars.length - 1) tl.set(ch.querySelector("i"), { opacity: 0 }, t0 + (i + 1) * dt);
+  });
+  tl.set(chars[chars.length - 1].querySelector("i"), { opacity: 0 }, 1.9);
+  // carga de la pagina
+  tl.set("#s03-load", { opacity: 1 }, 1.5);
+  tl.to("#s03-load", { scaleX: 1, duration: 1.1, ease: "power2.inOut" }, 1.5);
+  tl.to("#s03-load", { opacity: 0, duration: .6, ease: "power2.out" }, 2.75);
+  tl.to("#s03-page", { opacity: 1, duration: 1.2, ease: "power2.out" }, 1.9);
+  // firma discreta
+  tl.fromTo("#s03-by", { x: -16, opacity: 0 }, { x: 0, opacity: 1, duration: 1.0, ease: "power3.out" }, c("desarrollada"));
+  tl.fromTo("#s03-logo", { x: 14, opacity: 0, scale: .92, transformOrigin: "0 50%" }, { x: 0, opacity: 1, scale: 1, duration: 1.1, ease: "power3.out" }, c("OneScreen") - .05);
+
+  // ---- lockup oficial como protagonista ----
+  tl.fromTo("#s03-lockup", { opacity: 0, scale: .86, y: 26, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, y: 0, duration: 1.5, ease: "power3.out" }, c("SuprNotes") + .3);
+  tl.to("#s03-lockup", { opacity: 0, scale: 1.05, y: -22, duration: 1.0, ease: "power2.in" }, 3.0);
+
+  // ---- prisma / lente de IA ----
+  const tp = c("inteligencia") - .06;
+  tl.to("#s03-pout", { strokeDashoffset: 0, duration: 1.3, ease: "power2.inOut" }, tp);
+  tl.to("#s03-pin", { strokeDashoffset: 0, duration: 1.3, ease: "power2.inOut" }, tp + .35);
+  tl.to("#s03-pfill", { opacity: 1, duration: 1.2, ease: "power2.out" }, tp + .8);
+  tl.fromTo("#s03-halo", { opacity: 0, scale: .55 }, { opacity: .75, scale: 1, duration: 1.5, ease: "expo.out" }, tp + 1.0);
+  tl.fromTo("#s03-ia", { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: 1.1, ease: "power3.out", transformOrigin: "50% 50%" }, c("artificial") + .15);
+
+  // ---- embudo: haces de entrada y salida ----
+  const LANE = [430, 600, 770];
+  const FACE = [[802, 530], [762, 615], [723, 700]];
+  const OUTF = [[858, 530], [898, 615], [937, 700]];
+  const ANCH = [[1200, 410], [1200, 623], [1200, 809]];
+  const COL = ["#a9d4ff", "#7dffe0", "#ffa0c8"];
+  const RGB = [[169, 212, 255], [125, 255, 224], [255, 160, 200]];
+  const beams = $("#s03-beams"), tc = c("convertir") - .05;
+  const inB = [], outB = [];
+  LANE.forEach((y, i) => {
+    const e = AC.link(tl, beams, [452, y, 560, y, FACE[i][0] - 120, FACE[i][1], FACE[i][0], FACE[i][1]], tc + i * .12, 1.4, COL[i]);
+    e.style.color = COL[i]; e.style.opacity = .55; inB.push(e);
+  });
+  ANCH.forEach((a, i) => {
+    const e = AC.link(tl, beams, [OUTF[i][0], OUTF[i][1], OUTF[i][0] + 150, OUTF[i][1], a[0] - 150, a[1], a[0], a[1]], c("contenido") + .25 + i * .12, 1.4, COL[i]);
+    e.style.color = COL[i]; e.style.opacity = .3; outB.push(e);
+  });
+  // hoja futura: contorno que se dibuja en "educativo"
+  tl.to("#s03-ghost", { strokeDashoffset: 0, duration: 1.5, ease: "power2.inOut" }, c("educativo") - .35);
+  tl.set("#s03-ghost", { opacity: 1 }, 0);
+
+  // ---- entradas: cada objeto en su palabra ----
+  const ent = (id, lid, word) => {
+    const t = c(word) - .05;
+    tl.fromTo(id, { x: -130, opacity: 0, rotateY: 60, transformPerspective: 900 }, { x: 0, opacity: 1, rotateY: 0, duration: 1.1, ease: "power3.out" }, t);
+    tl.to(lid, { opacity: 1, duration: .7, ease: "power2.out" }, t + .55);
+    return t;
+  };
+  const tDoc = ent("#s03-o0", "#s03-l0", "documentos");
+  tl.to("#s03-o0 .dl", { strokeDashoffset: 0, duration: .9, ease: "power2.inOut", stagger: .14 }, tDoc + .5);
+  const tAud = ent("#s03-o1", "#s03-l1", "audios");
+  tl.fromTo("#s03-o1 b", { scaleY: .1 }, { scaleY: 1, duration: 1.0, ease: "power3.out", stagger: .06 }, tAud + .4);
+  const tVid = ent("#s03-o2", "#s03-l2", "videos");
+  tl.fromTo("#s03-clap", { rotate: -26, svgOrigin: "6 36" }, { rotate: 0, svgOrigin: "6 36", duration: .9, ease: "power3.out" }, tVid + .5);
+
+  // ---- conversión: se desintegran, cruzan el prisma y se reconstruyen ----
+  const TS = [9.02, 9.24, 9.58];
+  const BOX = [[322, 369, 96, 122], [292, 552, 156, 96], [302, 712, 136, 116]];
+  const REG = [[1232, 395, 285, 190], [1232, 612, 262, 100], [1232, 776, 225, 62]];
+  const PK = $("#s03-pk"), N = 22, FL = 1.2;
+  const mix = (a, w) => "rgb(" + a.map((v) => Math.round(v + (255 - v) * w)).join(",") + ")";
+  const sm = (x, a, b) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  for (let i = 0; i < 3; i++) {
+    // el objeto se disuelve
+    tl.to("#s03-o" + i, { opacity: 0, scale: 1.12, filter: "blur(8px)", duration: .8, ease: "power2.in" }, TS[i] + .05);
+    tl.to("#s03-l" + i, { opacity: 0, duration: .6, ease: "power2.in" }, TS[i]);
+    for (let j = 0; j < N; j++) {
+      const p = document.createElement("div"); p.className = "s03-p"; PK.appendChild(p);
+      const sz = 6 + rnd() * 8; p.style.width = p.style.height = sz + "px"; p.style.margin = (-sz / 2) + "px 0 0 " + (-sz / 2) + "px";
+      p.style.boxShadow = " 0 0 12px rgba(255,255,255,.07)" + COL[i] + "aa";
+      const sx = BOX[i][0] + rnd() * BOX[i][2], sy = BOX[i][1] + rnd() * BOX[i][3];
+      const cx = 830 + (rnd() - .5) * 52, cy = 600 + (rnd() - .5) * 90;
+      const tx = REG[i][0] + rnd() * REG[i][2], ty = REG[i][1] + rnd() * REG[i][3];
+      const A = [sx, sy, sx + 200, sy + (cy - sy) * .15, cx - 140, cy, cx, cy];
+      const B = [cx, cy, cx + 150, cy, tx - 220, ty, tx, ty];
+      const st = TS[i] + rnd() * .3, pr = { t: 0 };
+      tl.to(pr, { t: 1, duration: FL + rnd() * .2, ease: "none", onUpdate: () => {
+        const t = pr.t; let q;
+        if (t < .5) { const u = t * 2; q = AC.bez(A, 1 - (1 - u) * (1 - u)); } else { const v = (t - .5) * 2; q = AC.bez(B, Math.pow(v, 1.7)); }
+        const k = Math.exp(-Math.pow((t - .5) / .1, 2));
+        const s = (1 + .8 * k) * (1 - sm(t, .88, 1));
+        p.style.opacity = Math.min(1, t / .08) * (1 - sm(t, .9, 1));
+        p.style.transform = "translate(" + q.x.toFixed(1) + "px," + q.y.toFixed(1) + "px) scale(" + s.toFixed(3) + ")";
+        p.style.background = mix(RGB[i], k);
+      } }, st);
+    }
+  }
+  // halo y haces de salida acompañan la conversión
+  tl.to("#s03-halo", { opacity: 1, scale: 1.08, duration: 1.2, ease: "power2.inOut" }, 9.0);
+  tl.to("#s03-halo", { opacity: .5, scale: 1, duration: 1.4, ease: "power2.inOut" }, 11.3);
+  tl.to(outB, { opacity: .9, duration: 1.0, ease: "power2.out" }, 9.1);
+  tl.to(outB, { opacity: .35, duration: 1.4, ease: "power2.inOut" }, 11.4);
+  tl.to(inB, { opacity: .3, duration: 1.2, ease: "power2.inOut" }, 10.4);
+
+  // ---- hoja de estudio ----
+  tl.fromTo("#s03-sheet", { opacity: 0, x: 40, rotateY: -28, transformPerspective: 1500, transformOrigin: "0 50%" }, { opacity: 1, x: 0, rotateY: 0, duration: 1.3, ease: "power3.out" }, c("materiales") - .05);
+  tl.to("#s03-ghost", { opacity: 0, duration: .8, ease: "power2.out" }, c("materiales") + .5);
+  const wipe = (sel, t, d) => tl.to(sel, { clipPath: "inset(0 0% 0 0)", duration: d, ease: "power2.inOut" }, t);
+  wipe("#s03-s1", 10.25, 1.0); wipe("#s03-s2", 10.5, 1.0); wipe("#s03-s3", 10.82, 1.0);
+  [["#s03-b1", 10.25], ["#s03-b2", 10.5], ["#s03-b3", 10.82]].forEach((b) => tl.fromTo(b[0], { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: .8, ease: "back.out(2)", transformOrigin: "50% 50%" }, b[1] - .1));
+  // "estructurados": los apartados se separan y la hoja se enciende ordenada
+  tl.to("#s03-d1", { scaleX: 1, duration: 1.0, ease: "power2.inOut" }, c("estructurados") + .15);
+  tl.to("#s03-d2", { scaleX: 1, duration: 1.0, ease: "power2.inOut" }, c("estructurados") + .45);
+  tl.to("#s03-sheet", { boxShadow: " 0px 16px 34px rgba(0,0,0,0.28), 0 0 60px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5)", duration: 1.3, ease: "power2.inOut" }, c("estructurados"));
+
+  // ---- sello de alta calidad ----
+  const ts = c("alta") - .02;
+  tl.fromTo("#s03-seal", { opacity: 0, scale: 1.18, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: .9, ease: "power3.out" }, ts);
+  tl.to("#s03-sout", { strokeDashoffset: 0, duration: .9, ease: "power2.inOut" }, ts);
+  tl.to("#s03-sfill", { opacity: .95, duration: .7, ease: "power2.out" }, ts + .2);
+  tl.to("#s03-sring", { strokeDashoffset: 0, duration: .8, ease: "power2.inOut" }, ts + .25);
+  tl.to("#s03-schk", { strokeDashoffset: 0, duration: .55, ease: "power2.out" }, ts + .5);
+  tl.to(["#s03-st1", "#s03-st2"], { opacity: 1, duration: .5, ease: "power2.out", stagger: .12 }, c("calidad") + .05);
+
+  // ---- cámara: empuje suave durante toda la escena ----
+  tl.to("#s03-stage", { scale: 1.018, duration: D, ease: "none" }, 0);
+
+  window.__timelines["s03-que-es"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

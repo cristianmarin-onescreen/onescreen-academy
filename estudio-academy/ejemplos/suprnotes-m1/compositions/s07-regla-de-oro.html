@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s07 · La regla de oro</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s07 { position: absolute; inset: 0; overflow: hidden; }
+  #s07 .ac-title { top: 112px; }
+  #s07 .h { opacity: 0; }
+  #s07 .abs { position: absolute; }
+
+  /* ---------- ESCUDO ---------- */
+  #s07 #s07-shield { position: absolute; left: 960px; top: 555px; width: 0; height: 0; }
+  #s07 .sh-svg { position: absolute; left: -280px; top: -280px; width: 560px; height: 560px; overflow: visible; }
+  #s07 #s07-flashsvg { filter: blur(11px); }
+  #s07 #s07-ringsvg { filter: drop-shadow(0 0 14px rgba(255,255,255,.07))); }
+  #s07 .sh-disc { position: absolute; left: -260px; top: -280px; width: 520px; height: 560px; border-radius: 28px; opacity: 0; overflow: hidden; clip-path: inset(75px 55px round 205px);
+    border-color: rgba(125,240,255,.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.5); }
+  #s07 .sh-orb { position: absolute; left: -75px; top: -75px; width: 150px; height: 150px; border-radius: 50%; opacity: 0; display: grid; place-items: center;
+    font-family: "Rubik"; font-weight: 700; font-size: 58px; letter-spacing: -.03em; color: #0b2a8f;
+    background: radial-gradient(circle at 36% 30%, #ffffff 0%, #d4e6ff 30%, #6fa3ff 72%, #2a5ae0 100%);
+    box-shadow:  0 0 60px 6px rgba(255,255,255,.07), 0 0 60px 6px rgba(255,255,255,.07); }
+  #s07 .sh-legend { position: absolute; left: -170px; top: 22px; width: 340px; height: 60px; display: flex; align-items: center; justify-content: center; gap: 14px; opacity: 0;
+    font-family: "Rubik"; font-weight: 600; font-size: 40px; letter-spacing: -.02em; color: #fff; white-space: nowrap; }
+  #s07 .sh-legend svg { color: #7df0ff; }
+  #s07 .lock { position: absolute; width: 84px; height: 84px; margin: -42px 0 0 -42px; border-radius: 50%; display: grid; place-items: center; opacity: 0; color: #fff;
+    background: radial-gradient(circle at 35% 30%, rgba(125,240,255,.55), rgba(40,90,220,.7)); border: 2.5px solid rgba(255,255,255,.7); box-shadow:  0 0 40px 6px rgba(255,255,255,.07); }
+  #s07 .hit { position: absolute; width: 170px; height: 170px; margin: -85px 0 0 -85px; border-radius: 50%; opacity: 0; background: radial-gradient(circle, rgba(255,255,255,.95), rgba(125,240,255,.45) 40%, rgba(125,240,255,0) 70%); }
+
+  /* "solo" */
+  #s07 #s07-solo { position: absolute; left: 560px; top: 808px; width: 800px; height: 146px; overflow: hidden; text-align: center; opacity: 0; }
+  #s07 #s07-solo .w { display: inline-block; font-family: "Rubik"; font-weight: 800; font-size: 116px; letter-spacing: -.045em; line-height: 1.2; padding: 0 20px;
+    background: linear-gradient(90deg, #a9c8ff, #7df0ff 55%, #ffffff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #s07 #s07-solopulse { position: absolute; left: 960px; top: 880px; width: 520px; height: 190px; margin: -95px 0 0 -260px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(ellipse, rgba(125,240,255,.8), rgba(125,240,255,0) 68%); filter: blur(16px); }
+
+  /* ---------- ENEMIGOS ---------- */
+  #s07 #s07-globe { position: absolute; left: 200px; top: 455px; width: 200px; height: 200px; opacity: 0; }
+  #s07 #s07-globe svg { width: 200px; height: 200px; overflow: visible; filter: drop-shadow(0 0 16px rgba(255,255,255,.07))); }
+  #s07 #s07-glbl, #s07 #s07-uplbl { position: absolute; width: 300px; text-align: center; font-family: "Rubik"; font-weight: 600; font-size: 38px; letter-spacing: -.02em; opacity: 0; color: #fff; }
+  #s07 #s07-unap { position: absolute; left: 1455px; top: 420px; width: 210px; height: 270px; opacity: 0; padding: 30px 26px; }
+  #s07 #s07-unap i { display: block; height: 11px; border-radius: 6px; background: rgba(255,255,255,.3); margin-bottom: 16px; }
+  #s07 #s07-unap .q { position: absolute; left: 50%; top: 150px; width: 84px; height: 84px; margin-left: -42px; border-radius: 50%; display: grid; place-items: center; font-family: "Rubik"; font-weight: 700; font-size: 54px; color: #fff; background: rgba(255,255,255,.18); border: 2px dashed rgba(255,255,255,.6); }
+  #s07 .xx { position: absolute; opacity: 0; overflow: visible; }
+  #s07 .xx path { fill: none; stroke: #ff5a6e; stroke-width: 11; stroke-linecap: round; filter: drop-shadow(0 0 10px rgba(255,255,255,.07))); }
+
+  /* ---------- RESULTADO (beat b) ---------- */
+  #s07 #s07-res { left: 1365px; top: 405px; width: 330px; height: 300px; opacity: 0; padding: 28px; }
+  #s07 #s07-res .rh { display: flex; align-items: center; gap: 14px; }
+  #s07 #s07-res .ri { width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(145deg, #7df0ff, #2f7bff); box-shadow:  0 0 26px rgba(255,255,255,.07); }
+  #s07 #s07-res .ac-lbl { font-size: 28px; }
+  #s07 #s07-res .ac-sub { font-size: 18px; margin-top: 2px; }
+  #s07 #s07-res i { display: block; height: 11px; border-radius: 6px; background: rgba(255,255,255,.34); margin-top: 18px; }
+  #s07 #s07-res i.k { background: rgba(125,240,255,.8); width: 60%; }
+
+  /* ---------- TARJETAS DE FUENTES (beat c) ---------- */
+  #s07 .src { padding: 0; opacity: 0; }
+  #s07 .src .hd { display: flex; align-items: center; gap: 16px; }
+  #s07 .src .ic { width: 58px; height: 58px; border-radius: 17px; display: grid; place-items: center; flex: none; color: #fff; background: linear-gradient(145deg, #7df0ff, #2f7bff); box-shadow:  0 0 24px rgba(255,255,255,.07); }
+  #s07 .src .ac-lbl { font-size: 29px; }
+  #s07 .src .ac-sub { font-size: 19px; margin-top: 2px; }
+  #s07 .ok { position: absolute; right: -18px; top: -18px; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; opacity: 0; color: #fff;
+    background: linear-gradient(145deg, #7df0ff, #2f7bff); border: 3px solid #fff; box-shadow:  0 0 30px 6px rgba(255,255,255,.07); }
+
+  #s07 #s07-tr { left: 160px; top: 255px; width: 440px; height: 450px; padding: 22px 24px; }
+  #s07 #s07-tr .wave { display: block; margin-top: 12px; width: 392px; height: 44px; overflow: visible; }
+  #s07 #s07-tr .wave rect { fill: #7df0ff; opacity: .9; transform-box: fill-box; transform-origin: 50% 50%; }
+  #s07 #s07-tr .bbs { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  #s07 #s07-tr .bb { height: 62px; padding: 8px 18px; border-radius: 20px 20px 20px 6px; background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.26); opacity: 0; }
+  #s07 #s07-tr .bb b { display: block; font-family: "Rubik"; font-weight: 600; font-size: 16px; letter-spacing: .01em; color: #b9f7ff; line-height: 1.1; }
+  #s07 #s07-tr .bb span { display: block; font-family: "Manrope"; font-weight: 700; font-size: 21px; line-height: 1.15; margin-top: 3px; white-space: nowrap; }
+
+  #s07 #s07-nt { left: 160px; top: 735px; width: 380px; height: 160px; padding: 20px 24px; }
+  #s07 #s07-nt .ln2 { margin-top: 14px; }
+  #s07 #s07-nt i { display: block; height: 10px; border-radius: 5px; background: rgba(255,255,255,.3); margin-top: 9px; }
+  #s07 #s07-nt i.hl { background: rgba(125,240,255,.75); width: 70%; }
+
+  #s07 #s07-pr { left: 1360px; top: 285px; width: 400px; height: 170px; padding: 0 22px; display: flex; align-items: center; gap: 20px; }
+  #s07 #s07-yt { left: 1360px; top: 485px; width: 400px; height: 170px; padding: 0 22px; display: flex; align-items: center; gap: 20px; }
+  #s07 .thumb { width: 150px; height: 100px; flex: none; border-radius: 12px; background: rgba(255,255,255,.14); border: 1.5px solid rgba(255,255,255,.4); position: relative; overflow: hidden; }
+  #s07 .thumb i { position: absolute; display: block; border-radius: 3px; background: rgba(255,255,255,.55); }
+  #s07 #s07-any { position: absolute; left: 1360px; top: 685px; width: 400px; height: 170px; padding: 0 22px; display: flex; align-items: center; gap: 20px; opacity: 0;
+    background: rgba(255,255,255,.05); border: 2.5px dashed rgba(190,225,255,.7); box-shadow: none; }
+  #s07 #s07-any .ic { background: rgba(255,255,255,.14); box-shadow: none; }
+
+  #s07 #s07-links { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+
+  /* cursor */
+  #s07 #s07-cur { position: absolute; left: 0; top: 0; width: 56px; height: 56px; opacity: 0; filter: drop-shadow(0 6px 10px rgba(0,0,0,.3)); }
+  #s07 #s07-tap { position: absolute; left: 990px; top: 625px; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 4px solid #fff; opacity: 0; }
+
+  /* ---------- MATERIAL (beat d) ---------- */
+  #s07 .mat { position: absolute; left: 0; top: 0; width: 520px; height: 560px; opacity: 0; padding: 34px 36px; }
+  #s07 .mat .mh { display: flex; align-items: center; gap: 18px; }
+  #s07 .mat .mi { width: 64px; height: 64px; border-radius: 19px; display: grid; place-items: center; background: linear-gradient(145deg, #7df0ff, #2f7bff); box-shadow:  0 0 28px rgba(255,255,255,.07); }
+  #s07 .mat .ac-lbl { font-size: 31px; }
+  #s07 .mat .ac-sub { font-size: 19px; }
+  #s07 .mat .p { position: relative; margin-top: 24px; padding-left: 20px; font-family: "Manrope"; font-weight: 700; font-size: 22px; line-height: 1.3; opacity: 0; }
+  #s07 .mat .p::before { content: ""; position: absolute; left: 0; top: 4px; bottom: 4px; width: 4px; border-radius: 2px; background: linear-gradient(180deg, #a9c8ff, #7df0ff); }
+  #s07 #s07-seal { position: absolute; left: 100px; top: 167px; width: 210px; height: 210px; border-radius: 50%; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 36% 28%, #3b86ff, #1235b8 78%); border: 4px solid #fff; box-shadow:  0 0 60px 6px rgba(255,255,255,.07), 0px 16px 34px rgba(0,0,0,0.28); }
+  #s07 #s07-seal .dash { position: absolute; inset: 9px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.6); }
+  #s07 #s07-seal .t1 { font-family: "Manrope"; font-weight: 800; font-size: 22px; letter-spacing: -.01em; margin-top: 8px; }
+  #s07 #s07-seal .mask { position: relative; width: 170px; height: 48px; overflow: hidden; }
+  #s07 #s07-seal .mask b { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 38px; letter-spacing: -.03em; line-height: 48px; color: #fff; }
+  #s07 #s07-seal svg { color: #7df0ff; }
+
+  #s07 #s07-gen { position: absolute; left: 1140px; top: 365px; width: 340px; height: 380px; opacity: 0; padding: 30px 30px;
+    background: linear-gradient(145deg, rgba(200,205,215,.18), rgba(200,205,215,.05)); border-color: rgba(200,205,215,.3); box-shadow:  0px 16px 34px rgba(0,0,0,0.19); }
+  #s07 #s07-gen .gl { font-family: "Rubik"; font-weight: 600; font-size: 30px; letter-spacing: -.02em; color: rgba(215,220,232,.9); }
+  #s07 #s07-gen i { display: block; height: 12px; border-radius: 6px; background: rgba(200,205,215,.32); margin-top: 20px; }
+  #s07 #s07-gensvg { position: absolute; inset: 0; width: 340px; height: 380px; overflow: visible; }
+  #s07 #s07-gensvg path { fill: none; stroke: #dfe6f5; stroke-width: 4; stroke-linecap: round; }
+</style>
+
+<div id="s07" class="ac-root" data-composition-id="s07-regla-de-oro" data-width="1920" data-height="1080">
+
+  <div class="ac-title">
+    <div class="ln" id="s07-t1"><span class="w">La</span> <span class="w">regla</span> <span class="w">de</span> <span class="w"><em>oro</em></span></div>
+    <div class="ln" id="s07-t2"><span class="w">Nada</span> <span class="w">entra</span> <span class="w">sin</span> <span class="w">tu</span> <span class="w"><em>aprobación</em></span></div>
+    <div class="ln" id="s07-t3"><span class="w">¿Qué</span> <span class="w"><em>material</em></span> <span class="w">puede</span> <span class="w">ser?</span></div>
+    <div class="ln" id="s07-t4"><span class="w">El</span> <span class="w"><em>resultado</em></span></div>
+  </div>
+
+  <svg id="s07-links" viewBox="0 0 1920 1080"></svg>
+
+  <!-- escudo -->
+  <div id="s07-shield">
+    <svg class="sh-svg" id="s07-flashsvg" viewBox="-280 -280 560 560"><circle id="s07-flash" r="215" fill="none" stroke="#ffffff" stroke-width="16" opacity="0"/></svg>
+    <div class="ac-glass sh-disc" id="s07-disc">
+      <div class="mat" id="s07-mat">
+        <div class="mh"><div class="mi"><svg class="ac-ico" viewBox="0 0 48 48" width="34" height="34" ><rect x="10" y="6" width="28" height="36" rx="4"/><path d="M16 16h16M16 24h16M16 32h10"/></svg></div><div><div class="ac-lbl">Clase de biología</div><div class="ac-sub">Depredadores y ecosistema</div></div></div>
+        <div class="p" id="s07-p1">Los depredadores regulan las poblaciones y mantienen sano el ecosistema.</div>
+        <div class="p" id="s07-p2">Como vimos en clase: cuando volvió el lobo, los ciervos dejaron de agotar el bosque.</div>
+        <div class="p" id="s07-p3">Para repasar: ¿qué pasa con una especie en peligro si le falta su depredador?</div>
+      </div>
+    </div>
+    <svg class="sh-svg" id="s07-ringsvg" viewBox="-280 -280 560 560">
+      <defs><linearGradient id="s07-grad" gradientUnits="userSpaceOnUse" x1="-215" y1="-215" x2="215" y2="215"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#7df0ff"/><stop offset="1" stop-color="#3976ff"/></linearGradient></defs>
+      <circle r="234" fill="none" stroke="rgba(190,225,255,.22)" stroke-width="2" stroke-dasharray="3 9" id="s07-halo" opacity="0"/>
+      <circle id="s07-ring" r="215" fill="none" stroke="url(#s07-grad)" stroke-width="7" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90)"/>
+    </svg>
+    <div class="sh-orb" id="s07-orb">IA</div>
+    <div class="sh-legend" id="s07-legend"><svg class="ac-ico" viewBox="0 0 48 48" width="40" height="40" ><path d="M6 12h13l4 5h19v23H6z"/></svg><span>tus fuentes</span></div>
+    <div class="hit" id="s07-hitL" style="left:-215px;top:0"></div>
+    <div class="hit" id="s07-hitR" style="left:215px;top:0"></div>
+    <div class="lock" id="s07-lockL" style="left:-215px;top:0"><svg class="ac-ico" viewBox="0 0 48 48" width="40" height="40" ><rect x="10" y="21" width="28" height="20" rx="5"/><path d="M16 21v-6a8 8 0 0116 0v6"/></svg></div>
+    <div class="lock" id="s07-lockR" style="left:215px;top:0"><svg class="ac-ico" viewBox="0 0 48 48" width="40" height="40" ><rect x="10" y="21" width="28" height="20" rx="5"/><path d="M16 21v-6a8 8 0 0116 0v6"/></svg></div>
+    <div id="s07-seal" data-layout-allow-overlap data-layout-allow-overflow><div class="dash"></div><svg class="ac-ico" viewBox="0 0 48 48" width="34" height="34" style="stroke-width:5"><path d="M10 25l9 9 19-20"/></svg><div class="t1" data-layout-allow-overlap>Suena a tu</div><div class="mask" data-layout-allow-overlap data-layout-allow-overflow><b data-layout-allow-overlap>clase</b><b data-layout-allow-overlap>empresa</b><b data-layout-allow-overlap>curso</b></div></div>
+  </div>
+
+  <div id="s07-solopulse"></div>
+  <div id="s07-solo"><span class="w">solo</span></div>
+
+  <!-- beat b: enemigos -->
+  <div id="s07-globe">
+    <svg viewBox="-100 -100 200 200">
+      <circle r="92" fill="rgba(125,240,255,.08)" stroke="rgba(205,230,255,.95)" stroke-width="3.5"/>
+      <g id="s07-par" stroke="rgba(190,225,255,.55)" stroke-width="2.4" fill="none"></g>
+      <g id="s07-mer" stroke="rgba(190,225,255,.7)" stroke-width="2.4" fill="none"></g>
+    </svg>
+  </div>
+  <svg class="xx" id="s07-xg" style="left:420px;top:425px;width:260px;height:260px" viewBox="-130 -130 260 260"><path id="s07-xg1" d="M-66 -66 L66 66" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path id="s07-xg2" d="M66 -66 L-66 66" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
+  <div id="s07-glbl" style="left:400px;top:700px">Internet</div>
+
+  <div class="ac-glass" id="s07-unap"><i style="width:80%"></i><i style="width:100%"></i><i style="width:66%"></i><i style="width:90%"></i><div class="q">?</div></div>
+  <svg class="xx" id="s07-xu" style="left:1240px;top:405px;width:260px;height:300px" viewBox="-130 -150 260 300"><path id="s07-xu1" d="M-70 -80 L70 80" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path id="s07-xu2" d="M70 -80 L-70 80" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
+  <div id="s07-uplbl" style="left:1220px;top:728px">Sin aprobar</div>
+
+  <!-- beat b: resultado -->
+  <div class="ac-glass" id="s07-res">
+    <div class="rh"><div class="ri"><svg class="ac-ico" viewBox="0 0 48 48" width="34" height="34" ><rect x="10" y="6" width="28" height="36" rx="4"/><path d="M16 16h16M16 24h16M16 32h10"/></svg></div><div><div class="ac-lbl">Material nuevo</div><div class="ac-sub">hecho con tus fuentes</div></div></div>
+    <i style="width:100%"></i><i style="width:88%"></i><i class="k"></i><i style="width:72%"></i>
+  </div>
+
+  <!-- beat c: fuentes -->
+  <div class="ac-glass src" id="s07-tr">
+    <div class="hd"><div class="ic"><svg class="ac-ico" viewBox="0 0 48 48" width="34" height="34" ><rect x="10" y="6" width="28" height="36" rx="4"/><path d="M16 16h16M16 24h16M16 32h10"/></svg></div><div><div class="ac-lbl">Transcripción</div><div class="ac-sub">de una clase</div></div></div>
+    <svg class="wave" id="s07-wave" viewBox="0 0 392 44"></svg>
+    <div class="bbs">
+      <div class="bb" id="s07-bb1"><b>Qué se dijo</b><span>Regulan el ecosistema</span></div>
+      <div class="bb" id="s07-bb2"><b>Ejemplos</b><span>El lobo y los ciervos</span></div>
+      <div class="bb" id="s07-bb3"><b>Cómo se explicó</b><span>Con analogías, paso a paso</span></div>
+      <div class="bb" id="s07-bb4"><b>Preguntas</b><span>¿Y si falta un depredador?</span></div>
+    </div>
+    <div class="ok"><svg class="ac-ico" viewBox="0 0 48 48" width="30" height="30" style="stroke-width:5"><path d="M10 25l9 9 19-20"/></svg></div>
+  </div>
+  <div class="ac-glass src" id="s07-nt">
+    <div class="hd"><div class="ic"><svg class="ac-ico" viewBox="0 0 48 48" width="34" height="34" ><path d="M10 12h28M24 12v26M17 38h14"/></svg></div><div><div class="ac-lbl">Notas de estudio</div><div class="ac-sub">escritas por ti</div></div></div>
+    <div class="ln2"><i></i><i class="hl"></i><i style="width:84%"></i></div>
+    <div class="ok"><svg class="ac-ico" viewBox="0 0 48 48" width="30" height="30" style="stroke-width:5"><path d="M10 25l9 9 19-20"/></svg></div>
+  </div>
+  <div class="ac-glass src" id="s07-pr">
+    <div class="thumb"><i style="left:12px;top:12px;width:70px;height:9px;background:#7df0ff"></i><i style="left:12px;top:32px;width:100px;height:6px"></i><i style="left:12px;top:46px;width:80px;height:6px"></i>
+      <i style="left:16px;bottom:10px;width:14px;height:22px"></i><i style="left:38px;bottom:10px;width:14px;height:34px;background:#7df0ff"></i><i style="left:60px;bottom:10px;width:14px;height:16px"></i></div>
+    <div><div class="ac-lbl">Presentación</div><div class="ac-sub">diapositivas de tu clase</div></div>
+    <div class="ok"><svg class="ac-ico" viewBox="0 0 48 48" width="30" height="30" style="stroke-width:5"><path d="M10 25l9 9 19-20"/></svg></div>
+  </div>
+  <div class="ac-glass src" id="s07-yt">
+    <div class="thumb"><div style="position:absolute;left:50%;top:44%;margin:-24px 0 0 -24px;width:48px;height:48px;color:#fff"><svg class="ac-ico" viewBox="0 0 48 48" width="48" height="48"><path d="M17 12l19 12-19 12z" fill="#fff" stroke="#fff"/></svg></div><i style="left:10px;right:10px;bottom:10px;height:5px;background:rgba(255,255,255,.3)"></i><i style="left:10px;width:56px;bottom:10px;height:5px;background:#7df0ff"></i></div>
+    <div><div class="ac-lbl">Video de YouTube</div><div class="ac-sub">el que ya publicaste</div></div>
+    <div class="ok"><svg class="ac-ico" viewBox="0 0 48 48" width="30" height="30" style="stroke-width:5"><path d="M10 25l9 9 19-20"/></svg></div>
+  </div>
+  <div class="src" id="s07-any" style="border-radius:28px">
+    <div class="ic" style="width:58px;height:58px;border-radius:17px;display:grid;place-items:center;color:#fff"><svg class="ac-ico" viewBox="0 0 48 48" width="34" height="34"><path d="M24 10v28M10 24h28"/></svg></div>
+    <div><div class="ac-lbl" style="font-size:29px">Cualquier fuente</div><div class="ac-sub" style="font-size:19px">la que tú elijas</div></div>
+    <div class="ok"><svg class="ac-ico" viewBox="0 0 48 48" width="30" height="30" style="stroke-width:5"><path d="M10 25l9 9 19-20"/></svg></div>
+  </div>
+
+  <!-- beat d: texto genérico -->
+  <div class="ac-glass" id="s07-gen">
+    <div class="gl">Texto genérico</div>
+    <i style="width:100%"></i><i style="width:92%"></i><i style="width:97%"></i><i style="width:70%"></i><i style="width:95%"></i><i style="width:84%"></i><i style="width:60%"></i>
+    <svg id="s07-gensvg" viewBox="0 0 340 380"><path id="s07-genx" d="M26 346 L314 34" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
+  </div>
+
+  <div id="s07-tap"></div>
+  <svg id="s07-cur" viewBox="0 0 48 52"><path d="M4 3 L4 40 L14 31 L21 47 L29 43.5 L22 28 L36 28 Z" fill="#fff" stroke="#0b2a8f" stroke-width="3" stroke-linejoin="round"/></svg>
+</div>
+
+<script>
+(function () {
+  const S = "s07", NS = "http://www.w3.org/2000/svg";
+  const rootEl = document.getElementById("s07");
+  const c = (b, w, n) => AC.cue(S, b, w, n);
+  const links = document.getElementById("s07-links");
+  const tl = gsap.timeline({ paused: true });
+  const D = AC.sceneDur(S);
+
+  /* ---- globo: paralelos fijos, meridianos que giran ---- */
+  const par = document.getElementById("s07-par"), mer = document.getElementById("s07-mer"), MER = [];
+  [-60, -30, 0, 30, 60].forEach((y) => { const l = document.createElementNS(NS, "path"); const x = Math.sqrt(92 * 92 - y * y); l.setAttribute("d", "M" + (-x) + " " + y + " L" + x + " " + y); par.appendChild(l); });
+  for (let k = 0; k < 4; k++) { const e = document.createElementNS(NS, "ellipse"); e.setAttribute("cx", 0); e.setAttribute("cy", 0); e.setAttribute("ry", 92); mer.appendChild(e); MER.push(e); }
+  const gp = { p: 0 };
+  const setMer = () => MER.forEach((e, k) => e.setAttribute("rx", (Math.abs(Math.cos(gp.p + k * Math.PI / 4)) * 92).toFixed(2)));
+  setMer();
+
+  /* ---- onda de la transcripcion ---- */
+  const wave = document.getElementById("s07-wave"), rnd = AC.seeded(31), BARS = [];
+  for (let i = 0; i < 40; i++) {
+    const h = 8 + Math.abs(Math.sin(i * .5)) * 20 + rnd() * 12, r = document.createElementNS(NS, "rect");
+    r.setAttribute("x", i * 9.8 + 1); r.setAttribute("width", 6); r.setAttribute("rx", 3); r.setAttribute("y", 22 - h / 2); r.setAttribute("height", h); wave.appendChild(r); BARS.push(r);
+  }
+
+  /* ---- posiciones ---- */
+  const SH = { x: 960, y: 555 };
+
+  /* =========================================================
+     BEAT A  (0 - 9.4)  "solo genera ... a partir de tus fuentes"
+     ========================================================= */
+  const tImp = c("b07a", "importante"), tIA = c("b07a", "inteligencia"), tSolo = c("b07a", "solo"), tFuentes = c("b07a", "fuentes"), tDas = c("b07a", "das");
+  AC.line(tl, "#s07-t1", tImp - .15, tDas + .75);
+
+  // la IA aparece sola
+  tl.fromTo("#s07-orb", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.5, ease: "expo.out" }, tIA - .1);
+
+  // "solo": el anillo se cierra con trazo y la palabra sube con un pulso de luz
+  tl.to("#s07-ring", { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, tSolo);
+  tl.fromTo("#s07-halo", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power2.out" }, tSolo + 1.1);
+  tl.set("#s07-solo", { opacity: 1 }, tSolo - .001);
+  tl.fromTo("#s07-solo .w", { yPercent: 115 }, { yPercent: 0, duration: 1.1, ease: "power4.out" }, tSolo);
+  tl.fromTo("#s07-solopulse", { opacity: .95, scale: .35 }, { opacity: 0, scale: 1.7, duration: 1.7, ease: "power2.out", immediateRender: false }, tSolo + .15);
+  tl.fromTo("#s07-flash", { opacity: 0 }, { opacity: .9, duration: .35, ease: "power2.out" }, tSolo + 1.35);
+  tl.to("#s07-flash", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, tSolo + 1.7);
+  // el cristal interior se enciende al cerrarse el anillo
+  tl.fromTo("#s07-disc", { opacity: 0, scale: .86 }, { opacity: 1, scale: 1, duration: 1.3, ease: "power3.out" }, tSolo + 1.0);
+
+  // "fuentes": la IA sube y aparece la leyenda
+  tl.to("#s07-orb", { y: -46, scale: .72, duration: 1.2, ease: "power2.inOut" }, tFuentes - .05);
+  tl.fromTo("#s07-legend", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, tFuentes + .15);
+  // "das": respiro luminoso
+  tl.fromTo("#s07-flash", { opacity: 0 }, { opacity: .65, duration: .5, ease: "power2.out" }, tDas - .1);
+  tl.to("#s07-flash", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, tDas + .4);
+  // "solo" sale con calma antes del siguiente beat
+  AC.hideLn(tl, "#s07-solo", tDas + .75); tl.set("#s07-solo", { opacity: 0 }, tDas + 1.4);
+
+  /* =========================================================
+     BEAT B  (9.5 - 16.7)  no investiga en internet / sale de tu material
+     ========================================================= */
+  const tSup = c("b07b", "Supernotes"), tInv = c("b07b", "investiga"), tNet = c("b07b", "Internet"), tNi = c("b07b", "ni"), tUsa = c("b07b", "usa"),
+        tInfo = c("b07b", "informacion"), tApr = c("b07b", "aprobado"), tTodo = c("b07b", "Todo"), tSale = c("b07b", "sale"), tMat = c("b07b", "material");
+  AC.line(tl, "#s07-t2", tSup + .2, tMat + .5);
+
+  // globo: se acerca, choca con el escudo y es tachado
+  const tG = tInv - .2;
+  tl.fromTo("#s07-globe", { opacity: 0, scale: .85 }, { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, tG);
+  tl.fromTo("#s07-globe", { x: 0 }, { x: 350, duration: 1.5, ease: "power2.inOut" }, tG);
+  tl.to(gp, { p: Math.PI * 1.6, duration: 3.4, ease: "power1.out", onUpdate: setMer }, tG);
+  tl.fromTo("#s07-glbl", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, tNet);
+  // choque: destello en el borde y rebote
+  const tHit = tG + 1.5;
+  tl.fromTo("#s07-hitL", { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .5, ease: "power2.out" }, tHit);
+  tl.to("#s07-hitL", { opacity: 0, scale: 1.5, duration: 1.0, ease: "power2.out" }, tHit + .5);
+  tl.fromTo("#s07-ring", { strokeWidth: 7 }, { strokeWidth: 14, duration: .45, ease: "power2.out", yoyo: true, repeat: 1 }, tHit);
+  tl.to("#s07-globe", { x: 250, duration: 1.1, ease: "power2.out" }, tHit);
+  tl.fromTo("#s07-lockL", { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: 1.0, ease: "back.out(1.6)" }, tHit + .3);
+  tl.set("#s07-xg", { opacity: 1 }, tHit + .5);
+  tl.to("#s07-xg1", { strokeDashoffset: 0, duration: .6, ease: "power2.inOut" }, tHit + .55);
+  tl.to("#s07-xg2", { strokeDashoffset: 0, duration: .6, ease: "power2.inOut" }, tHit + 1.1);
+
+  // informacion sin aprobar: llega desde la derecha y es detenida
+  const tU = tUsa + .1;
+  tl.fromTo("#s07-unap", { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }, tU);
+  tl.fromTo("#s07-unap", { x: 100 }, { x: -270, duration: 1.6, ease: "power2.inOut" }, tU);
+  tl.fromTo("#s07-uplbl", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, tInfo + .55);
+  const tHit2 = tU + 1.6;
+  tl.fromTo("#s07-hitR", { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .5, ease: "power2.out" }, tHit2);
+  tl.to("#s07-hitR", { opacity: 0, scale: 1.5, duration: 1.0, ease: "power2.out" }, tHit2 + .5);
+  tl.fromTo("#s07-ring", { strokeWidth: 7 }, { strokeWidth: 14, duration: .45, ease: "power2.out", yoyo: true, repeat: 1 }, tHit2 + 1.5);
+  tl.to("#s07-unap", { x: -190, duration: 1.1, ease: "power2.out" }, tHit2);
+  tl.fromTo("#s07-lockR", { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: 1.0, ease: "back.out(1.6)" }, tHit2 + .3);
+  tl.set("#s07-xu", { opacity: 1 }, tHit2 + .5);
+  tl.to("#s07-xu1", { strokeDashoffset: 0, duration: .6, ease: "power2.inOut" }, tHit2 + .55);
+  tl.to("#s07-xu2", { strokeDashoffset: 0, duration: .6, ease: "power2.inOut" }, tHit2 + 1.1);
+
+  // todo lo rechazado se retira con calma
+  const tClr = tHit2 + 1.8;
+  ["#s07-globe", "#s07-xg", "#s07-glbl", "#s07-unap", "#s07-xu", "#s07-uplbl", "#s07-lockL", "#s07-lockR"].forEach((s) => tl.to(s, { opacity: 0, duration: .8, ease: "power2.inOut" }, tClr));
+
+  // "sale de tu material": del escudo sale contenido nuevo
+  const pOut = [1175, 555, 1240, 555, 1300, 555, 1365, 555];
+  AC.link(tl, links, pOut, tSale + .45, 1.0, "#7df0ff");
+  AC.packet(tl, rootEl, pOut, tSale + .6, 1.1);
+  tl.fromTo("#s07-res", { opacity: 0, scale: .82, x: -40 }, { opacity: 1, scale: 1, x: 0, duration: 1.3, ease: "power3.out" }, tMat - .2);
+  // se retira antes de que entre el siguiente beat
+  const tC0 = AC.blockStart(S, "b07c");
+  tl.to("#s07-res", { opacity: 0, x: 30, duration: 1.0, ease: "power2.inOut" }, tC0 + .5);
+  tl.to("#s07-links path", { opacity: 0, duration: .8, ease: "power2.inOut" }, tC0 + .5);
+
+  /* =========================================================
+     BEAT C  (16.8 - 36.4)  las fuentes entran al escudo
+     ========================================================= */
+  const tTr = c("b07c", "transcripcion"), tApre = c("b07c", "aprende"), tDijo = c("b07c", "dijo"), tEj = c("b07c", "ejemplos"), tExp = c("b07c", "explico"), tPre = c("b07c", "preguntas"),
+        tNot = c("b07c", "Notas"), tPres = c("b07c", "presentacion"), tVid = c("b07c", "video"), tYT = c("b07c", "YouTube"), tCual = c("b07c", "cualquier"), tSiem = c("b07c", "siempre"), tEleg = c("b07c", "elegido");
+  AC.line(tl, "#s07-t3", tC0 + .6, tEleg + .55);
+
+  const cardIn = (sel, t, dx) => tl.fromTo(sel, { x: dx, opacity: 0, scale: .94 }, { x: 0, opacity: 1, scale: 1, duration: 1.4, ease: "power3.out" }, t);
+  const pulse = (t, a) => { tl.fromTo("#s07-flash", { opacity: 0 }, { opacity: a || .6, duration: .5, ease: "power2.out" }, t); tl.to("#s07-flash", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, t + .5); };
+
+  // transcripcion
+  cardIn("#s07-tr", tTr - .1, -150);
+  tl.fromTo(BARS, { scaleY: .05 }, { scaleY: 1, duration: .9, ease: "power2.out", stagger: { each: .02 } }, tTr + .7);
+  const pTr = [600, 470, 690, 470, 700, 520, 800, 530];
+  AC.link(tl, links, pTr, tApre - 1.5, 1.1, "#7df0ff");
+  AC.packet(tl, rootEl, pTr, tApre - 1.1, 1.1);
+  // "aprende": el escudo absorbe y la IA se ilumina
+  pulse(tApre, .7);
+  tl.fromTo("#s07-orb", { filter: "brightness(1)" }, { filter: "brightness(1.35)", duration: .9, ease: "power2.out", yoyo: true, repeat: 1 }, tApre);
+  const bb = (id, t) => tl.fromTo(id, { opacity: 0, y: 14, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "power3.out" }, t);
+  bb("#s07-bb1", tDijo - .35); bb("#s07-bb2", tEj - .15); bb("#s07-bb3", tExp - .35); bb("#s07-bb4", tPre - .15);
+
+  // notas
+  cardIn("#s07-nt", tNot - .1, -150);
+  const pNt = [540, 815, 650, 815, 700, 620, 800, 590];
+  AC.link(tl, links, pNt, tNot + 1.0, 1.0, "#7df0ff");
+  AC.packet(tl, rootEl, pNt, tNot + 1.2, 1.1);
+  pulse(tNot + 2.3, .4);
+
+  // presentacion
+  cardIn("#s07-pr", tPres - .1, 150);
+  const pPr = [1360, 370, 1250, 370, 1220, 520, 1120, 530];
+  AC.link(tl, links, pPr, tPres + 1.3, 1.0, "#7df0ff");
+  AC.packet(tl, rootEl, pPr, tPres + 1.5, 1.1);
+  pulse(tPres + 2.6, .4);
+
+  // video de YouTube
+  cardIn("#s07-yt", tVid - .1, 150);
+  const pYt = [1360, 570, 1270, 570, 1220, 570, 1130, 565];
+  AC.link(tl, links, pYt, tYT + .35, 1.0, "#7df0ff");
+  AC.packet(tl, rootEl, pYt, tYT + .55, 1.1);
+  pulse(tYT + 1.7, .4);
+
+  // cualquier fuente
+  cardIn("#s07-any", tCual - .1, 150);
+  const pAny = [1360, 770, 1260, 770, 1200, 640, 1125, 610];
+  AC.link(tl, links, pAny, tCual + 1.0, 1.0, "#bcd6ff");
+
+  // aprobacion: un cursor hace clic en el escudo y una ola de checks marca cada fuente
+  const tClick = tSiem + .35, cx = 993, cy = 630;
+  tl.set("#s07-cur", { x: 1230, y: 930 }, 0);
+  tl.fromTo("#s07-cur", { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, tClick - 1.5);
+  tl.to("#s07-cur", { x: cx, y: cy, duration: 1.4, ease: "power2.inOut" }, tClick - 1.5);
+  tl.to("#s07-cur", { scale: .86, duration: .16, ease: "power2.out", transformOrigin: "10% 6%", yoyo: true, repeat: 1 }, tClick);
+  tl.fromTo("#s07-tap", { opacity: .9, scale: .3 }, { opacity: 0, scale: 2.2, duration: 1.1, ease: "power2.out", immediateRender: false }, tClick);
+  const OKS = ["#s07-tr", "#s07-nt", "#s07-pr", "#s07-yt", "#s07-any"];
+  OKS.forEach((s, i) => tl.fromTo(s + " .ok", { opacity: 0, scale: .3 }, { opacity: 1, scale: 1, duration: .7, ease: "back.out(1.8)" }, tClick + .3 + i * .2));
+  // la tarjeta punteada se vuelve solida cuando es elegida
+  tl.to("#s07-any", { borderStyle: "solid", backgroundColor: "rgba(255,255,255,.14)", duration: .8, ease: "power2.inOut" }, tClick + .3 + 4 * .2);
+  pulse(tEleg, .8);
+  tl.to("#s07-cur", { opacity: 0, duration: .6, ease: "power2.inOut" }, tEleg + .7);
+
+  /* =========================================================
+     BEAT D  (36.4 - 43.8)  el resultado suena a tu clase
+     ========================================================= */
+  const tRes = c("b07d", "resultado"), tSue = c("b07d", "suena"), tEmp = c("b07d", "empresa"), tCurso = c("b07d", "curso"), tNo = c("b07d", "no"), tTxt = c("b07d", "texto"), tGen = c("b07d", "generico");
+  AC.line(tl, "#s07-t4", tRes + .4, null);
+
+  // las fuentes se recogen en el escudo
+  const CNT = { "#s07-tr": [380, 480], "#s07-nt": [350, 815], "#s07-pr": [1560, 370], "#s07-yt": [1560, 570], "#s07-any": [1560, 770] };
+  const tConv = tRes + .1;
+  Object.keys(CNT).forEach((s, i) => {
+    tl.to(s, { x: SH.x - CNT[s][0], y: SH.y - CNT[s][1], scale: .25, opacity: 0, duration: 1.2, ease: "power2.inOut" }, tConv + i * .05);
+  });
+  tl.to("#s07-links path", { opacity: 0, duration: .8, ease: "power2.inOut" }, tConv);
+
+  // el escudo se convierte en la tarjeta del material
+  const tMorph = tRes + .75;
+  tl.to("#s07-ring", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, tMorph);
+  tl.to("#s07-halo", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, tMorph);
+  tl.to(["#s07-orb", "#s07-legend"], { opacity: 0, duration: .7, ease: "power2.inOut" }, tMorph);
+  tl.to("#s07-disc", { clipPath: "inset(0px 0px round 28px)", duration: 1.5, ease: "power2.inOut" }, tMorph);
+  tl.fromTo("#s07-mat", { opacity: 0 }, { opacity: 1, duration: .9, ease: "power2.out" }, tMorph + 1.0);
+  tl.fromTo("#s07-p1", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, tMorph + 1.3);
+  tl.fromTo("#s07-p2", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, tMorph + 1.7);
+  tl.fromTo("#s07-p3", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, tMorph + 2.1);
+
+  // sello: "Suena a tu clase", la ultima palabra cambia con la voz
+  tl.fromTo("#s07-seal", { opacity: 0, scale: 1.7, rotate: -26 }, { opacity: 1, scale: 1, rotate: -8, duration: 1.1, ease: "power3.out" }, tSue + .1);
+  tl.set("#s07-seal .mask b", { yPercent: 120 }, 0);
+  tl.set("#s07-seal .mask b:nth-child(1)", { yPercent: 0 }, 0);
+  tl.to("#s07-seal .mask b:nth-child(1)", { yPercent: -120, duration: .9, ease: "power3.inOut" }, tEmp - .1);
+  tl.fromTo("#s07-seal .mask b:nth-child(2)", { yPercent: 120 }, { yPercent: 0, duration: .9, ease: "power3.inOut" }, tEmp - .1);
+  tl.to("#s07-seal .mask b:nth-child(2)", { yPercent: -120, duration: .9, ease: "power3.inOut" }, tCurso - .1);
+  tl.fromTo("#s07-seal .mask b:nth-child(3)", { yPercent: 120 }, { yPercent: 0, duration: .9, ease: "power3.inOut" }, tCurso - .1);
+
+  // contraste: el texto generico entra al lado y se tacha con suavidad
+  const tShift = tNo - .3;
+  tl.to("#s07-shield", { x: -260, duration: 1.4, ease: "power2.inOut" }, tShift);
+  tl.fromTo("#s07-gen", { opacity: 0, x: 90 }, { opacity: 1, x: 0, duration: 1.3, ease: "power3.out" }, tShift + .3);
+  tl.to("#s07-genx", { strokeDashoffset: 0, duration: .9, ease: "power2.inOut" }, tGen - .3);
+  tl.to("#s07-gen", { opacity: .4, duration: 1.0, ease: "power2.inOut" }, tGen + .4);
+
+  tl.set({}, {}, D);
+  window.__timelines["s07-regla-de-oro"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

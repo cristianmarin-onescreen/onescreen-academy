@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s08 · Docente</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Poppins"; src: url("assets/fonts/Poppins-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s08docente { position: absolute; inset: 0; overflow: hidden; }
+  #s08docente .g { position: absolute; inset: 0; }
+  #s08docente .au { position: absolute; border-radius: 50%; opacity: 0; }
+  #s08docente #s08-au1 { left: 360px; top: 200px; width: 1200px; height: 800px; background: radial-gradient(ellipse at 50% 50%, rgba(125,240,255,.12), rgba(125,240,255,0) 66%); }
+  #s08docente #s08-au2 { left: 460px; top: 330px; width: 1000px; height: 640px; background: radial-gradient(ellipse at 50% 50%, rgba(255,170,125,.42), rgba(255,170,125,0) 66%); }
+
+  /* titulo de apertura */
+  #s08docente .ac-title { top: 430px; font-size: 100px; height: 140px; }
+  #s08docente .ac-title .ln { height: 140px; padding-top: 10px; }
+
+  /* tablero de pasos */
+  #s08docente #s08-rail { position: absolute; inset: 0; width: 1920px; height: 1080px; opacity: 0; }
+  #s08docente .rn { position: absolute; top: 161px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; border: 3px solid rgba(255,255,255,.4); background: rgba(2,10,60,.7); opacity: 0; }
+  #s08docente .rl { position: absolute; top: 124px; font-family: "Rubik"; font-weight: 500; font-size: 26px; line-height: 36px; letter-spacing: -.01em; color: rgba(255,255,255,.4); white-space: nowrap; opacity: 0; }
+
+  /* docente */
+  #s08docente #s08-teacher { position: absolute; left: 150px; top: 370px; width: 330px; height: 550px; overflow: visible; }
+  #s08docente .tp { fill: none; stroke: #cfe4ff; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  #s08docente .tfill { opacity: 0; }
+  #s08docente #s08-cap { position: absolute; left: 150px; top: 918px; width: 330px; text-align: center; font-family: "Manrope"; font-weight: 700; font-size: 24px; opacity: 0; color: rgba(255,255,255,.85); }
+
+  /* pizarra de vidrio */
+  #s08docente #s08-board { left: 560px; top: 230px; width: 1200px; height: 650px; opacity: 0; border-color: rgba(190,225,255,.5); }
+  #s08docente .bt { position: absolute; left: 46px; top: 34px; font-family: "Rubik"; font-weight: 700; font-size: 46px; letter-spacing: -.035em; line-height: 1.1; opacity: 0; }
+  #s08docente .bs { position: absolute; left: 48px; top: 96px; font-family: "Manrope"; font-weight: 600; font-size: 26px; opacity: 0; color: rgba(255,255,255,.75); }
+  #s08docente .nd { position: absolute; top: 285px; width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; opacity: 0; border: 2px solid rgba(255,255,255,.5);
+    background: linear-gradient(145deg, rgba(255,255,255,.2), rgba(255,255,255,.05)); box-shadow:  0 0 40px 4px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5); }
+  #s08docente .nd svg { width: 96px; height: 96px; fill: none; stroke: var(--c); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(255,255,255,.07))); }
+  #s08docente .nn { position: absolute; top: 455px; width: 320px; margin-left: -160px; text-align: center; opacity: 0; }
+  #s08docente .nn b { display: block; font-family: "Rubik"; font-weight: 700; font-size: 38px; letter-spacing: -.03em; }
+  #s08docente .nn span { display: block; margin-top: 6px; font-family: "Manrope"; font-weight: 600; font-size: 24px; color: rgba(255,255,255,.8); }
+  #s08docente #s08-arrows { position: absolute; inset: 0; width: 1200px; height: 650px; overflow: visible; }
+  #s08docente #s08-arrows path { fill: none; stroke: #bcd6ff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+  /* grabacion */
+  #s08docente #s08-mic { left: 570px; top: 540px; width: 160px; height: 160px; border-radius: 50%; display: grid; place-items: center; opacity: 0; }
+  #s08docente #s08-mic svg { width: 78px; height: 78px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  #s08docente #s08-rec { position: absolute; right: 14px; top: 14px; width: 22px; height: 22px; border-radius: 50%; background: #ff7a6b; box-shadow:  0 0 22px 6px rgba(255,255,255,.07); opacity: 0; }
+  #s08docente #s08-recring { position: absolute; left: 0; top: 0; width: 160px; height: 160px; border-radius: 50%; border: 3px solid rgba(125,240,255,.8); opacity: 0; }
+  #s08docente #s08-wave { position: absolute; left: 760px; top: 540px; width: 320px; height: 160px; }
+  #s08docente #s08-wave i { position: absolute; top: 10px; width: 6px; height: 140px; border-radius: 3px; background: linear-gradient(180deg, #bff8ff, #3976ff); box-shadow:  0 0 10px rgba(255,255,255,.07); transform: scaleY(0); opacity: 0; }
+  #s08docente #s08-doc { left: 1170px; top: 450px; width: 260px; height: 340px; border-radius: 26px; opacity: 0; border-color: rgba(160,225,255,.6); }
+  #s08docente #s08-doc .dh { position: absolute; left: 24px; top: 24px; display: flex; align-items: center; gap: 12px; font-family: "Rubik"; font-weight: 600; font-size: 24px; letter-spacing: -.02em; white-space: nowrap; }
+  #s08docente #s08-doc .dh span { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(145deg, #7df0ff, #2f7bff); }
+  #s08docente #s08-doc .dl { position: absolute; left: 24px; height: 9px; border-radius: 5px; background: rgba(255,255,255,.5); transform-origin: 0 50%; transform: scaleX(0); }
+
+  /* nucleo */
+  #s08docente #s08-core { left: 809px; top: 350px; opacity: 0; }
+  #s08docente #s08-orb { background: radial-gradient(circle, rgba(170,130,255,.30), rgba(170,130,255,0) 70%); box-shadow:  0 0 60px 6px rgba(255,255,255,.07), 0 0 60px 6px rgba(255,255,255,.07); }
+  #s08docente #s08-ico { position: absolute; left: 734px; top: 275px; width: 150px; height: 150px; border-radius: 37px; opacity: 0; }
+  #s08docente #s08-word { position: absolute; left: 920px; top: 313px; height: 74px; line-height: 74px; font-family: "Poppins"; font-weight: 500; font-size: 60px; letter-spacing: 0; color: #fff; white-space: nowrap; opacity: 0; }
+  #s08docente #s08-core .name { font-size: 48px; }
+
+  /* reloj */
+  #s08docente #s08-clock { left: 400px; top: 275px; width: 140px; height: 140px; border-radius: 50%; opacity: 0; }
+  #s08docente #s08-clock svg { position: absolute; inset: 0; width: 140px; height: 140px; fill: none; stroke: rgba(255,255,255,.6); stroke-width: 3; stroke-linecap: round; }
+  #s08docente #s08-hand { position: absolute; left: 67px; top: 24px; width: 6px; height: 46px; border-radius: 3px; background: #7df0ff; box-shadow:  0 0 12px rgba(255,255,255,.07); transform-origin: 50% 100%; }
+  #s08docente #s08-hub { position: absolute; left: 62px; top: 62px; width: 16px; height: 16px; border-radius: 50%; background: #fff; }
+  #s08docente #s08-clk-l { position: absolute; left: 370px; top: 430px; width: 200px; text-align: center; font-family: "Rubik"; font-weight: 600; font-size: 30px; letter-spacing: -.02em; opacity: 0; }
+
+  /* piezas */
+  #s08docente .pc { top: 548px; width: 360px; height: 320px; opacity: 0; }
+  #s08docente .ph { position: absolute; left: 28px; top: 22px; display: flex; align-items: center; gap: 16px; }
+  #s08docente .pi { width: 60px; height: 60px; border-radius: 18px; display: grid; place-items: center; background: var(--c); box-shadow:  0 0 26px rgba(255,255,255,.07); }
+  #s08docente .pl { font-family: "Rubik"; font-weight: 600; font-size: 28px; letter-spacing: -.02em; white-space: nowrap; }
+  #s08docente .br { position: absolute; left: 28px; width: 310px; height: 44px; display: flex; align-items: center; gap: 14px; font-family: "Manrope"; font-weight: 700; font-size: 24px; opacity: 0; white-space: nowrap; }
+  #s08docente .br i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); box-shadow:  0 0 12px rgba(255,255,255,.07); flex: none; }
+  #s08docente .fcw { position: absolute; left: 28px; top: 106px; width: 304px; height: 190px; }
+  #s08docente .fc { position: absolute; inset: 0; border-radius: 20px; border: 1.5px solid rgba(255,255,255,.4); background: rgba(255,255,255,.1); opacity: 0; }
+  #s08docente .fx { position: absolute; inset: 0; border-radius: 20px; text-align: center; padding: 30px 20px 0; opacity: 0; background: linear-gradient(145deg, rgba(120,170,255,.38), rgba(60,110,255,.12)); border: 1.5px solid rgba(190,215,255,.7); }
+  #s08docente .fx .ft { font-family: "Rubik"; font-weight: 700; font-size: 38px; letter-spacing: -.03em; line-height: 1.05; }
+  #s08docente .fx .fd { margin-top: 14px; font-family: "Manrope"; font-weight: 600; font-size: 20px; line-height: 1.3; color: #fff; }
+  #s08docente .fph { position: absolute; left: 30px; top: 42px; right: 30px; opacity: 0; }
+  #s08docente .fph i { display: block; height: 10px; border-radius: 5px; background: rgba(255,255,255,.35); margin-bottom: 16px; }
+  #s08docente .q { position: absolute; left: 28px; top: 100px; width: 310px; font-family: "Rubik"; font-weight: 600; font-size: 25px; letter-spacing: -.02em; line-height: 1.15; opacity: 0; }
+  #s08docente .op { position: absolute; left: 28px; width: 304px; height: 40px; border-radius: 12px; display: flex; align-items: center; gap: 12px; padding-left: 8px; font-family: "Manrope"; font-weight: 600; font-size: 21px; opacity: 0; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.22); }
+  #s08docente .op b { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: "Rubik"; font-size: 15px; font-weight: 700; background: rgba(255,255,255,.2); flex: none; }
+  #s08docente .op svg { position: absolute; right: 8px; top: 7px; width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  #s08docente .ck { position: absolute; left: 28px; height: 44px; display: flex; align-items: center; gap: 14px; font-family: "Manrope"; font-weight: 700; font-size: 21px; white-space: nowrap; opacity: 0; }
+  #s08docente .ck u { width: 26px; height: 26px; border-radius: 8px; border: 2.5px solid rgba(255,255,255,.7); flex: none; }
+  #s08docente #s08-share { left: 1530px; top: 838px; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; opacity: 0; border-color: rgba(255,200,170,.8); }
+  #s08docente #s08-share svg { width: 32px; height: 32px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  #s08docente .av { position: absolute; top: 922px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; border: 3px solid rgba(255,255,255,.4); background: rgba(255,255,255,.08); opacity: 0; }
+  #s08docente #s08-avl { position: absolute; left: 640px; top: 918px; width: 340px; text-align: right; font-family: "Rubik"; font-weight: 600; font-size: 26px; letter-spacing: -.02em; line-height: 34px; opacity: 0; }
+
+  /* hilo de origen */
+  #s08docente #s08-bus { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; filter: drop-shadow(0 0 7px rgba(255,255,255,.07))); }
+  #s08docente #s08-bus path { fill: none; stroke: #ffdcc2; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  #s08docente #s08-src { left: 210px; top: 295px; width: 300px; height: 90px; display: flex; align-items: center; gap: 16px; padding-left: 20px; opacity: 0; }
+  #s08docente #s08-src .si { width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(145deg, #ffc9a8, #ff8f6b); box-shadow:  0 0 22px rgba(255,255,255,.07); flex: none; }
+  #s08docente #s08-src .st { position: relative; width: 200px; height: 62px; }
+  #s08docente #s08-src .st b { position: absolute; left: 0; top: 0; font-family: "Rubik"; font-weight: 700; font-size: 30px; letter-spacing: -.03em; white-space: nowrap; }
+  #s08docente #s08-src .st span { position: absolute; left: 0; top: 36px; font-family: "Manrope"; font-weight: 700; font-size: 19px; color: #ffd2b8; white-space: nowrap; opacity: 0; }
+
+  /* noche -> amanecer */
+  #s08docente #s08-sw { left: 640px; top: 255px; width: 640px; height: 310px; border-radius: 44px; overflow: hidden; opacity: 0; }
+  #s08docente #s08-sw .sk { position: absolute; inset: 0; }
+  #s08docente #s08-sw .night { background: linear-gradient(180deg, #040c45, #0a2285 72%, #1537a8); }
+  #s08docente #s08-sw .day { background: linear-gradient(180deg, #7a9cff 0%, #ffcfae 55%, #ff9a6b 100%); opacity: 0; }
+  #s08docente #s08-stars i { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #fff; box-shadow:  0 0 8px 2px rgba(255,255,255,.07); }
+  #s08docente #s08-moon { position: absolute; left: 440px; top: 60px; width: 92px; height: 92px; border-radius: 50%; box-shadow: inset -26px -6px 0 0 #e8f0ff, 0 0 40px 6px rgba(255,255,255,.07); }
+  #s08docente #s08-sun { position: absolute; left: 265px; top: 90px; width: 110px; height: 110px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #fff2e0, #ffc9a0 46%, #ff9a72 100%); box-shadow:  0 0 60px 6px rgba(255,255,255,.07); }
+  #s08docente #s08-hills { position: absolute; left: 0; bottom: 0; width: 640px; height: 90px; }
+  #s08docente #s08-sl { position: absolute; left: 610px; top: 592px; width: 700px; height: 50px; text-align: center; font-family: "Rubik"; font-weight: 600; font-size: 38px; letter-spacing: -.03em; }
+  #s08docente #s08-sl span { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
+
+  /* tres verbos */
+  #s08docente .vc { top: 705px; width: 460px; height: 140px; display: flex; align-items: center; gap: 20px; padding-left: 28px; opacity: 0; }
+  #s08docente .vi { width: 68px; height: 68px; border-radius: 20px; display: grid; place-items: center; flex: none; background: rgba(255,255,255,.16); }
+  #s08docente .vi svg { width: 42px; height: 42px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  #s08docente .vt { font-family: "Rubik"; font-weight: 700; font-size: 44px; letter-spacing: -.035em; line-height: 1; }
+  #s08docente .vs { margin-top: 8px; font-family: "Manrope"; font-weight: 600; font-size: 21px; color: rgba(255,255,255,.78); white-space: nowrap; }
+  #s08docente .vk { position: absolute; right: 26px; top: 44px; width: 52px; height: 52px; border-radius: 50%; border: 3px solid rgba(255,255,255,.4); display: grid; place-items: center; }
+  #s08docente .vk svg { width: 32px; height: 32px; fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+</style>
+
+<div id="s08docente" class="ac-root" data-composition-id="s08-docente" data-width="1920" data-height="1080">
+  <div class="au" id="s08-au1"></div>
+  <div class="au" id="s08-au2"></div>
+
+  <div class="ac-title"><div class="ln" id="s08-t1"><span class="w">Esto,</span> <span class="w">en</span> <span class="w">la</span> <span class="w"><em>práctica</em></span></div></div>
+
+  <svg id="s08-rail" viewBox="0 0 1920 1080">
+    <path d="M171 172H1760" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="3" stroke-linecap="round"/>
+    <path id="s08-rail-on" d="M171 172H1760" pathLength="1" fill="none" stroke="#7df0ff" stroke-width="4" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="1" style="filter:drop-shadow(0 0 6px rgba(255,255,255,.07)))"/>
+  </svg>
+
+  <!-- 1 · la clase -->
+  <div class="g" id="s08-g1">
+    <div class="ac-glass" id="s08-board">
+      <div class="bt" id="s08-bt">Clase de biología</div>
+      <div class="bs" id="s08-bs">Los depredadores</div>
+      <svg id="s08-arrows" viewBox="0 0 1200 650">
+        <path pathLength="1" d="M295 360H505M490 346L506 360L490 374"/>
+        <path pathLength="1" d="M695 360H905M890 346L906 360L890 374"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- docente -->
+  <svg id="s08-teacher" viewBox="0 0 300 500">
+    <path class="tfill" id="s08-fh" fill="#7df0ff" d="M78 80a42 42 0 1 0 84 0a42 42 0 1 0 -84 0"/>
+    <path class="tfill" id="s08-fb2" fill="#9ec2ff" d="M132 36a18 18 0 1 0 36 0a18 18 0 1 0 -36 0"/>
+    <path class="tfill" id="s08-ft" fill="#4f8dff" d="M62 200Q62 138 120 136Q178 138 178 200L192 350H48Z"/>
+    <path class="tp" pathLength="1" id="s08-th" d="M78 80a42 42 0 1 0 84 0a42 42 0 1 0 -84 0"/>
+    <path class="tp" pathLength="1" id="s08-tb" d="M132 36a18 18 0 1 0 36 0a18 18 0 1 0 -36 0"/>
+    <path class="tp" pathLength="1" id="s08-tg1" d="M96 86a11 11 0 1 0 22 0a11 11 0 1 0 -22 0"/>
+    <path class="tp" pathLength="1" id="s08-tg2" d="M124 86a11 11 0 1 0 22 0a11 11 0 1 0 -22 0"/>
+    <path class="tp" pathLength="1" id="s08-tg3" d="M118 86h6"/>
+    <path class="tp" pathLength="1" id="s08-tt" d="M62 200Q62 138 120 136Q178 138 178 200L192 350H48Z"/>
+    <path class="tp" pathLength="1" id="s08-ta1" d="M62 196Q38 250 46 306"/>
+    <g id="s08-arm"><path class="tp" pathLength="1" id="s08-ta2" d="M178 196Q232 206 262 160"/><circle id="s08-thand" cx="262" cy="160" r="8" fill="#cfe4ff" opacity="0"/></g>
+    <path class="tp" pathLength="1" id="s08-tl1" d="M88 350L84 478M152 350L156 478"/>
+    <path class="tp" pathLength="1" id="s08-tl2" d="M66 482h36M138 482h36"/>
+  </svg>
+  <div id="s08-cap">Docente de biología</div>
+
+  <!-- 2 · grabacion y transcripcion -->
+  <div class="g" id="s08-g2">
+    <div class="ac-glass" id="s08-mic"><div id="s08-recring"></div><svg viewBox="0 0 48 48"><rect x="17" y="5" width="14" height="25" rx="7"/><path d="M9 22a15 15 0 0030 0M24 37v6M16 43h16"/></svg><div id="s08-rec"></div></div>
+    <div id="s08-wave"></div>
+    <div class="ac-glass" id="s08-doc"><div class="dh"><span id="s08-dic"></span>Transcripción</div></div>
+  </div>
+
+  <!-- 3 y 4 · piezas y fuente -->
+  <div class="g" id="s08-g34">
+    <svg class="ac-links" id="s08-links" viewBox="0 0 1920 1080"></svg>
+    <svg id="s08-bus" viewBox="0 0 1920 1080">
+      <path pathLength="1" id="s08-bv" d="M360 385V548"/>
+      <path pathLength="1" id="s08-bh1" d="M360 508H760"/>
+      <path pathLength="1" id="s08-bd2" d="M760 508V548"/>
+      <path pathLength="1" id="s08-bh2" d="M760 508H1560"/>
+      <path pathLength="1" id="s08-bd3" d="M1160 508V548"/>
+      <path pathLength="1" id="s08-bd4" d="M1560 508V548"/>
+    </svg>
+    <div class="ac-core" id="s08-core"><div class="ring r2"></div><div class="ring r1"></div><div class="burst"></div><div class="orb" id="s08-orb"></div></div>
+    <img id="s08-ico" src="assets/sn-app-icon.png" alt="SuprNotes">
+    <div id="s08-word">SuprNotes</div>
+    <div class="ac-glass" id="s08-clock"></div>
+    <div id="s08-clk-l">minutos</div>
+    <div class="ac-glass" id="s08-src"></div>
+    <div id="s08-avl">todo el curso</div>
+  </div>
+
+  <!-- 5 · noche -> amanecer, tres verbos -->
+  <div class="ac-glass" id="s08-sw">
+    <div class="sk night"></div><div class="sk day"></div>
+    <div id="s08-stars"></div><div id="s08-moon"></div><div id="s08-sun"></div>
+    <svg id="s08-hills" viewBox="0 0 300 90" preserveAspectRatio="none"><path d="M0 40C50 20 90 30 140 42C190 54 240 26 300 36V90H0Z" fill="#06196a"/></svg>
+  </div>
+  <div id="s08-sl"><span id="s08-sl2">Más tiempo para enseñar</span></div>
+</div>
+
+<script>
+(function () {
+  const S = "s08", root = document.getElementById("s08docente");
+  const $ = (id) => document.getElementById(id);
+  const g34 = $("s08-g34"), linksSvg = $("s08-links");
+  const c = (w, n) => AC.cue(S, "b08", w, n);
+  const tl = gsap.timeline({ paused: true });
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const rnd = AC.seeded(808);
+
+  /* ---------- construccion del DOM ---------- */
+  // tablero de pasos
+  const RX = [171, 571, 971, 1371], RL = ["La clase", "La transcripción", "Tu material", "Tu voz"];
+  RX.forEach((x, k) => {
+    const n = document.createElement("div"); n.className = "rn"; n.id = "s08-rn" + k; n.style.left = x + "px"; root.appendChild(n);
+    const l = document.createElement("div"); l.className = "rl"; l.id = "s08-rl" + k; l.style.left = (x + 26) + "px"; l.textContent = RL[k]; root.appendChild(l);
+  });
+
+  // nodos de la cadena troficas
+  const NODES = [
+    { id: "pl", x: 200, c: "#7df0ff", n: "Planta", r: "produce su alimento", d: "M60 104V54M60 76C40 76 28 64 26 44C44 44 58 54 60 76M60 60C78 60 90 48 92 30C74 30 62 42 60 60" },
+    { id: "pr", x: 600, c: "#9ec2ff", n: "Presa", r: "se alimenta de plantas", d: "M28 96C28 74 48 66 66 70C84 74 96 84 96 96ZM52 56a16 16 0 1 0 32 0a16 16 0 1 0 -32 0M60 42C56 20 64 14 68 18C70 24 68 34 68 42M76 42C78 22 86 20 88 26C88 34 82 40 80 44" },
+    { id: "de", x: 1000, c: "#ff9f7e", n: "Depredador", r: "caza a la presa", d: "M24 46L36 18L52 40H68L84 18L96 46C96 72 78 94 60 102C42 94 24 72 24 46ZM44 58l9 3M76 58l-9 3M53 84h14l-7 8z" }
+  ];
+  const board = $("s08-board");
+  NODES.forEach((o) => {
+    const d = document.createElement("div"); d.className = "nd"; d.id = "s08-nd-" + o.id; d.style.left = (o.x - 75) + "px"; d.style.setProperty("--c", o.c);
+    d.innerHTML = '<svg viewBox="0 0 120 120"><path d="' + o.d + '"/></svg>'; board.appendChild(d);
+    const t = document.createElement("div"); t.className = "nn"; t.id = "s08-nn-" + o.id; t.style.left = o.x + "px";
+    t.innerHTML = "<b>" + o.n + "</b><span>" + o.r + "</span>"; board.appendChild(t);
+  });
+  // mover flechas dentro del tablero (el svg ya esta en el tablero)
+
+  // icono de doc en la transcripcion
+  $("s08-dic").innerHTML = AC.svg("doc", 30, 'style="color:#fff"');
+  // lineas del doc
+  const DL = [212, 190, 200, 160, 212, 180, 120];
+  DL.forEach((w, i) => { const d = document.createElement("div"); d.className = "dl"; d.id = "s08-dl" + i; d.style.top = (100 + i * 28) + "px"; d.style.width = w + "px"; $("s08-doc").appendChild(d); });
+  // onda de audio
+  const AMP = [], W = $("s08-wave");
+  for (let i = 0; i < 28; i++) {
+    const a = .22 + .78 * Math.abs(Math.sin(i * .43 + 1.1)) * (.65 + .35 * rnd()); AMP.push(a);
+    const b = document.createElement("i"); b.style.left = (i * 11.5) + "px"; W.appendChild(b);
+  }
+  const bars = W.querySelectorAll("i");
+  const AMP2 = AMP.map((a, i) => Math.min(1, Math.max(.2, a * (.55 + .8 * rnd()))));
+
+  // nucleo
+  gsap.set("#s08-core", { scale: .62 });
+
+  // reloj
+  const clock = $("s08-clock");
+  let ticks = '<svg viewBox="0 0 140 140">';
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6, r1 = 56, r2 = i % 3 === 0 ? 47 : 51; ticks += '<path d="M' + (70 + Math.sin(a) * r1).toFixed(1) + " " + (70 - Math.cos(a) * r1).toFixed(1) + "L" + (70 + Math.sin(a) * r2).toFixed(1) + " " + (70 - Math.cos(a) * r2).toFixed(1) + '"/>'; }
+  clock.innerHTML = ticks + '</svg><div id="s08-hand"></div><div id="s08-hub"></div>';
+
+  // piezas
+  function card(i, x, col, icon, label, body) {
+    const d = document.createElement("div"); d.className = "ac-glass pc"; d.id = "s08-p" + i;
+    d.style.left = x + "px"; d.style.setProperty("--c", col); d.style.borderColor = col + "aa";
+    d.innerHTML = '<div class="ph"><div class="pi">' + AC.svg(icon, 34) + '</div><div class="pl">' + label + "</div></div>" + body;
+    g34.appendChild(d);
+  }
+  const CX = [180, 580, 980, 1380], COL = ["#5c8dff", "#4f8dff", "#16b8e8", "#ff7c4c"];
+  card(1, CX[0], COL[0], "resumen", "Resumen",
+    '<div class="br" id="s08-r1" style="top:112px"><i></i>Qué es un depredador</div><div class="br" id="s08-r2" style="top:168px"><i></i>La cadena trófica</div><div class="br" id="s08-r3" style="top:224px"><i></i>Equilibrio natural</div>');
+  card(2, CX[1], COL[1], "tarjetas", "Tarjetas",
+    '<div class="fcw"><div class="fc" id="s08-fc"><div class="fph" id="s08-fph"><i style="width:60%"></i><i></i><i style="width:80%"></i></div>' +
+    '<div class="fx" id="s08-fa"><div class="ft">ecosistema</div><div class="fd">Seres vivos y el entorno que comparten</div></div>' +
+    '<div class="fx" id="s08-fb"><div class="ft">especie<br>en peligro</div><div class="fd">Corre riesgo de desaparecer</div></div></div></div>');
+  card(3, CX[2], COL[2], "cuest", "Cuestionario",
+    '<div class="q" id="s08-q">¿Qué come un depredador?</div>' +
+    '<div class="op" id="s08-o1" style="top:176px"><b>A</b>Otros animales<svg viewBox="0 0 48 48"><path pathLength="1" d="M10 25l9 9 19-20"/></svg></div>' +
+    '<div class="op" id="s08-o2" style="top:222px"><b>B</b>Solo plantas</div>' +
+    '<div class="op" id="s08-o3" style="top:268px"><b>C</b>Minerales</div>');
+  card(4, CX[3], COL[3], "guia", "Guía de repaso",
+    '<div class="ck" id="s08-k1" style="top:112px"><u></u>Conceptos clave</div><div class="ck" id="s08-k2" style="top:168px"><u></u>Ejemplos de la clase</div><div class="ck" id="s08-k3" style="top:224px"><u></u>Preguntas de práctica</div>');
+  document.querySelectorAll("#s08docente .pc").forEach((p) => gsap.set(p, { transformPerspective: 900 }));
+
+  // compartir
+  const share = document.createElement("div"); share.className = "ac-glass"; share.id = "s08-share"; share.innerHTML = AC.svg("enlace", 32, 'style="stroke:#fff"'); g34.appendChild(share);
+  const AVX = []; for (let i = 0; i < 14; i++) AVX.push(1010 + i * 52);
+  AVX.forEach((x, i) => { const a = document.createElement("div"); a.className = "av"; a.id = "s08-av" + i; a.style.left = x + "px"; g34.appendChild(a); });
+
+  // fuente (tu clase)
+  $("s08-src").innerHTML = '<div class="si">' + AC.svg("doc", 30, 'style="color:#fff"') + '</div><div class="st" data-layout-allow-overlap><b>Tu clase</b><span id="s08-ss1" data-layout-allow-overlap>tus ejemplos</span><span id="s08-ss2" data-layout-allow-overlap>tu forma de explicar</span><span id="s08-ss3" data-layout-allow-overlap>ella fue la fuente</span></div>';
+
+  // estrellas
+  const sk = $("s08-stars");
+  for (let i = 0; i < 11; i++) { const s = document.createElement("i"); s.style.left = (18 + rnd() * 604) + "px"; s.style.top = (16 + rnd() * 120) + "px"; sk.appendChild(s); }
+
+  // verbos
+  const VERBS = [
+    { t: "Revisa", s: "lo que generó SuprNotes", x: 210, ic: AC.svg("ojo", 42), w: "Revisa" },
+    { t: "Ajusta", s: "a tu manera de enseñar", x: 730, ic: '<svg viewBox="0 0 48 48"><path d="M8 14h32M8 24h32M8 34h32"/><circle cx="18" cy="14" r="4" fill="#0c2a96"/><circle cx="32" cy="24" r="4" fill="#0c2a96"/><circle cx="22" cy="34" r="4" fill="#0c2a96"/></svg>', w: "ajusta" },
+    { t: "Comparte", s: "con todo el curso", x: 1250, ic: AC.svg("enlace", 42), w: "comparte" }
+  ];
+  VERBS.forEach((v, i) => {
+    const d = document.createElement("div"); d.className = "ac-glass vc"; d.id = "s08-v" + i; d.style.left = v.x + "px";
+    d.innerHTML = '<div class="vi">' + v.ic + '</div><div><div class="vt">' + v.t + '</div><div class="vs">' + v.s + '</div></div><div class="vk"><svg viewBox="0 0 48 48"><path pathLength="1" d="M10 25l9 9 19-20"/></svg></div>';
+    root.appendChild(d);
+  });
+
+  /* ---------- utilidades de movimiento ---------- */
+  function packetPoly(parent, pts, start, dur) {
+    const d = document.createElement("div"); d.className = "ac-pk"; parent.appendChild(d);
+    const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    const pr = { t: 0 };
+    tl.set(d, { opacity: 1 }, start);
+    tl.to(pr, { t: 1, duration: dur, ease: "power1.inOut", onUpdate: () => {
+      const s = pr.t * L[L.length - 1]; let i = 1; while (i < L.length - 1 && L[i] < s) i++;
+      const f = (s - L[i - 1]) / (L[i] - L[i - 1] || 1);
+      d.style.left = (pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * f) + "px"; d.style.top = (pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * f) + "px";
+    } }, start);
+    tl.set(d, { opacity: 0 }, start + dur);
+  }
+  const draw = (sel, t, dur, ease) => tl.to(sel, { strokeDashoffset: 0, duration: dur, ease: ease || "power2.inOut" }, t);
+  function lit(k, t) {
+    tl.to("#s08-rn" + k, { borderColor: "#7df0ff", backgroundColor: "#7df0ff", boxShadow: " 0 0 18px 4px rgba(255,255,255,.07)", duration: .9, ease: "power2.out" }, t);
+    tl.to("#s08-rl" + k, { color: "#ffffff", duration: .9, ease: "power2.out" }, t);
+  }
+  const railTo = (k, t) => tl.to("#s08-rail-on", { strokeDashoffset: 1 - (RX[k] - 171) / (1760 - 171), duration: 1.5, ease: "power2.inOut" }, t);
+
+  /* ---------- tiempos de la voz ---------- */
+  const T = {
+    prac: c("practica"), imag: c("Imagina"), doc: c("docente"), bio: c("biologia"), clase: c("clase", 0), depr: c("depredadores"),
+    grab: c("Graba"), ses: c("sesion", 0), trans: c("transcripcion"), sup: c("Supernotes"),
+    min: c("minutos"), res: c("resumen"), tarj: c("tarjetas"), defs: c("definiciones"), eco: c("ecosistema"), esp: c("especie"), cuest: c("cuestionario"), sig: c("siguiente"),
+    guia: c("guia"), comp: c("compartir"), todo: c("todo"), mejor: c("mejor"), ya: c("Ya"), esta: c("construido"), ejem: c("ejemplos"), forma: c("forma"), fuente: c("ella"),
+    noche: c("noche"), mat: c("material"), rev: c("Revisa"), aju: c("ajusta"), cpt: c("comparte")
+  };
+
+  /* ====== BEAT 0: titulo ====== */
+  AC.line(tl, "#s08-t1", T.prac - 1.2, 2.55);
+  tl.fromTo("#s08-au1", { opacity: 0 }, { opacity: 1, duration: 2, ease: "power2.out" }, .2);
+
+  /* ====== BEAT 1: la docente y la pizarra ====== */
+  tl.fromTo("#s08-rail", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power2.out" }, T.imag);
+  tl.to([".rn", ".rl"].map((s) => "#s08docente " + s).join(","), { opacity: 1, duration: 1.2, ease: "power2.out", stagger: 0 }, T.imag);
+  lit(0, T.imag + .3);
+  // docente se dibuja
+  tl.to("#s08-th", { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, T.doc);
+  tl.to("#s08-tb", { strokeDashoffset: 0, duration: .9, ease: "power2.inOut" }, T.doc + .3);
+  tl.to("#s08-tt", { strokeDashoffset: 0, duration: 1.5, ease: "power2.inOut" }, T.doc + .2);
+  tl.to(["#s08-tg1", "#s08-tg2", "#s08-tg3"], { strokeDashoffset: 0, duration: .9, ease: "power2.inOut" }, T.doc + 1);
+  tl.to(["#s08-ta1", "#s08-ta2"], { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, T.doc + .9);
+  tl.to(["#s08-tl1", "#s08-tl2"], { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, T.doc + 1.1);
+  tl.to("#s08-fh", { opacity: .28, duration: 1.2, ease: "power2.out" }, T.doc + 1.4);
+  tl.to("#s08-fb2", { opacity: .5, duration: 1.2, ease: "power2.out" }, T.doc + 1.4);
+  tl.to("#s08-ft", { opacity: .38, duration: 1.2, ease: "power2.out" }, T.doc + 1.4);
+  tl.to("#s08-thand", { opacity: 1, duration: .6 }, T.doc + 2);
+  tl.fromTo("#s08-cap", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, T.doc + 1.3);
+  // pizarra
+  tl.fromTo("#s08-board", { opacity: 0, x: 60, rotateY: -14, transformPerspective: 1200 }, { opacity: 1, x: 0, rotateY: 0, duration: 1.4, ease: "power3.out" }, T.bio - .05);
+  tl.fromTo("#s08-bt", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, T.bio + .8);
+  tl.fromTo("#s08-bs", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, T.bio + 1.1);
+  // cadena trofica: planta, presa, depredador (en 'clase', 'sobre', 'depredadores')
+  const nodeIn = (id, t) => {
+    tl.fromTo("#s08-nd-" + id, { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: 1.2, ease: "expo.out" }, t);
+    tl.fromTo("#s08-nn-" + id, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, t + .3);
+  };
+  nodeIn("pl", T.clase - .1); nodeIn("pr", T.clase + .4); nodeIn("de", T.depr - .05);
+  // brazo senala la pizarra
+  tl.to("#s08-arm", { rotation: -16, svgOrigin: "178 196", duration: 1.4, ease: "power2.inOut" }, T.clase);
+  // flechas (energia) con paquete de luz
+  draw("#s08-arrows path:nth-child(1)", T.clase + .45, 1.0);
+  draw("#s08-arrows path:nth-child(2)", T.depr + .25, 1.0);
+  packetPoly(g34.parentNode.querySelector("#s08-g1"), [[855, 590], [1065, 590]], T.clase + .6, .9);
+  packetPoly(g34.parentNode.querySelector("#s08-g1"), [[1255, 590], [1465, 590]], T.depr + .4, .9);
+
+  /* ====== BEAT 2: grabacion -> transcripcion -> SuprNotes ====== */
+  // la pizarra se despide
+  tl.to("#s08-board", { opacity: 0, x: -50, duration: .9, ease: "power2.inOut" }, T.grab + .1);
+  tl.fromTo("#s08-mic", { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: 1.2, ease: "expo.out" }, T.grab + .55);
+  tl.fromTo("#s08-rec", { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, T.grab + 1.0);
+  tl.fromTo("#s08-recring", { opacity: .7, scale: 1 }, { opacity: 0, scale: 1.9, duration: 1.5, ease: "power2.out" }, T.grab + .8);
+  lit(1, T.grab + .1); railTo(1, T.grab + .1);
+  // onda de audio
+  tl.set(bars, { opacity: 1 }, T.ses + .15);
+  bars.forEach((b, i) => tl.to(b, { scaleY: AMP[i], duration: .9, ease: "power2.out" }, T.ses + .15 + i * .035));
+  bars.forEach((b, i) => tl.to(b, { scaleY: AMP2[i], duration: .9, ease: "sine.inOut" }, T.ses + 1.0 + i * .015));
+  // la voz se vuelve texto: las barras fluyen hacia la hoja
+  tl.to("#s08-mic", { opacity: .5, duration: 1, ease: "power2.inOut" }, T.trans + .2);
+  tl.to(bars, { scaleY: .08, duration: .7, ease: "power2.inOut", stagger: { each: .02, from: "end" } }, T.trans - .15);
+  tl.to(bars, { x: (i) => 400 - i * 11.5, opacity: 0, duration: 1.0, ease: "power2.inOut", stagger: { each: .02, from: "end" } }, T.trans + .3);
+  tl.fromTo("#s08-doc", { opacity: 0, y: 30, scale: .92 }, { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power3.out" }, T.trans);
+  DL.forEach((w, i) => tl.to("#s08-dl" + i, { scaleX: 1, duration: .7, ease: "power2.out" }, T.trans + .9 + i * .06));
+  // SuprNotes (el nucleo) aparece y absorbe la hoja
+  tl.fromTo("#s08-core", { opacity: 0, scale: .25 }, { opacity: 1, scale: .62, duration: 1.3, ease: "expo.out" }, T.sup - .1);
+  tl.fromTo("#s08-ico", { opacity: 0, scale: .3 }, { opacity: 1, scale: 1, duration: 1.3, ease: "expo.out" }, T.sup - .1);
+  tl.fromTo("#s08-word", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1.2, ease: "power3.out" }, T.sup + .25);
+  tl.to("#s08-core .r1", { rotation: 360, duration: AC.sceneDur(S), ease: "none" }, 0);
+  tl.to("#s08-core .r2", { rotation: -360, duration: AC.sceneDur(S), ease: "none" }, 0);
+  const flyT = T.sup + .45;
+  tl.to("#s08-doc", { x: -491, y: -270, scale: .22, duration: 1.3, ease: "power2.inOut" }, flyT);
+  tl.to("#s08-doc", { opacity: 0, duration: .35, ease: "power1.in" }, flyT + .95);
+  tl.fromTo("#s08-core .burst", { scale: 1, opacity: .8 }, { scale: 2.2, opacity: 0, duration: 1.3, ease: "power2.out" }, flyT + 1.15);
+
+  /* ====== BEAT 3: en minutos, cuatro piezas ====== */
+  tl.to("#s08-teacher", { opacity: 0, x: -50, duration: 1.3, ease: "power2.inOut" }, T.min - .3);
+  tl.to("#s08-cap", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, T.min - .3);
+  tl.to("#s08-g2", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, T.min + .1);
+  lit(2, T.min - .45); railTo(2, T.min - .45);
+  tl.fromTo("#s08-clock", { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: 1.2, ease: "expo.out" }, T.min);
+  tl.fromTo("#s08-clk-l", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, T.min + .4);
+  tl.fromTo("#s08-hand", { rotation: 0 }, { rotation: 810, duration: 2.6, ease: "power2.inOut" }, T.min + .3);
+
+  const gx = (i) => CX[i] + 180;
+  const pieceIn = (i, t) => {
+    const cx = gx(i);
+    AC.link(tl, document.getElementById("s08-links"), [960, 415, 960, 495, cx, 465, cx, 543], t - .1, 1.0, "#7df0ff");
+    packetPoly(g34, [[960, 415], [960, 455], [cx, 485], [cx, 543]], t + .1, 1.0);
+    tl.fromTo("#s08-p" + (i + 1), { opacity: 0, y: 44, scale: .94, rotateX: 16 }, { opacity: 1, y: 0, scale: 1, rotateX: 0, duration: 1.3, ease: "power3.out" }, t + .5);
+  };
+  tl.set(linksSvg, { opacity: 1 }, T.res - .2);
+  // resumen: tres vinetas
+  pieceIn(0, T.res);
+  [1, 2, 3].forEach((n, k) => tl.fromTo("#s08-r" + n, { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 1.0, ease: "power3.out" }, T.res + 1.5 + k * .55));
+  // tarjetas: marco vacio con lineas; ecosistema; luego voltea a especie en peligro
+  pieceIn(1, T.tarj);
+  tl.fromTo("#s08-fc", { opacity: 0, scale: .94 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power3.out" }, T.tarj + .9);
+  tl.fromTo("#s08-fph", { opacity: 0 }, { opacity: 1, duration: .8 }, T.tarj + 1.3);
+  gsap.set("#s08-fa", { transformPerspective: 800 }); gsap.set("#s08-fb", { transformPerspective: 800, rotateY: 90 });
+  tl.to("#s08-fph", { opacity: 0, duration: .6 }, T.eco - .05);
+  tl.fromTo("#s08-fa", { opacity: 0, rotateY: 0, scale: .96 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power3.out" }, T.eco - .05);
+  tl.to("#s08-fa", { rotateY: -90, duration: .6, ease: "power2.in" }, T.esp);
+  tl.set("#s08-fa", { opacity: 0 }, T.esp + .6);
+  tl.fromTo("#s08-fb", { opacity: 1, rotateY: 90 }, { opacity: 1, rotateY: 0, duration: .8, ease: "power2.out" }, T.esp + .6);
+  // cuestionario: pregunta, tres opciones, la correcta se marca
+  pieceIn(2, T.cuest);
+  tl.fromTo("#s08-q", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1.0, ease: "power3.out" }, T.cuest + 1.4);
+  [1, 2, 3].forEach((n, k) => tl.fromTo("#s08-o" + n, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .9, ease: "power3.out" }, T.sig - .1 + k * .45));
+  tl.to("#s08-o1", { backgroundColor: "rgba(8,110,190,.85)", borderColor: "rgba(160,240,255,.95)", duration: .9, ease: "power2.out" }, T.sig + 1.15);
+  draw("#s08-o1 path", T.sig + 1.2, .8, "power2.out");
+  tl.to(["#s08-o2", "#s08-o3"], { opacity: .5, duration: .9, ease: "power2.out" }, T.sig + 1.25);
+  // guia de repaso
+  pieceIn(3, T.guia);
+  [1, 2, 3].forEach((n, k) => tl.fromTo("#s08-k" + n, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: .9, ease: "power3.out" }, T.guia + 1.0 + k * .3));
+  // compartir con todo el curso
+  tl.fromTo("#s08-share", { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: 1.0, ease: "back.out(1.6)" }, T.comp - .05);
+  AVX.forEach((x, i) => {
+    AC.link(tl, linksSvg, [1560, 898, 1560, 908, x, 906, x, 918], T.comp + .15, 1.2, "#ffdcc2");
+    tl.fromTo("#s08-av" + i, { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: .7, ease: "back.out(2)" }, T.comp + .75 + i * .06);
+    tl.to("#s08-av" + i, { backgroundColor: "rgba(125,240,255,.85)", borderColor: "#ffffff", duration: .6 }, T.comp + 1.0 + i * .06);
+  });
+  tl.fromTo("#s08-avl", { opacity: 0, x: 12 }, { opacity: 1, x: 0, duration: 1.0, ease: "power3.out" }, T.todo - .1);
+
+  /* ====== BEAT 4: construido con sus ejemplos y su forma de explicar ====== */
+  tl.to("#s08-clock", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, T.mejor - .5);
+  tl.to("#s08-clk-l", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, T.mejor - .5);
+  lit(3, T.mejor - .1); railTo(3, T.mejor - .1);
+  tl.fromTo("#s08-src", { opacity: 0, x: -40, scale: .9 }, { opacity: 1, x: 0, scale: 1, duration: 1.3, ease: "power3.out" }, T.esta - .1);
+  const sub = (n, t) => {
+    if (n > 1) tl.to("#s08-ss" + (n - 1), { opacity: 0, y: -8, duration: .4, ease: "power2.in" }, t - .3);
+    tl.fromTo("#s08-ss" + n, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .9, ease: "power3.out" }, t + .2);
+  };
+  // 'sus ejemplos': el hilo sale de la clase y llega a las dos primeras piezas
+  sub(1, T.ejem - .25);
+  draw("#s08-bv", T.ejem - .2, 1.0); draw("#s08-bh1", T.ejem + .6, 1.2); draw("#s08-bd2", T.ejem + 1.7, .5, "power2.out");
+  packetPoly(g34, [[360, 385], [360, 508], [760, 508], [760, 548]], T.ejem + .1, 1.7);
+  // 'su forma de explicar': el hilo sigue a las otras dos
+  sub(2, T.forma - .1);
+  draw("#s08-bh2", T.forma, 1.4); draw("#s08-bd3", T.forma + .55, .5, "power2.out"); draw("#s08-bd4", T.forma + 1.3, .5, "power2.out");
+  packetPoly(g34, [[760, 508], [1160, 508], [1160, 548]], T.forma + .1, 1.2);
+  packetPoly(g34, [[760, 508], [1560, 508], [1560, 548]], T.forma + .3, 1.6);
+  // 'ella fue la fuente': la fuente se ilumina y las cuatro piezas se calientan
+  sub(3, T.fuente);
+  tl.to("#s08-src", { borderColor: "rgba(255,190,150,.95)", boxShadow: " 0 0 60px 6px rgba(255,255,255,.07), 0px 16px 34px rgba(0,0,0,0.28)", duration: 1.2, ease: "power2.out" }, T.fuente);
+  [1, 2, 3, 4].forEach((n, k) => tl.to("#s08-p" + n, { boxShadow: " 0 0 56px 6px rgba(255,255,255,.07), 0px 16px 34px rgba(0,0,0,0.28)", duration: 1.2, ease: "power2.out" }, T.fuente + .1 + k * .12));
+
+  /* ====== BEAT 5: ya no pasa la noche armando material ====== */
+  const OUTT = T.ya;
+  tl.to("#s08-g34", { opacity: 0, scale: .97, transformOrigin: "50% 50%", duration: 1.0, ease: "power2.inOut" }, OUTT - .1);
+  tl.to(["#s08-src", "#s08-bus"], { opacity: 0, duration: 1.0, ease: "power2.inOut" }, OUTT - .1);
+  tl.fromTo("#s08-sw", { opacity: 0, y: 30, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: 1.4, ease: "power3.out" }, T.noche - .35);
+  tl.fromTo("#s08-moon", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3, ease: "power3.out" }, T.noche - .1);
+  tl.fromTo("#s08-stars i", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power2.out", stagger: .06 }, T.noche);
+  // amanecer (en 'material')
+  const SUN = T.mat + .05;
+  tl.to("#s08docente .day", { opacity: 1, duration: 1.6, ease: "power2.inOut" }, SUN);
+  tl.to("#s08-moon", { y: 150, opacity: 0, duration: 1.3, ease: "power2.inOut" }, SUN);
+  tl.to("#s08-stars i", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, SUN);
+  tl.fromTo("#s08-sun", { y: 230 }, { y: 0, duration: 1.7, ease: "power2.out" }, SUN + .1);
+  tl.to("#s08-au2", { opacity: 1, duration: 1.8, ease: "power2.out" }, SUN);
+  tl.fromTo("#s08-sl2", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, SUN + 1.0);
+
+  // revisa, ajusta, comparte: tres verbos con check
+  [["Revisa", T.rev], ["ajusta", T.aju], ["comparte", T.cpt]].forEach((v, i) => {
+    const t = v[1] - .1, dur = i === 2 ? 1.05 : 1.2;
+    tl.fromTo("#s08-v" + i, { opacity: 0, y: 34, scale: .96 }, { opacity: 1, y: 0, scale: 1, duration: dur, ease: "power3.out" }, t);
+    tl.to("#s08-v" + i + " .vk", { backgroundColor: "#7df0ff", borderColor: "#7df0ff", boxShadow: " 0 0 24px rgba(255,255,255,.07)", duration: .7, ease: "power2.out" }, t + .45);
+    tl.to("#s08-v" + i + " .vk path", { strokeDashoffset: 0, duration: .7, ease: "power2.out" }, t + .5);
+    tl.to("#s08-v" + i + " .vk svg", { stroke: "#0c2a96", duration: .01 }, t + .5);
+  });
+  tl.to("#s08-rail-on", { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut" }, T.rev);
+
+  window.__timelines["s08-docente"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

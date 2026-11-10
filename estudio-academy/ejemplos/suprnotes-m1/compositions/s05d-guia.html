@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s05d · Guía de repaso</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s05dguia { position: absolute; inset: 0; overflow: hidden; background: #020a2e; }
+  #s05dguia .s05d-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 78% 70% at 50% 46%, #1a47d0 0%, #0c2a96 34%, #061a66 62%, #020a2e 100%); }
+  #s05dguia .s05d-grid { position: absolute; inset: 0;   background-position: 20px 20px; background-image: radial-gradient(rgba(255,255,255,.17) 1.4px, transparent 1.6px); background-size: 44px 44px; opacity: .55; }
+  #s05dguia .s05d-aura { position: absolute; left: 160px; top: -40px; width: 1600px; height: 1160px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 124, 76,.42) 0%, rgba(255, 124, 76,.14) 38%, rgba(255, 124, 76,0) 66%); opacity: 0; }
+  #s05dguia .s05d-aura2 { position: absolute; left: 1060px; top: 300px; width: 900px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(125,240,255,.34), rgba(125,240,255,0) 66%); opacity: 0; }
+  #s05dguia .s05d-vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 64% at 50% 50%, rgba(0,0,0,0) 38%, rgba(1,4,24,.55) 78%, rgba(0,2,16,.86) 100%); }
+
+  /* HOJA */
+  #s05dguia #s05d-wrap { position: absolute; left: 570px; top: 170px; width: 780px; height: 740px; opacity: 0; }
+  #s05dguia .s05d-gh { position: absolute; inset: 0; border-radius: 30px; border: 1.5px solid rgba(255,255,255,.2); background: linear-gradient(145deg, rgba(255,255,255,.11), rgba(255,255,255,.02)); -webkit-backdrop-filter: blur(34px); backdrop-filter: blur(34px); }
+  #s05dguia #s05d-gh1 { transform: translate(20px,-14px) rotate(2.6deg); }
+  #s05dguia #s05d-gh2 { transform: translate(-18px,12px) rotate(-3deg); }
+  #s05dguia #s05d-doc { left: 0; top: 0; width: 780px; height: 740px; border-radius: 30px; overflow: hidden;
+    background: linear-gradient(145deg, rgba(255,255,255,.16), rgba(7, 35, 101,.5)); border: 2px solid rgba(255, 178, 150,.6);
+    box-shadow:  0px 16px 34px rgba(0,0,0,0.28), 0 0 60px 4px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5); }
+  #s05dguia .hd-ic { position: absolute; left: 40px; top: 36px; width: 84px; height: 84px; border-radius: 24px; display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, #ffb69b, #1d58e2); box-shadow:  0 0 30px rgba(255,255,255,.07); }
+  #s05dguia .hd-t { position: absolute; left: 148px; top: 34px; font-family: "Rubik"; font-weight: 700; font-size: 50px; letter-spacing: -0.035em; line-height: 1.1; white-space: nowrap; }
+  #s05dguia .hd-s { position: absolute; left: 150px; top: 94px; font-size: 22px; font-weight: 700; opacity: .95; white-space: nowrap; }
+  #s05dguia .hd-rule { position: absolute; left: 40px; top: 140px; width: 700px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, #ffb69b, #7df0ff); transform-origin: 0 50%; transform: scaleX(0); }
+  #s05dguia .tg { position: absolute; top: 158px; font-family: "Rubik"; font-weight: 600; font-size: 18px; letter-spacing: .16em; white-space: nowrap; opacity: 0; display: flex; align-items: center; gap: 10px; }
+  #s05dguia #s05d-tg1 { left: 40px; color: #fff; }
+  #s05dguia #s05d-tg2 { left: 300px; color: #fff; }
+  #s05dguia .tg svg { width: 22px; height: 22px; }
+  #s05dguia .en { position: absolute; left: 40px; width: 700px; height: 96px; }
+  #s05dguia .en .slot { position: absolute; inset: 0; border-radius: 18px; border: 2px dashed rgba(255,255,255,.26); background: rgba(255,255,255,.04); opacity: 0; }
+  #s05dguia .en .row { position: absolute; inset: 0; padding: 12px 16px 0 32px; opacity: 0; }
+  #s05dguia .en .bar { position: absolute; left: 6px; top: 14px; width: 7px; height: 68px; border-radius: 4px; background: linear-gradient(180deg, #ffbfa8, #2862ea); box-shadow:  0 0 14px rgba(255,255,255,.07); }
+  #s05dguia .en .t { font-family: "Rubik"; font-weight: 700; font-size: 32px; letter-spacing: -0.02em; color: #ffd2c2; line-height: 1.12; white-space: nowrap; }
+  #s05dguia .en .d { font-family: "Manrope"; font-weight: 600; font-size: 25px; color: rgba(255,255,255,.9); margin-top: 6px; white-space: nowrap; }
+  #s05dguia .hl { position: relative; display: inline-block; isolation: isolate; margin: 0 8px; }
+  #s05dguia .hl .m { position: absolute; left: -6px; right: -6px; bottom: 1px; height: 62%; border-radius: 5px; background: linear-gradient(90deg, rgba(255, 134, 90,.9), rgba(255, 171, 140,.65)); transform-origin: 0 50%; transform: rotate(-1.2deg); }
+  #s05dguia .hl b { font-weight: 800; color: #fff; position: relative; }
+  #s05dguia .en svg.st { position: absolute; right: 22px; top: 30px; width: 36px; height: 36px; fill: #fff; opacity: 0; filter: drop-shadow(0 0 8px rgba(255,255,255,.07)) drop-shadow(0 0 16px rgba(255,255,255,.07)); }
+  #s05dguia .ft { position: absolute; left: 40px; top: 654px; width: 700px; height: 66px; }
+  #s05dguia .ft .ln { position: absolute; left: 0; top: 0; width: 700px; height: 2px; background: rgba(255,255,255,.28); transform-origin: 0 50%; transform: scaleX(0); }
+  #s05dguia .ft .tx { position: absolute; left: 0; top: 16px; font-family: "Rubik"; font-weight: 600; font-size: 31px; letter-spacing: -0.02em; white-space: nowrap; opacity: 0; }
+  #s05dguia .ft .ck { position: absolute; right: 0; top: 8px; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: linear-gradient(145deg, #ffb69b, #1d58e2); box-shadow:  0 0 30px rgba(255,255,255,.07); opacity: 0; }
+  #s05dguia .ft .ck svg { width: 34px; height: 34px; fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+  #s05dguia .gl { position: absolute; top: -40px; left: -220px; width: 150px; height: 830px; transform: skewX(-18deg); background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.34), rgba(255,255,255,0)); opacity: 0; }
+
+  /* FRAGMENTOS */
+  #s05dguia .fr { width: 300px; height: 62px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-family: "Rubik"; font-weight: 600; font-size: 25px; letter-spacing: -0.01em; opacity: 0; white-space: nowrap;
+    background: linear-gradient(145deg, rgba(255,255,255,.28), rgba(255, 124, 76,.2)); border: 1.5px solid rgba(255, 215, 200,.7); box-shadow:  0 0 34px 6px rgba(255,255,255,.07), 0 0 60px 6px rgba(255,255,255,.07); }
+  #s05dguia .fr span { color: rgba(255,255,255,.7); margin-left: 8px; }
+
+  /* CALENDARIO */
+  #s05dguia #s05d-cal { left: 1240px; top: 260px; width: 480px; height: 570px; border-radius: 30px; overflow: visible; opacity: 0;
+    background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(6,20,100,.55)); border: 2px solid rgba(160,230,255,.6);
+    box-shadow:  0px 16px 34px rgba(0,0,0,0.28), 0 0 60px 4px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5); }
+  #s05dguia .cal-ic { position: absolute; left: 36px; top: 30px; width: 60px; height: 60px; border-radius: 18px; display: grid; place-items: center; color: #fff; background: linear-gradient(145deg, #7df0ff, #2f7bff); box-shadow:  0 0 24px rgba(255,255,255,.07); }
+  #s05dguia .cal-m { position: absolute; left: 112px; top: 30px; font-family: "Rubik"; font-weight: 700; font-size: 44px; letter-spacing: -0.03em; line-height: 60px; }
+  #s05dguia .cal-y { position: absolute; right: 36px; top: 42px; font-family: "Manrope"; font-weight: 700; font-size: 24px; opacity: .7; line-height: 40px; }
+  #s05dguia .wd { position: absolute; top: 122px; width: 58px; text-align: center; font-family: "Rubik"; font-weight: 600; font-size: 20px; color: #e2edff; opacity: 1; }
+  #s05dguia .cell { position: absolute; width: 58px; height: 56px; display: grid; place-items: center; font-family: "Rubik"; font-weight: 600; font-size: 26px; color: #fff; font-weight: 700; }
+  #s05dguia .cell .tr { position: absolute; inset: 4px 3px; border-radius: 14px; background: rgba(125,240,255,.28); opacity: 0; }
+  #s05dguia .cell .ev { position: absolute; inset: 1px -2px; border-radius: 15px; background: linear-gradient(145deg, #ffb69b, #2862ea); box-shadow:  0 0 34px 6px rgba(255,255,255,.07); opacity: 0; }
+  #s05dguia .cell span { position: relative; }
+  #s05dguia #s05d-ring { position: absolute; width: 58px; height: 56px; border-radius: 16px; border: 3.5px solid #7df0ff; box-shadow:  0 0 22px 4px rgba(255,255,255,.07), inset 0 0 14px rgba(125,240,255,.45); opacity: 0; }
+  #s05dguia #s05d-evl { position: absolute; left: 238px; top: 294px; width: 3px; height: 18px; background: #ffbfa8; opacity: 0; transform-origin: 50% 0; }
+  #s05dguia #s05d-evt { position: absolute; left: 90px; top: 314px; width: 300px; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 31px; letter-spacing: -0.02em; color: #ffd2c2; opacity: 0; display: flex; align-items: center; justify-content: center; gap: 10px; text-shadow:  0 0 20px rgba(255,255,255,.07); }
+  #s05dguia #s05d-evt svg { width: 30px; height: 30px; color: #ffd2c2; }
+  #s05dguia .odo { position: absolute; left: 36px; top: 372px; width: 150px; height: 166px; overflow: hidden; }
+  #s05dguia .odo .nm { position: absolute; left: 0; right: 0; top: 0; text-align: center; font-family: "Rubik"; font-weight: 800; font-size: 128px; line-height: 166px; letter-spacing: -0.05em; background: linear-gradient(180deg, #ffffff, #7df0ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  #s05dguia .cl { position: absolute; left: 204px; top: 410px; width: 250px; font-family: "Manrope"; font-weight: 700; font-size: 28px; line-height: 1.22; color: rgba(255,255,255,.92); opacity: 0; }
+  #s05dguia .cl em { font-style: normal; font-family: "Rubik"; font-weight: 700; color: #ffd2c2; }
+  #s05dguia svg.ac-links { z-index: 3; }
+</style>
+
+<div id="s05dguia" class="ac-root" data-composition-id="s05d-guia" data-width="1920" data-height="1080">
+  <div class="s05d-bg"></div>
+  <div class="s05d-grid"></div>
+  <div class="s05d-aura" id="s05d-aura" data-layout-allow-overflow></div>
+  <div class="s05d-aura2" id="s05d-aura2" data-layout-allow-overflow></div>
+  <div class="s05d-vig"></div>
+
+  <div id="s05d-wrap">
+    <div class="s05d-gh" id="s05d-gh1"></div>
+    <div class="s05d-gh" id="s05d-gh2"></div>
+    <div class="ac-glass" id="s05d-doc">
+      <div class="hd-ic" id="s05d-hic"></div>
+      <div class="hd-t" id="s05d-ht">Guía de repaso</div>
+      <div class="hd-s" id="s05d-hs">Biología · Los depredadores</div>
+      <div class="hd-rule" id="s05d-rule"></div>
+      <div class="tg" id="s05d-tg1"></div>
+      <div class="tg" id="s05d-tg2"></div>
+      <div id="s05d-ens"></div>
+      <div class="ft" id="s05d-ft"><div class="ln"></div><div class="tx">Guía lista para repasar</div>
+        <div class="ck"><svg viewBox="0 0 48 48"><path id="s05d-ckp" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M10 25l9 9 19-20"/></svg></div></div>
+      <div class="gl" id="s05d-gl"></div>
+    </div>
+  </div>
+
+  <div id="s05d-frs"></div>
+  <svg class="ac-links" id="s05d-links" viewBox="0 0 1920 1080"></svg>
+
+  <div class="ac-glass" id="s05d-cal">
+    <div class="cal-ic" id="s05d-cic"></div>
+    <div class="cal-m">Junio</div><div class="cal-y">2026</div>
+    <div id="s05d-grid"></div>
+    <div id="s05d-ring"></div>
+    <div id="s05d-evl"></div>
+    <div id="s05d-evt"></div>
+    <div class="odo" id="s05d-odo" data-layout-allow-overflow></div>
+    <div class="cl" id="s05d-cl1"><em>días</em> para la evaluación</div>
+    <div class="cl" id="s05d-cl2"><em>día</em> para la evaluación</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const S = "s05d-guia";
+  const c = (w, n) => AC.icue(S, "b05d", w, n);
+  const $ = (id) => document.getElementById(id);
+  const STAR = '<svg class="st" viewBox="0 0 24 24"><path d="M12 1.5l3 6.9 7.4.7-5.6 4.9 1.7 7.3L12 17.6l-6.5 3.7 1.7-7.3L1.6 9.1l7.4-.7z"/></svg>';
+
+  // ---- iconos
+  $("s05d-hic").innerHTML = AC.svg("guia", 52);
+  $("s05d-cic").innerHTML = AC.svg("calendario", 38);
+  $("s05d-tg1").innerHTML = AC.svg("doc", 22) + "DEFINICIONES";
+  $("s05d-tg2").innerHTML = STAR.replace('class="st"', 'style="fill:#ffc4ae"') + "PUNTOS CLAVE";
+  $("s05d-evt").innerHTML = AC.svg("escudo", 30).replace("<svg", '<svg style="display:none"') + "Evaluación";
+  $("s05d-evt").innerHTML = '<svg viewBox="0 0 48 48" class="ac-ico"><path d="M12 6v38M12 8h26l-6 8 6 8H12"/></svg>Evaluación';
+
+  // ---- glosario
+  const EN = [
+    { t: "Depredador",         a: "animal que", k: "caza",        z: " a otros para alimentarse" },
+    { t: "Ecosistema",         a: "seres vivos que ", k: "dependen", z: " unos de otros" },
+    { t: "Especie en peligro", a: "población con riesgo de ", k: "desaparecer", z: "" },
+    { t: "Conservación",       a: "cuidar y ", k: "proteger",        z: " la naturaleza" }
+  ];
+  const ens = $("s05d-ens");
+  EN.forEach((e, i) => {
+    const d = document.createElement("div"); d.className = "en"; d.id = "s05d-e" + i; d.style.top = (206 + 108 * i) + "px";
+    d.innerHTML = '<div class="slot"></div><div class="row"><i class="bar"></i><div class="t">' + e.t + '</div><div class="d">' + e.a +
+      '<span class="hl"><span class="m"></span><b>' + e.k + '</b></span>' + e.z + '</div>' + STAR + '</div>';
+    ens.appendChild(d);
+  });
+
+  // ---- fragmentos de luz (definiciones sueltas)
+  const R = AC.seeded(55);
+  const FR = [ { x: 330, y: 330 }, { x: 1590, y: 360 }, { x: 330, y: 730 }, { x: 1590, y: 740 } ];
+  const frs = $("s05d-frs");
+  FR.forEach((f, i) => {
+    const d = document.createElement("div"); d.className = "ac-glass fr"; d.id = "s05d-f" + i; d.setAttribute("data-layout-allow-overlap", ""); d.setAttribute("data-layout-allow-occlusion", "");
+    d.style.left = (f.x - 150) + "px"; d.style.top = (f.y - 31) + "px";
+    d.innerHTML = EN[i].t + "<span>: …</span>"; frs.appendChild(d);
+    f.rot = (R() - .5) * 14;
+  });
+
+  // ---- calendario: 2 filas, 8..21 (lunes a domingo)
+  const gridEl = $("s05d-grid"), GX = 36, GY = 160;
+  ["L", "M", "M", "J", "V", "S", "D"].forEach((l, i) => {
+    const w = document.createElement("div"); w.className = "wd"; w.style.left = (GX + i * 58) + "px"; w.textContent = l; gridEl.appendChild(w);
+  });
+  const pos = (day) => { const k = day - 8; return { x: GX + (k % 7) * 58, y: GY + Math.floor(k / 7) * 56 }; };
+  for (let d = 8; d <= 21; d++) {
+    const p = pos(d), e = document.createElement("div"); e.className = "cell"; e.id = "s05d-c" + d; e.style.left = p.x + "px"; e.style.top = p.y + "px";
+    e.innerHTML = '<div class="tr"></div><div class="ev"></div><span>' + d + '</span>'; gridEl.appendChild(e);
+  }
+  const p15 = pos(15);
+  $("s05d-ring").style.left = p15.x + "px"; $("s05d-ring").style.top = p15.y + "px";
+  const odo = $("s05d-odo");
+  for (let n = 3; n >= 1; n--) { const e = document.createElement("div"); e.className = "nm"; e.id = "s05d-n" + n; e.textContent = n; odo.appendChild(e); }
+
+  // ---- tiempos (locales al inserto): la voz manda, el resto respira
+  const cDoc = c("documento"), cRe = c("reúne"), cDef = c("definiciones"), cPun = c("puntos"), cCla = c("clave"),
+        cPen = c("pensado"), cMom = c("momento"), cPre = c("previo"), cEva = c("evaluación");
+  const tl = gsap.timeline({ paused: true });
+  const P3 = 1800;
+
+  // fondo: aura magenta nace con el documento
+  tl.fromTo("#s05d-aura", { opacity: 0, scale: .7 }, { opacity: .85, scale: 1, duration: 1.6, ease: "power2.out" }, cDoc - .1);
+
+  // 1) "documento": la hoja de vidrio entra en 3D, sin prisa
+  tl.fromTo("#s05d-wrap", { opacity: 0, scale: .7, y: 60, rotateX: 20, rotateY: -30, transformPerspective: P3 },
+                          { opacity: 1, scale: 1, y: 0, rotateX: 6, rotateY: -8, transformPerspective: P3, duration: 1.3, ease: "expo.out" }, cDoc - .1);
+  tl.fromTo("#s05d-gh1", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 1.1, ease: "power2.out" }, cDoc + .3);
+  tl.fromTo("#s05d-gh2", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 1.1, ease: "power2.out" }, cDoc + .4);
+  tl.fromTo("#s05d-hic", { scale: 0, rotate: -30 }, { scale: 1, rotate: 0, duration: .9, ease: "expo.out" }, cDoc + .35);
+  tl.fromTo("#s05d-ht", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .9, ease: "expo.out" }, cDoc + .5);
+  tl.fromTo("#s05d-hs", { opacity: 0, x: -20 }, { opacity: .95, x: 0, duration: .9, ease: "expo.out" }, cDoc + .65);
+  tl.to("#s05d-rule", { scaleX: 1, duration: 1.1, ease: "power2.inOut" }, cDoc + .7);
+  EN.forEach((e, i) => tl.fromTo("#s05d-e" + i + " .slot", { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, cDoc + .9 + i * .1));
+
+  // 2) "reúne": la hoja se endereza y las definiciones sueltas llegan una a una
+  tl.to("#s05d-wrap", { rotateX: 0, rotateY: 0, duration: 1.2, ease: "power2.inOut" }, cRe);
+  FR.forEach((f, i) => {
+    const t0 = cRe + i * .2, fl = 1.1, tx = 610 + 150, ty = 170 + 206 + 108 * i + 48;
+    const sx = f.x, sy = f.y, sg = sx < tx ? 1 : -1;
+    const p = [sx, sy, sx + (tx - sx) * .12, sy - 110, tx - sg * 190, ty - 80, tx, ty];
+    const sel = "#s05d-f" + i, el = $("s05d-f" + i), pr = { t: 0 };
+    tl.fromTo(sel, { opacity: 0, scale: .6, rotate: f.rot }, { opacity: 1, scale: 1, duration: .6, ease: "power2.out" }, t0 - .1);
+    tl.to(pr, { t: 1, duration: fl, ease: "power2.inOut", onUpdate: () => { const b = AC.bez(p, pr.t); el.style.left = (b.x - 150) + "px"; el.style.top = (b.y - 31) + "px"; } }, t0 + .15);
+    tl.to(sel, { rotate: 0, duration: fl, ease: "power2.inOut" }, t0 + .15);
+    for (let k = 1; k <= 2; k++) AC.packet(tl, $("s05dguia"), p, t0 + .15 + k * .07, fl, "power2.inOut");
+    const L = t0 + .15 + fl;
+    tl.to(sel, { opacity: 0, scale: .94, duration: .35, ease: "power2.in" }, L - .12);
+    tl.to("#s05d-e" + i + " .slot", { opacity: 0, duration: .4, ease: "power2.in" }, L - .1);
+    tl.fromTo("#s05d-e" + i + " .row", { opacity: 0, scale: 1.04, transformOrigin: "0% 50%" }, { opacity: 1, scale: 1, duration: .6, ease: "power2.out" }, L - .15);
+    tl.fromTo("#s05d-e" + i + " .bar", { scaleY: 0, transformOrigin: "50% 0%" }, { scaleY: 1, duration: .5, ease: "power2.out" }, L - .1);
+  });
+  tl.fromTo("#s05d-tg1", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: .8, ease: "expo.out" }, cDef);
+
+  // 3) "puntos clave": el marcador se dibuja despacio, una entrada cada ~0.4 s, y se lee
+  tl.fromTo("#s05d-tg2", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: .8, ease: "expo.out" }, cPun);
+  const hit = (i, t) => {
+    tl.fromTo("#s05d-e" + i + " .m", { scaleX: 0 }, { scaleX: 1, duration: 1.0, ease: "power2.inOut" }, t);
+    tl.fromTo("#s05d-e" + i + " svg.st", { scale: 0, rotate: -60, opacity: 0, transformOrigin: "50% 50%" }, { scale: 1, rotate: 0, opacity: 1, duration: .8, ease: "expo.out" }, t + .8);
+  };
+  hit(0, cPun + .1); hit(1, cCla + .05); hit(2, cPen - .3); hit(3, cPen + .1);
+
+  // 4) "momento previo a una evaluación": la hoja cede el centro, el calendario entra con calma
+  tl.to("#s05d-wrap", { x: -250, scale: .96, rotateY: 6, duration: 1.4, ease: "power2.inOut" }, cMom - .05);
+  tl.to("#s05d-aura", { x: -220, duration: 1.4, ease: "power2.inOut" }, cMom - .05);
+  tl.fromTo("#s05d-aura2", { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: 1.5, ease: "power2.out" }, cMom);
+  tl.fromTo("#s05d-cal", { opacity: 0, x: 220, scale: .88, rotateY: -28, transformPerspective: P3 },
+                         { opacity: 1, x: 0, scale: 1, rotateY: -8, transformPerspective: P3, duration: 1.4, ease: "expo.out" }, cMom);
+  tl.fromTo("#s05d-cic", { scale: 0, rotate: 20 }, { scale: 1, rotate: 0, duration: .9, ease: "expo.out" }, cMom + .4);
+  tl.fromTo("#s05d-grid .wd", { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: .6, ease: "power2.out", stagger: .04 }, cMom + .5);
+  tl.fromTo("#s05d-grid .cell span", { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .6, ease: "power2.out", stagger: .035 }, cMom + .6);
+  // cuenta regresiva: 3 -> 2 -> 1, un numero por beat
+  tl.fromTo("#s05d-cl1", { opacity: 0, x: 16 }, { opacity: 1, x: 0, duration: .8, ease: "expo.out" }, cPre - .05);
+  const dn = (n, t) => {
+    tl.to("#s05d-n" + (n + 1), { yPercent: -110, duration: .45, ease: "power2.in" }, t);
+    tl.fromTo("#s05d-n" + n, { yPercent: 110 }, { yPercent: 0, duration: .6, ease: "expo.out" }, t + .2);
+  };
+  tl.fromTo("#s05d-n3", { yPercent: 110 }, { yPercent: 0, duration: .8, ease: "expo.out" }, cPre - .05);
+  tl.fromTo("#s05d-ring", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: .8, ease: "expo.out" }, cPre + .1);
+  const T2 = cPre + .4, T1 = cEva + .3;
+  tl.to("#s05d-ring", { x: pos(16).x - p15.x, y: pos(16).y - p15.y, duration: .6, ease: "power2.inOut" }, T2);
+  tl.to("#s05d-c15 .tr", { opacity: 1, duration: .5, ease: "power2.out" }, T2);
+  dn(2, T2);
+  // "evaluación": el dia 18 se marca, bandera y rotulo
+  tl.fromTo("#s05d-c18 .ev", { opacity: 0, scale: .3 }, { opacity: 1, scale: 1, duration: 1.0, ease: "expo.out" }, cEva - .02);
+  tl.fromTo("#s05d-c18 span", { scale: 1 }, { scale: 1.2, duration: .8, ease: "expo.out", transformOrigin: "50% 50%" }, cEva - .02);
+  tl.fromTo("#s05d-evl", { opacity: 0, scaleY: 0 }, { opacity: 1, scaleY: 1, duration: .5, ease: "power2.out" }, cEva + .15);
+  tl.fromTo("#s05d-evt", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: .9, ease: "expo.out" }, cEva + .3);
+  // un dia antes: contador en 1 y la guia queda lista (check)
+  tl.to("#s05d-ring", { x: pos(17).x - p15.x, y: pos(17).y - p15.y, duration: .6, ease: "power2.inOut" }, T1);
+  tl.to("#s05d-c16 .tr", { opacity: 1, duration: .5, ease: "power2.out" }, T1);
+  dn(1, T1);
+  tl.to("#s05d-cl1", { opacity: 0, y: -12, duration: .4, ease: "power2.in" }, T1);
+  tl.fromTo("#s05d-cl2", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .6, ease: "expo.out" }, T1 + .25);
+  tl.to("#s05d-c17 .tr", { opacity: 1, duration: .5 }, T1 + .3);
+  tl.fromTo("#s05d-ft .ln", { scaleX: 0 }, { scaleX: 1, duration: .8, ease: "power2.inOut" }, T1 - .1);
+  tl.fromTo("#s05d-ft .ck", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: .5, ease: "expo.out" }, T1 + .05);
+  tl.to("#s05d-ckp", { strokeDashoffset: 0, duration: .5, ease: "power2.out" }, T1 + .2);
+  tl.fromTo("#s05d-ft .tx", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: .7, ease: "expo.out" }, T1 + .15);
+  tl.fromTo("#s05d-doc", { boxShadow: " 0px 16px 34px rgba(0,0,0,0.28), 0 0 60px 4px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5)" },
+                          { boxShadow: " 0px 16px 34px rgba(0,0,0,0.28), 0 0 60px 6px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5)", duration: .5, ease: "power2.inOut", yoyo: true, repeat: 1 }, T1 + .05);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["s05d-guia"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s06 · Tecnología</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s06tecnologia { position: absolute; inset: 0; overflow: hidden; }
+  #s06tecnologia .ac-title { top: 112px; }
+
+  /* luces de fondo propias (sobre el fondo continuo del módulo) */
+  #s06tecnologia .s06-bloom { position: absolute; border-radius: 50%; opacity: 0; filter: blur(30px); }
+  #s06tecnologia .s06-bl { left: 80px; top: 230px; width: 840px; height: 720px; background: radial-gradient(ellipse at 50% 50%, rgba(79,141,255,.55), rgba(79,141,255,0) 68%); }
+  #s06tecnologia .s06-br { left: 1000px; top: 230px; width: 840px; height: 720px; background: radial-gradient(ellipse at 50% 50%, rgba(41,211,255,.42), rgba(41,211,255,0) 68%); }
+  #s06tecnologia .s06-bc { left: 560px; top: 250px; width: 800px; height: 680px; background: radial-gradient(ellipse at 50% 50%, rgba(190,225,255,.5), rgba(130,190,255,0) 68%); }
+
+  #s06tecnologia svg.ac-links { z-index: 3; pointer-events: none; }
+
+  /* tarjetas de los dos modelos */
+  #s06tecnologia .s06-card { position: absolute; width: 680px; height: 600px; top: 290px; }
+  #s06tecnologia .s06-card.L { left: 160px; --c: #4f8dff; --cl: #eef4ff; }
+  #s06tecnologia .s06-card.R { left: 1080px; --c: #29d3ff; --cl: #d2faff; }
+  #s06tecnologia .s06-glass { inset: 0; opacity: 0; border-color: rgba(255,255,255,.34); }
+  #s06tecnologia .s06-card.L .s06-glass { box-shadow:  0px 16px 34px rgba(0,0,0,0.28), 0 0 60px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5); border-color: rgba(170,200,255,.6); }
+  #s06tecnologia .s06-card.R .s06-glass { box-shadow:  0px 16px 34px rgba(0,0,0,0.28), 0 0 60px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.5); border-color: rgba(150,235,255,.6); }
+
+  #s06tecnologia .s06-orb { position: absolute; left: 265px; top: 225px; width: 150px; height: 150px; border-radius: 50%; opacity: 0; display: grid; place-items: center; color: #fff; z-index: 4;
+    border: 2px solid rgba(255,255,255,.55); }
+  #s06tecnologia .s06-card.L .s06-orb { background: radial-gradient(circle at 35% 28%, #b9d2ff 0%, #4f8dff 62%, #1f4fd8 100%); box-shadow:  0 0 60px 6px rgba(255,255,255,.07), 0 0 60px 6px rgba(255,255,255,.07); }
+  #s06tecnologia .s06-card.R .s06-orb { background: radial-gradient(circle at 35% 28%, #c2f6ff 0%, #29d3ff 62%, #0b8fc9 100%); box-shadow:  0 0 60px 6px rgba(255,255,255,.07), 0 0 60px 6px rgba(255,255,255,.07); }
+  #s06tecnologia .s06-orb svg { width: 78px; height: 78px; }
+
+  #s06tecnologia .s06-hdt { position: absolute; left: 148px; top: 44px; opacity: 0; }
+  #s06tecnologia .s06-hdt .ac-lbl { font-size: 36px; }
+  #s06tecnologia .s06-hdt .ac-sub { font-size: 21px; margin-top: 6px; color: var(--cl); opacity: 1; }
+  #s06tecnologia .s06-cap { position: absolute; left: 40px; font-family: "Manrope"; font-weight: 700; font-size: 20px; color: var(--cl); opacity: 0; display: flex; align-items: center; gap: 12px; }
+  #s06tecnologia .s06-cap i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow:  0 0 12px 3px rgba(255,255,255,.07); display: block; }
+
+  /* modelo de lenguaje */
+  #s06tecnologia .s06-tk { position: absolute; height: 48px; border-radius: 12px; display: grid; place-items: center; opacity: 0;
+    font-family: "Manrope"; font-weight: 700; font-size: 25px; letter-spacing: -.01em; color: #fff;
+    background: rgba(79,141,255,.26); border: 1.5px solid rgba(190,215,255,.5); z-index: 2; }
+  #s06tecnologia .s06-rel { position: absolute; left: 0; top: 0; width: 680px; height: 600px; overflow: visible; z-index: 1; }
+  #s06tecnologia .s06-sep { position: absolute; left: 40px; top: 372px; width: 600px; height: 1.5px; background: rgba(255,255,255,.2); opacity: 0; }
+  #s06tecnologia .s06-sent { position: absolute; left: 40px; top: 430px; width: 600px; font-family: "Manrope"; font-weight: 700; font-size: 32px; line-height: 1.34; letter-spacing: -.01em; color: #fff; opacity: 0; }
+  #s06tecnologia .s06-sent .k { color: #9dc0ff; }
+  #s06tecnologia .s06-sent .cur { display: inline-block; width: 4px; height: 34px; margin-left: 3px; vertical-align: -6px; background: #9dc0ff; box-shadow:  0 0 12px 2px rgba(255,255,255,.07); }
+
+  /* modelo de visión */
+  #s06tecnologia .s06-img { position: absolute; left: 40px; top: 142px; width: 600px; height: 410px; border-radius: 20px; overflow: hidden; opacity: 0; border: 1.5px solid rgba(255,255,255,.35); box-shadow:  0px 14px 34px rgba(0,0,0,0.28); }
+  #s06tecnologia .s06-img svg.art { position: absolute; inset: 0; width: 600px; height: 410px; display: block; }
+  #s06tecnologia .s06-scan { position: absolute; top: 0; left: -90px; width: 90px; height: 410px; opacity: 0;
+    background: linear-gradient(90deg, rgba(41,211,255,0) 0%, rgba(41,211,255,.28) 78%, rgba(190,248,255,.95) 100%); box-shadow:  0px 0px 26px rgba(0,0,0,0.28); }
+  #s06tecnologia .s06-bx { position: absolute; inset: 0; width: 600px; height: 410px; overflow: visible; }
+  #s06tecnologia .s06-tag { position: absolute; height: 30px; padding: 0 11px; border-radius: 7px; display: flex; align-items: center; gap: 8px; opacity: 0;
+    font-family: "Manrope"; font-weight: 800; font-size: 18px; color: #03204f; background: #7df0ff; box-shadow:  0px 6px 18px rgba(0,0,0,0.28); white-space: nowrap; }
+  #s06tecnologia .s06-tag b { font-weight: 800; font-variant-numeric: tabular-nums; }
+
+  /* núcleo común */
+  #s06tecnologia .s06-core { position: absolute; left: 960px; top: 590px; width: 0; height: 0; z-index: 5; }
+  #s06tecnologia .s06-core .orb { position: absolute; width: 150px; height: 150px; left: -75px; top: -75px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(circle at 35% 28%, #ffffff 0%, #cfe6ff 30%, #4f8dff 66%, #29d3ff 100%);
+    box-shadow:  0 0 60px 6px rgba(255,255,255,.07), 0 0 60px 6px rgba(255,255,255,.07); }
+  #s06tecnologia .s06-core .rg { position: absolute; border-radius: 50%; opacity: 0; border: 2.5px dashed rgba(255,255,255,.55); }
+  #s06tecnologia .s06-core .r1 { width: 210px; height: 210px; left: -105px; top: -105px; }
+  #s06tecnologia .s06-core .r2 { width: 270px; height: 270px; left: -135px; top: -135px; border-color: rgba(160,220,255,.4); }
+  #s06tecnologia .s06-core .pulse { position: absolute; width: 150px; height: 150px; left: -75px; top: -75px; border-radius: 50%; border: 4px solid rgba(255,255,255,.85); opacity: 0; }
+
+  /* tarjeta de comprensión */
+  #s06tecnologia .s06-res { left: 680px; top: 355px; width: 560px; height: 470px; opacity: 0; z-index: 6; border-color: rgba(175,225,255,.7);
+    box-shadow:  0px 16px 34px rgba(0,0,0,0.28), 0 0 60px rgba(255,255,255,.07), inset 0 1px 0 rgba(255,255,255,.55); }
+  #s06tecnologia .s06-fuse { position: absolute; left: 218px; top: 30px; width: 124px; height: 124px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(circle at 35% 28%, rgba(255,255,255,.34), rgba(40,90,220,.5) 70%); border: 2px solid rgba(255,255,255,.6);
+    box-shadow:  0 0 50px 6px rgba(255,255,255,.07); }
+  #s06tecnologia .s06-fuse svg { position: absolute; width: 66px; height: 66px; top: 29px; }
+  #s06tecnologia .s06-fuse svg:nth-child(1) { left: 10px; color: #9dc0ff; }
+  #s06tecnologia .s06-fuse svg:nth-child(2) { left: 48px; color: #8ef0ff; }
+  #s06tecnologia .s06-rtitle { position: absolute; left: 0; top: 172px; width: 560px; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 44px; letter-spacing: -.03em; opacity: 0; }
+  #s06tecnologia .s06-row { position: absolute; left: 72px; width: 416px; height: 58px; display: flex; align-items: center; gap: 16px; opacity: 0;
+    font-family: "Manrope"; font-weight: 700; font-size: 28px; border-bottom: 1.5px solid rgba(255,255,255,.2); }
+  #s06tecnologia .s06-row .ri { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+  #s06tecnologia .s06-row.a .ri { background: rgba(79,141,255,.4); color: #cfe0ff; }
+  #s06tecnologia .s06-row.b .ri { background: rgba(41,211,255,.34); color: #d4fbff; }
+  #s06tecnologia .s06-row .ck { margin-left: auto; color: #8ef0ff; width: 34px; height: 34px; flex: none; }
+  #s06tecnologia .s06-rsub { position: absolute; left: 0; top: 408px; width: 560px; text-align: center; font-family: "Manrope"; font-weight: 600; font-size: 24px; color: #cfe0ff; opacity: 0; }
+</style>
+
+<div id="s06tecnologia" class="ac-root" data-composition-id="s06-tecnologia" data-width="1920" data-height="1080">
+  <div class="s06-bloom s06-bl" id="s06-bl"></div>
+  <div class="s06-bloom s06-br" id="s06-br"></div>
+  <div class="s06-bloom s06-bc" id="s06-bc"></div>
+
+  <div class="ac-title">
+    <div class="ln" id="s06-t1"><span class="w">Dos</span> <span class="w">tipos</span> <span class="w">de</span> <span class="w"><em>modelos</em></span></div>
+    <div class="ln" id="s06-t2"><span class="w">Entre</span> <span class="w">los</span> <span class="w">dos,</span> <span class="w"><em>comprensión</em></span> <span class="w"><em>total</em></span></div>
+  </div>
+
+  <svg class="ac-links" id="s06-links" viewBox="0 0 1920 1080">
+    <g id="s06-g0"></g><g id="s06-gL"></g><g id="s06-gR"></g>
+  </svg>
+
+  <!-- modelo de lenguaje -->
+  <div class="s06-card L" id="s06-cL">
+    <div class="ac-glass s06-glass" id="s06-glL"></div>
+    <div class="s06-hdt" id="s06-hL"><div class="ac-lbl">Modelo de lenguaje</div><div class="ac-sub">entiende y redacta el texto</div></div>
+    <div class="s06-cap" id="s06-capL1" style="top:142px"><i></i>Entiende el significado</div>
+    <svg class="s06-rel" id="s06-rel" viewBox="0 0 680 600"></svg>
+    <div id="s06-tks"></div>
+    <div class="s06-sep" id="s06-sep"></div>
+    <div class="s06-cap" id="s06-capL2" style="top:384px"><i></i>Redacta el texto</div>
+    <div class="s06-sent" id="s06-sent"></div>
+    <div class="s06-orb" id="s06-oL"></div>
+  </div>
+
+  <!-- modelo de visión -->
+  <div class="s06-card R" id="s06-cR">
+    <div class="ac-glass s06-glass" id="s06-glR"></div>
+    <div class="s06-hdt" id="s06-hR"><div class="ac-lbl">Modelo de visión</div><div class="ac-sub">interpreta las imágenes</div></div>
+    <div class="s06-img" id="s06-img">
+      <svg class="art" viewBox="0 0 600 410">
+        <defs>
+          <linearGradient id="s06-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2447b8"/><stop offset=".6" stop-color="#6f9fff"/><stop offset="1" stop-color="#d6e6ff"/></linearGradient>
+        </defs>
+        <rect width="600" height="410" fill="url(#s06-sky)"/>
+        <circle cx="466" cy="104" r="64" fill="#fff" opacity=".16"/>
+        <circle cx="466" cy="104" r="38" fill="#fff" opacity=".93"/>
+        <path d="M0 300 C90 252 170 262 262 292 C340 316 430 256 600 284 L600 410 L0 410Z" fill="#183c9f"/>
+        <path d="M0 350 C120 326 250 342 360 338 C460 334 540 326 600 340 L600 410 L0 410Z" fill="#0d2373"/>
+        <!-- acacia -->
+        <path d="M566 352 L566 292" stroke="#0a1b5c" stroke-width="7" stroke-linecap="round"/>
+        <ellipse cx="566" cy="280" rx="36" ry="13" fill="#0a1b5c"/>
+        <ellipse cx="552" cy="270" rx="22" ry="9" fill="#0a1b5c"/>
+        <!-- depredador (león) -->
+        <g transform="translate(60 350)">
+          <path d="M20 -64 C-6 -68 -12 -94 4 -110" fill="none" stroke="#cfdcff" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="4" cy="-112" r="9" fill="#9fb6f5"/>
+          <rect x="38" y="-48" width="14" height="48" rx="6" fill="#bccdf7"/><rect x="132" y="-48" width="14" height="48" rx="6" fill="#bccdf7"/>
+          <ellipse cx="100" cy="-68" rx="80" ry="38" fill="#f2f6ff"/>
+          <rect x="58" y="-50" width="14" height="50" rx="6" fill="#f2f6ff"/><rect x="152" y="-50" width="14" height="50" rx="6" fill="#f2f6ff"/>
+          <circle cx="178" cy="-92" r="45" fill="#a2b8f2"/>
+          <circle cx="188" cy="-86" r="28" fill="#f2f6ff"/>
+          <ellipse cx="208" cy="-78" rx="16" ry="12" fill="#dfe8ff"/>
+          <circle cx="220" cy="-82" r="4.5" fill="#0d2373"/><circle cx="194" cy="-95" r="3.6" fill="#0d2373"/>
+          <circle cx="176" cy="-114" r="8" fill="#f2f6ff"/>
+        </g>
+        <!-- presa (gacela) -->
+        <g transform="translate(360 350)">
+          <path d="M20 -70 L5 -82" stroke="#bfe3ff" stroke-width="7" stroke-linecap="round"/>
+          <path d="M30 -46 L22 0 M106 -46 L124 -6" stroke="#8cc3ee" stroke-width="7" stroke-linecap="round"/>
+          <ellipse cx="66" cy="-62" rx="50" ry="23" fill="#bfe3ff"/>
+          <path d="M44 -44 L40 0 M96 -48 L106 0" stroke="#bfe3ff" stroke-width="7" stroke-linecap="round"/>
+          <polygon points="100,-74 124,-122 140,-114 118,-62" fill="#bfe3ff"/>
+          <ellipse cx="148" cy="-120" rx="21" ry="10" transform="rotate(-18 148 -120)" fill="#bfe3ff"/>
+          <circle cx="164" cy="-116" r="3.4" fill="#0d2373"/><circle cx="144" cy="-123" r="3.2" fill="#0d2373"/>
+          <path d="M138 -128 C130 -152 140 -164 146 -168 M148 -128 C148 -150 156 -158 162 -160" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+        </g>
+      </svg>
+      <div class="s06-scan" id="s06-scan"></div>
+      <svg class="s06-bx" viewBox="0 0 600 410">
+        <rect id="s06-bx1" x="42" y="196" width="252" height="160" rx="10" fill="rgba(125,240,255,.1)" stroke="#7df0ff" stroke-width="3.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" style="fill-opacity:0"/>
+        <rect id="s06-bx2" x="350" y="172" width="196" height="184" rx="10" fill="rgba(125,240,255,.1)" stroke="#7df0ff" stroke-width="3.5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" style="fill-opacity:0"/>
+      </svg>
+      <div class="s06-tag" id="s06-tg1" style="left:42px; top:164px">depredador <b id="s06-n1">0</b> %</div>
+      <div class="s06-tag" id="s06-tg2" style="left:350px; top:140px">presa <b id="s06-n2">0</b> %</div>
+    </div>
+    <div class="s06-orb" id="s06-oR"></div>
+  </div>
+
+  <!-- núcleo común -->
+  <div class="s06-core" id="s06-core">
+    <div class="rg r2" id="s06-r2"></div><div class="rg r1" id="s06-r1"></div>
+    <div class="pulse" id="s06-pulse"></div><div class="orb" id="s06-corb"></div>
+  </div>
+
+  <!-- comprensión -->
+  <div class="ac-glass s06-res" id="s06-res">
+    <div class="s06-fuse" id="s06-fuse"></div>
+    <div class="s06-rtitle" id="s06-rt">Comprensión completa</div>
+    <div class="s06-row a" id="s06-ra" style="top:250px"><div class="ri" id="s06-ria"></div><span>Texto entendido</span></div>
+    <div class="s06-row b" id="s06-rb" style="top:322px"><div class="ri" id="s06-rib"></div><span>Imagen interpretada</span></div>
+    <div class="s06-rsub" id="s06-rs">Un solo análisis de todo tu material</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const S = "s06", B = "b06", $ = (id) => document.getElementById(id);
+  const tl = gsap.timeline({ paused: true });
+  const cDos0 = AC.cue(S, B, "dos", 0), cMod = AC.cue(S, B, "modelos", 0), cJun = AC.cue(S, B, "juntos"), cLen = AC.cue(S, B, "lenguaje"),
+    cEnt = AC.cue(S, B, "entienden"), cRed = AC.cue(S, B, "redactan"), cVis = AC.cue(S, B, "visión"), cInt = AC.cue(S, B, "interpretan"),
+    cAna = AC.cue(S, B, "analizan"), cMat = AC.cue(S, B, "material");
+
+  // iconos
+  $("s06-oL").innerHTML = AC.svg("cerebro", 78);
+  $("s06-oR").innerHTML = AC.svg("ojo", 78);
+  $("s06-fuse").innerHTML = AC.svg("cerebro", 66) + AC.svg("ojo", 66);
+  $("s06-ria").innerHTML = AC.svg("texto", 28); $("s06-rib").innerHTML = AC.svg("imagen", 28);
+  const ck = (id) => '<svg class="ac-ico ck" viewBox="0 0 48 48"><path id="' + id + '" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" d="M10 25l9 9 19-20"/></svg>';
+  $("s06-ra").insertAdjacentHTML("beforeend", ck("s06-cka")); $("s06-rb").insertAdjacentHTML("beforeend", ck("s06-ckb"));
+
+  // posiciones de reposo en 3D
+  gsap.set("#s06-cL", { transformPerspective: 1800, rotateY: 8 });
+  gsap.set("#s06-cR", { transformPerspective: 1800, rotateY: -8 });
+
+  // tokens de lenguaje
+  const TK = [
+    { w: "ecosistema", x: 40, y: 190, wd: 190 }, { w: "depredador", x: 262, y: 216, wd: 190 }, { w: "especie", x: 500, y: 190, wd: 140 },
+    { w: "hábitat", x: 64, y: 274, wd: 140 }, { w: "conservación", x: 250, y: 292, wd: 220 }, { w: "presa", x: 500, y: 266, wd: 120 }
+  ];
+  const tks = $("s06-tks"), rel = $("s06-rel");
+  TK.forEach((t, i) => {
+    const d = document.createElement("div"); d.className = "s06-tk"; d.id = "s06-tk" + i; d.textContent = t.w;
+    d.style.left = t.x + "px"; d.style.top = t.y + "px"; d.style.width = t.wd + "px"; tks.appendChild(d);
+  });
+  const EDGES = [[0,1],[1,2],[2,5],[1,4],[0,3],[3,4],[4,5]];
+  EDGES.forEach((e, i) => {
+    const a = TK[e[0]], b = TK[e[1]], l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    l.setAttribute("x1", a.x + a.wd / 2); l.setAttribute("y1", a.y + 24); l.setAttribute("x2", b.x + b.wd / 2); l.setAttribute("y2", b.y + 24);
+    l.setAttribute("stroke", "#9dc0ff"); l.setAttribute("stroke-width", "2.5"); l.setAttribute("stroke-linecap", "round");
+    l.setAttribute("pathLength", "1"); l.setAttribute("stroke-dasharray", "1"); l.setAttribute("stroke-dashoffset", "1"); l.id = "s06-ed" + i; rel.appendChild(l);
+  });
+
+  // frase redactada
+  const SEG = [["El ", 0], ["depredador", 1], [" regula el ", 0], ["ecosistema", 1], [" y apoya la ", 0], ["conservación", 1], [" de la especie.", 0]];
+  const TOTAL = SEG.reduce((a, s) => a + s[0].length, 0), sent = $("s06-sent");
+  function render(n) {
+    let out = "", left = n;
+    for (const s of SEG) { if (left <= 0) break; const p = s[0].slice(0, left); left -= p.length; out += s[1] ? '<span class="k">' + p + "</span>" : p; }
+    sent.innerHTML = out + '<span class="cur"></span>';
+  }
+  render(0);
+
+  /* ---------- 1. «dos tipos de modelos trabajando juntos» ---------- */
+  AC.line(tl, "#s06-t1", cDos0 - .05, 9.25);
+  tl.fromTo("#s06-oL", { opacity: 0, scale: .4, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 1.3, ease: "expo.out" }, cMod - .15);
+  tl.fromTo("#s06-oR", { opacity: 0, scale: .4, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 1.3, ease: "expo.out" }, cMod + .3);
+  tl.fromTo("#s06-bl", { opacity: 0 }, { opacity: 1, duration: 1.6, ease: "power2.out" }, cMod - .15);
+  tl.fromTo("#s06-br", { opacity: 0 }, { opacity: 1, duration: 1.6, ease: "power2.out" }, cMod + .3);
+  // hilo de luz entre los dos «trabajando juntos»
+  const p0 = [588, 590, 780, 470, 1140, 710, 1332, 590];
+  AC.link(tl, $("s06-g0"), p0, cJun - .5, 1.3, "#cfe6ff");
+  AC.packet(tl, $("s06tecnologia"), p0, cJun - .15, 1.3, "power1.inOut");
+  tl.to("#s06-g0", { opacity: 0, duration: .7, ease: "power2.in" }, cLen - .45);
+
+  /* ---------- 2. lenguaje: entiende y redacta ---------- */
+  const tL = cLen - .3;
+  tl.fromTo("#s06-glL", { opacity: 0, scale: .55, x: -50, rotateY: 26, transformPerspective: 1800 }, { opacity: 1, scale: 1, x: 0, rotateY: 0, duration: 1.3, ease: "expo.out" }, tL);
+  tl.to("#s06-oL", { x: -258, y: -222, scale: .56, duration: 1.2, ease: "power2.inOut" }, tL);
+  tl.fromTo("#s06-hL", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: .9, ease: "power3.out" }, tL + .6);
+  tl.to("#s06-oR", { opacity: .4, scale: .8, duration: 1.0, ease: "power2.inOut" }, tL);
+  // tokens
+  TK.forEach((t, i) => tl.fromTo("#s06-tk" + i, { opacity: 0, y: 18, scale: .9 }, { opacity: 1, y: 0, scale: 1, duration: .8, ease: "power3.out" }, cLen + .15 + i * .12));
+  // entiende: relaciones
+  tl.fromTo("#s06-capL1", { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: .8, ease: "power3.out" }, cEnt - .1);
+  EDGES.forEach((e, i) => tl.to("#s06-ed" + i, { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, cEnt + .1 + i * .1));
+  TK.forEach((t, i) => tl.to("#s06-tk" + i, { backgroundColor: "rgba(79,141,255,.5)", borderColor: "rgba(210,228,255,.9)", duration: .9, ease: "power2.inOut" }, cEnt + .5));
+  // redacta: los tokens se acomodan hacia la frase que se escribe
+  const tRed = cRed + .1;
+  tl.to("#s06-capL1", { opacity: .35, duration: .8 }, tRed);
+  tl.to(".s06-rel", { opacity: .35, duration: .8, ease: "power2.inOut" }, tRed);
+  TK.forEach((t, i) => tl.to("#s06-tk" + i, { opacity: .5, duration: 1.0, ease: "power2.inOut" }, tRed + .2));
+  [0, 1, 4].forEach((k, j) => { const t = TK[k], q = [t.x + t.wd / 2, t.y + 52, t.x + t.wd / 2, 400, 150 + j * 150, 380, 120 + j * 190, 452]; AC.packet(tl, $("s06-cL"), q, tRed + .3 + j * .2, 1.1, "power2.inOut"); });
+  tl.fromTo("#s06-sep", { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 1.0, ease: "power2.out", transformOrigin: "0 50%" }, tRed);
+  tl.fromTo("#s06-capL2", { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: .8, ease: "power3.out" }, tRed + .15);
+  tl.fromTo("#s06-sent", { opacity: 0 }, { opacity: 1, duration: .5, ease: "power2.out" }, tRed + .3);
+  const pr = { n: 0 };
+  tl.to(pr, { n: TOTAL, duration: 1.45, ease: "none", onUpdate: () => render(Math.round(pr.n)) }, tRed + .75);
+
+  /* ---------- 3. visión: interpreta las imágenes ---------- */
+  const tV = cVis - .1;
+  tl.fromTo("#s06-glR", { opacity: 0, scale: .55, x: 50, rotateY: -26, transformPerspective: 1800 }, { opacity: 1, scale: 1, x: 0, rotateY: 0, duration: 1.3, ease: "expo.out" }, tV);
+  tl.to("#s06-oR", { opacity: 1, x: -258, y: -222, scale: .56, duration: 1.2, ease: "power2.inOut" }, tV);
+  tl.fromTo("#s06-hR", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: .9, ease: "power3.out" }, tV + .6);
+  tl.fromTo("#s06-img", { opacity: 0, scale: .94 }, { opacity: 1, scale: 1, duration: 1.0, ease: "power3.out" }, tV + .55);
+  // barrido de escaneo
+  tl.set("#s06-scan", { opacity: 1 }, cInt - .1);
+  tl.fromTo("#s06-scan", { x: 0 }, { x: 690, duration: 1.15, ease: "power1.inOut" }, cInt - .1);
+  tl.set("#s06-scan", { opacity: 0 }, cInt + 1.1);
+  // cajas de detección: aparecen cuando el escaneo pasa
+  const nn1 = { v: 0 }, nn2 = { v: 0 };
+  tl.to("#s06-bx1", { strokeDashoffset: 0, fillOpacity: 1, duration: .85, ease: "power2.inOut" }, cInt + .25);
+  tl.fromTo("#s06-tg1", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .7, ease: "power3.out" }, cInt + .6);
+  tl.to(nn1, { v: 97, duration: .9, ease: "power2.out", onUpdate: () => { $("s06-n1").textContent = Math.round(nn1.v); } }, cInt + .6);
+  tl.to("#s06-bx2", { strokeDashoffset: 0, fillOpacity: 1, duration: .85, ease: "power2.inOut" }, cInt + .7);
+  tl.fromTo("#s06-tg2", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .7, ease: "power3.out" }, cInt + 1.05);
+  tl.to(nn2, { v: 94, duration: .9, ease: "power2.out", onUpdate: () => { $("s06-n2").textContent = Math.round(nn2.v); } }, cInt + 1.05);
+
+  /* ---------- 4. «entre los dos analizan todo tu material al mismo tiempo» ---------- */
+  const tA = 9.3;
+  AC.line(tl, "#s06-t2", 10.1, null);
+  tl.to("#s06-cL", { x: 70, scale: .72, rotateY: 22, duration: 1.1, ease: "power2.inOut" }, tA);
+  tl.to("#s06-cR", { x: -70, scale: .72, rotateY: -22, duration: 1.1, ease: "power2.inOut" }, tA);
+  tl.to("#s06-bl", { opacity: .5, duration: 1.0 }, tA); tl.to("#s06-br", { opacity: .5, duration: 1.0 }, tA);
+  tl.fromTo("#s06-bc", { opacity: 0 }, { opacity: 1, duration: 1.6, ease: "power2.out" }, tA + .6);
+  // núcleo
+  tl.fromTo("#s06-corb", { scale: .15, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.0, ease: "expo.out" }, 9.95);
+  tl.fromTo("#s06-r1", { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.0, ease: "expo.out" }, 10.05);
+  tl.fromTo("#s06-r2", { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.0, ease: "expo.out" }, 10.15);
+  tl.to("#s06-r1", { rotation: 360, duration: 4, ease: "none" }, 10.05);
+  tl.to("#s06-r2", { rotation: -360, duration: 4, ease: "none" }, 10.15);
+  // hilos desde cada tarjeta hacia el núcleo (a la vez = al mismo tiempo)
+  const YS = [480, 590, 700];
+  YS.forEach((y, i) => {
+    const pl = [776, y, 840, y, 840, 590, 884, 590], pr2 = [1144, y, 1080, y, 1080, 590, 1036, 590];
+    AC.link(tl, $("s06-gL"), pl, 10.35 + i * .08, .95, "#9dc0ff");
+    AC.link(tl, $("s06-gR"), pr2, 10.35 + i * .08, .95, "#8ef0ff");
+    AC.packet(tl, $("s06tecnologia"), pl, 10.75 + i * .1, .85, "power1.inOut");
+    AC.packet(tl, $("s06tecnologia"), pr2, 10.75 + i * .1, .85, "power1.inOut");
+  });
+  tl.fromTo("#s06-core", { scale: 1 }, { scale: 1.14, duration: .5, ease: "power2.out", yoyo: true, repeat: 1 }, 11.1);
+  tl.fromTo("#s06-pulse", { scale: 1, opacity: .9 }, { scale: 2.6, opacity: 0, duration: 1.3, ease: "power2.out", immediateRender: false }, 11.15);
+  // surge la comprensión del núcleo; las dos tarjetas dejan el centro
+  const tR = 11.25;
+  tl.fromTo("#s06-res", { opacity: 0, scale: .25, rotateX: 28, transformPerspective: 1600 }, { opacity: 1, scale: 1, rotateX: 0, duration: 1.3, ease: "expo.out" }, tR);
+  tl.to("#s06-corb", { scale: 1.7, opacity: 0, duration: 1.0, ease: "power2.in" }, tR + .1);
+  tl.to(["#s06-r1", "#s06-r2"], { opacity: 0, duration: .8, ease: "power2.in" }, tR + .1);
+  tl.to("#s06-cL", { x: 0, scale: .62, rotateY: 34, opacity: .5, duration: 1.3, ease: "power2.inOut" }, tR);
+  tl.to("#s06-cR", { x: 0, scale: .62, rotateY: -34, opacity: .5, duration: 1.3, ease: "power2.inOut" }, tR);
+  tl.to(["#s06-gL", "#s06-gR"], { opacity: .35, duration: 1.0 }, tR + .3);
+  tl.fromTo("#s06-fuse", { opacity: 0, scale: .5 }, { opacity: 1, scale: 1, duration: .9, ease: "back.out(1.6)" }, tR + .35);
+  tl.fromTo("#s06-rt", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .8, ease: "power3.out" }, tR + .6);
+  tl.fromTo("#s06-ra", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: .8, ease: "power3.out" }, tR + .75);
+  tl.to("#s06-cka", { strokeDashoffset: 0, duration: .6, ease: "power2.inOut" }, tR + 1.15);
+  tl.fromTo("#s06-rb", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: .8, ease: "power3.out" }, tR + 1.0);
+  tl.to("#s06-ckb", { strokeDashoffset: 0, duration: .6, ease: "power2.inOut" }, tR + 1.4);
+  tl.fromTo("#s06-rs", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .8, ease: "power3.out" }, tR + 1.3);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["s06-tecnologia"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s02 · El problema</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  @font-face { font-family: "Nevis"; src: url("assets/fonts/Nevis.ttf") format("truetype"); font-weight: 700; font-display: block; }
+  #s02 { position: absolute; inset: 0; perspective: 1500px; perspective-origin: 960px 540px; }
+  #s02 .abs { position: absolute; }
+  #s02 .ac-title .ln { opacity: 0; }
+  @font-face { font-family: "Poppins"; src: url("assets/fonts/Poppins-500.woff2") format("woff2"); font-weight: 500; font-display: block; }
+  #s02 #s02-lock { left: 760px; top: 120px; width: 440px; height: 124px; display: flex; align-items: center; gap: 37px; opacity: 0; }
+  #s02 #s02-lkic { width: 124px; height: 124px; flex: none; display: block; filter: drop-shadow(0 8px 14px rgba(0,0,0,.3)); }
+  #s02 #s02-lkw { font-family: "Poppins"; font-weight: 500; font-size: 58px; line-height: 1; color: #fff; letter-spacing: 0; white-space: nowrap; clip-path: inset(0 100% 0 0); }
+  #s02 #s02-lkflash { position: absolute; left: 0; top: 0; width: 124px; height: 124px; border-radius: 30px; border: 3px solid rgba(255,255,255,.8); opacity: 0; }
+
+  /* beat 1: tres situaciones */
+  #s02 .sit { top: 350px; width: 440px; height: 380px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; opacity: 0; }
+  #s02 .sit .ac-lbl { font-size: 40px; text-align: center; }
+  #s02 .sit .ac-sub { font-size: 22px; margin: 0; }
+
+  /* beat 2: el monton */
+  #s02 .it { position: absolute; opacity: 0; }
+  #s02 .bub { display: flex; align-items: center; justify-content: center; padding: 0 28px; text-align: center; font-family: "Manrope"; font-weight: 700; font-size: 27px; line-height: 1.25; }
+  #s02 .bar { height: 12px; border-radius: 6px; background: rgba(255,255,255,.5); }
+  #s02 .bub.sk { flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px; }
+  #s02 .ex { display: flex; align-items: center; gap: 22px; padding: 0 28px; text-align: left; }
+  #s02 .ex .acc { width: 8px; align-self: stretch; margin: 22px 0; border-radius: 4px; background: linear-gradient(#7df0ff, #3976ff); flex: none; }
+  #s02 .ex .k { font-family: "Manrope"; font-weight: 800; font-size: 19px; color: #7df0ff; letter-spacing: .01em; }
+  #s02 .ex .v { font-family: "Rubik"; font-weight: 600; font-size: 29px; line-height: 1.1; margin-top: 4px; }
+  #s02 .qm { display: grid; place-items: center; border-radius: 50%; font-family: "Rubik"; font-weight: 700; }
+  #s02 .ico { display: grid; place-items: center; color: #cfe2ff; }
+
+  /* beat 3: el monton hecho bloque */
+  #s02 #s02-tok { left: 160px; top: 400px; width: 320px; height: 320px; opacity: 0; }
+  #s02 #s02-tok .l { position: absolute; inset: 0; }
+  #s02 #s02-tok .l.b1 { transform: translate(-18px, -16px) rotate(-5deg); opacity: .55; }
+  #s02 #s02-tok .l.b2 { transform: translate(16px, 14px) rotate(4deg); opacity: .4; }
+  #s02 #s02-tok .l.f { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 0 22px; }
+  #s02 #s02-tok .ac-lbl { font-size: 31px; }
+  #s02 .ppl { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; top: 226px; opacity: 0; color: #cfe2ff; }
+
+  #s02 .gh { left: 1160px; width: 600px; height: 170px; border-radius: 28px; opacity: 0; overflow: hidden;
+    border: 2.5px dashed rgba(255,255,255,.4); background: rgba(255,255,255,.025); }
+  #s02 .gh .gf { position: absolute; left: 0; top: 0; right: 0; bottom: 0; width: auto; height: auto; border-radius: 26px; opacity: 0; }
+  #s02 .gh .ic { position: absolute; left: 30px; top: 43px; width: 84px; height: 84px; border-radius: 24px; display: grid; place-items: center; background: rgba(255,255,255,.1); color: rgba(255,255,255,.7); }
+  #s02 .gh .tx { position: absolute; left: 140px; top: 28px; right: 34px; }
+  #s02 .gh .ac-lbl { font-size: 36px; }
+  #s02 .gh .tr { position: relative; height: 12px; border-radius: 6px; border: 1.5px dashed rgba(255,255,255,.3); margin-top: 13px; overflow: hidden; }
+  #s02 .gh .ac-lbl { margin-bottom: 3px; }
+  #s02 .gh .tr i { position: absolute; left: 0; top: 0; bottom: 0; right: 0; transform-origin: 0 50%; background: rgba(255,205,150,.72); transform: scaleX(0); border-radius: 6px; }
+  #s02 .gh .sw { position: absolute; top: -20px; bottom: -20px; left: 0; width: 150px; opacity: 0;
+    background: linear-gradient(90deg, rgba(125,240,255,0), rgba(125,240,255,.55), rgba(125,240,255,0)); transform: skewX(-18deg); }
+
+  /* beat 4: reloj */
+  #s02 #s02-cg { left: 460px; top: 300px; width: 700px; height: 580px; opacity: 0; }
+  #s02 #s02-amb { position: absolute; left: 30px; top: -135px; width: 640px; height: 640px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(circle, rgba(255,160,70,.55) 0%, rgba(255,160,70,.26) 42%, rgba(255,172,92,0) 68%); }
+  #s02 #s02-cool { position: absolute; left: 30px; top: -135px; width: 640px; height: 640px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(circle, rgba(125,240,255,.34) 0%, rgba(90,150,255,.14) 42%, rgba(90,150,255,0) 68%); }
+  #s02 #s02-face { left: 185px; top: 20px; width: 330px; height: 330px; border-radius: 50%; }
+  #s02 #s02-clk { position: absolute; left: 185px; top: 20px; width: 330px; height: 330px; overflow: visible; }
+  #s02 #s02-odo { left: 200px; top: 395px; width: 300px; height: 106px; border-radius: 28px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  #s02 .dg { position: relative; width: 56px; height: 84px; overflow: hidden; border-radius: 12px; background: rgba(2,10,60,.32); }
+  #s02 .dg .st { position: absolute; left: 0; top: 0; width: 100%; will-change: transform; }
+  #s02 .dg .st div { height: 84px; line-height: 84px; text-align: center; font-family: "Rubik"; font-weight: 600; font-size: 64px; letter-spacing: -0.02em; }
+  #s02 .co { width: 20px; text-align: center; font-family: "Rubik"; font-weight: 700; font-size: 58px; line-height: 84px; opacity: .85; }
+  #s02 #s02-cap { left: 100px; top: 522px; width: 500px; height: 40px; text-align: center; font-family: "Manrope"; font-weight: 700; font-size: 30px; }
+  #s02 #s02-cap span { position: absolute; left: 0; right: 0; top: 0; }
+  #s02 #s02-cap2 { opacity: 0; color: #7df0ff; }
+
+  /* lista de verificacion */
+  #s02 #s02-chk { left: 160px; top: 395px; width: 340px; height: 335px; opacity: 0; }
+  #s02 #s02-chk .cnt { position: absolute; left: 32px; top: 22px; width: 200px; height: 64px; font-family: "Rubik"; font-weight: 700; font-size: 54px; letter-spacing: -0.03em; }
+  #s02 #s02-chk .cnt span { position: absolute; left: 0; top: 0; }
+  #s02 #s02-chk .row { position: absolute; left: 32px; height: 40px; display: flex; align-items: center; gap: 18px; font-family: "Rubik"; font-weight: 600; font-size: 28px; }
+  #s02 #s02-chk .bx { position: relative; width: 38px; height: 38px; border-radius: 11px; border: 2.5px solid rgba(255,255,255,.55); flex: none; }
+  #s02 #s02-chk .bx svg { position: absolute; left: 3px; top: 3px; width: 28px; height: 28px; overflow: visible; }
+  #s02 #s02-chk .bx svg path { fill: none; stroke: #fff; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  #s02 #s02-chk .bx .fl { position: absolute; inset: -2.5px; border-radius: 11px; background: #e59a52; opacity: 0; }
+  #s02 #s02-chk #s02-r2 .fl { background: #3976ff; }
+  #s02 #s02-chk .bx.last { border-style: dashed; border-color: rgba(255,200,140,.75); }
+
+  /* respuesta */
+  #s02 #s02-halo { left: 560px; top: 20px; width: 800px; height: 270px; border-radius: 50%; opacity: 0; filter: blur(8px);
+    background: radial-gradient(ellipse, rgba(125,240,255,.30) 0%, rgba(90,150,255,.14) 45%, rgba(90,150,255,0) 70%); }
+  #s02 svg.s02lk { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+</style>
+
+<div id="s02" class="ac-root" data-composition-id="s02-problema" data-width="1920" data-height="1080">
+  <div class="abs" id="s02-halo"></div>
+  <div class="ac-title">
+    <div class="ln" id="s02-t1"><span class="w">Una</span> <span class="w">situación</span> <span class="w">que</span> <span class="w"><em>seguro</em></span> <span class="w"><em>conoces</em></span></div>
+      </div>
+
+  <div class="abs" id="s02-lock"><img id="s02-lkic" src="assets/sn-app-icon.png" alt=""><span id="s02-lkw">SuprNotes</span><div id="s02-lkflash"></div></div>
+
+  <!-- beat 1 -->
+  <div class="ac-glass sit" id="s02-sit0" style="left:200px"></div>
+  <div class="ac-glass sit" id="s02-sit1" style="left:740px"></div>
+  <div class="ac-glass sit" id="s02-sit2" style="left:1280px"></div>
+
+  <!-- beat 2 -->
+  <div id="s02-pile" class="abs" style="inset:0"></div>
+
+  <!-- beat 3 -->
+  <svg class="s02lk" id="s02-lk" viewBox="0 0 1920 1080"></svg>
+  <div class="abs" id="s02-tok"></div>
+  <div class="abs" id="s02-ppl"></div>
+  <div class="abs gh" id="s02-g0" style="top:315px"></div>
+  <div class="abs gh" id="s02-g1" style="top:515px"></div>
+  <div class="abs gh" id="s02-g2" style="top:715px"></div>
+
+  <!-- beat 4 -->
+  <div class="abs" id="s02-cg">
+    <div id="s02-amb"></div><div id="s02-cool"></div>
+    <div class="ac-glass" id="s02-face"></div>
+    <svg id="s02-clk" viewBox="0 0 330 330"></svg>
+    <div class="ac-glass" id="s02-odo"></div>
+    <div class="abs" id="s02-cap"><span id="s02-cap1">tiempo haciéndolo a mano</span><span id="s02-cap2">tiempo con SuprNotes</span></div>
+  </div>
+  <div class="ac-glass" id="s02-chk"></div>
+</div>
+
+<script>
+(function () {
+  const S = "s02", root = document.getElementById("s02");
+  const $ = (s) => document.querySelector(s);
+  const R = AC.seeded(20260502);
+
+  /* ---------------- beat 1: tres situaciones ---------------- */
+  const EQUIPO = '<svg class="ac-ico" viewBox="0 0 48 48" width="124" height="124"><circle cx="24" cy="16" r="6.5"/><path d="M13 39c1-7 5-10.5 11-10.5S34 32 35 39"/><circle cx="8.5" cy="21" r="4.2"/><path d="M2 36c0-5 3-8 6.500-8"/><circle cx="39.500" cy="21" r="4.2"/><path d="M46 36c0-5-3-8-6.500-8"/></svg>';
+  const SIT = [
+    { ic: AC.svg("gorro", 124), t: "Una clase", s: "en el aula", c: "#a9c8ff", w: "clase" },
+    { ic: EQUIPO, t: "Una capacitación", s: "en la empresa", c: "#7df0ff", w: "capacitación" },
+    { ic: AC.svg("guia", 124), t: "Una sesión de estudio", s: "solo o en grupo", c: "#cfe2ff", w: "sesión" }
+  ];
+  SIT.forEach((o, i) => { const d = $("#s02-sit" + i); d.innerHTML = '<div style="color:' + o.c + '">' + o.ic + '</div><div class="ac-lbl">' + o.t + '</div><div class="ac-sub">' + o.s + '</div>'; });
+
+  /* ---------------- beat 2: el monton de informacion ---------------- */
+  const pile = $("#s02-pile");
+  // [cx, cy, w, h, z, rot, cue de la voz (palabra, nth, desfase), html, clase]
+  const bars = (w1, w2) => '<div class="bar" style="width:' + w1 + 'px"></div><div class="bar" style="width:' + w2 + 'px"></div>';
+  const exHtml = (k, v) => '<div class="acc"></div><div><div class="k">' + k + '</div><div class="v">' + v + '</div></div>';
+  const ITEMS = [
+    { x: 640, y: 440, w: 380, h: 118, z: 90, r: -4, c: ["explicó", 0, 0.0], cls: "ac-glass bub", h_: "Los depredadores regulan el ecosistema" },
+    { x: 930, y: 322, w: 84, h: 84, z: 30, r: 6, c: ["explicó", 0, 0.5], cls: "ac-glass ico", h_: AC.svg("chat", 44) },
+    { x: 1190, y: 392, w: 360, h: 108, z: 50, r: 3, c: ["mucho", 0, 0.15], cls: "ac-glass bub", h_: "Cada especie cumple un papel" },
+    { x: 1450, y: 560, w: 270, h: 96, z: -20, r: -3, c: ["mucho", 0, 0.65], cls: "ac-glass bub sk", h_: bars(190, 130) },
+    { x: 720, y: 660, w: 410, h: 118, z: 70, r: -2, c: ["ejemplos", 0, 0.0], cls: "ac-glass ex", h_: exHtml("Ejemplo", "el lobo y el ciervo") },
+    { x: 1230, y: 722, w: 440, h: 118, z: 40, r: 2.5, c: ["dieron", 0, 1.3], cls: "ac-glass ex", h_: exHtml("Ejemplo", "una especie en peligro") },
+    { x: 1000, y: 540, w: 150, h: 150, z: 130, r: 0, c: ["preguntas", 0, 0.0], cls: "ac-glass qm", h_: '<span class="ac-em" style="font-size:104px;line-height:1">?</span>' },
+    { x: 1505, y: 402, w: 92, h: 92, z: 20, r: 8, c: ["preguntas", 0, 0.55], cls: "ac-glass qm", h_: '<span style="font-size:58px;line-height:1;color:#a9c8ff">?</span>' },
+    { x: 480, y: 810, w: 340, h: 92, z: 60, r: -3, c: ["preguntas", 0, 1.1], cls: "ac-glass bub", h_: "¿Y la conservación?" }
+  ];
+  ITEMS.forEach((o, i) => {
+    const d = document.createElement("div"); d.className = "it " + o.cls; d.id = "s02-it" + i;
+    d.style.left = (o.x - o.w / 2) + "px"; d.style.top = (o.y - o.h / 2) + "px"; d.style.width = o.w + "px"; d.style.height = o.h + "px";
+    d.innerHTML = o.h_; pile.appendChild(d);
+  });
+
+  /* ---------------- beat 3: tarjeta del monton, personas, fichas fantasma ---------------- */
+  $("#s02-tok").innerHTML = '<div class="ac-glass l b2"></div><div class="ac-glass l b1"></div><div class="ac-glass l f"><div style="color:#a9c8ff">' + AC.svg("carpeta", 92) + '</div><div class="ac-lbl">Todo lo que se explicó</div><div class="ac-sub">sin ordenar</div></div>';
+  const PPL_X = [1360, 1460, 1560];
+  const ppl = $("#s02-ppl");
+  PPL_X.forEach((x, i) => { const d = document.createElement("div"); d.className = "ac-glass ppl"; d.id = "s02-p" + i; d.style.left = (x - 38) + "px"; d.innerHTML = AC.svg("persona", 40); ppl.appendChild(d); });
+  const GH = [ { k: "resumen", t: "Un resumen", ya: 400 }, { k: "tarjetas", t: "Tarjetas", ya: 600 }, { k: "cuest", t: "Un cuestionario", ya: 800 } ];
+  const BW = [100, 86, 62];
+  GH.forEach((g, i) => {
+    const d = $("#s02-g" + i);
+    d.innerHTML = '<div class="ac-glass gf"></div><div class="ic">' + AC.svg(g.k, 50) + '</div><div class="tx"><div class="ac-lbl">' + g.t + '</div>' +
+      BW.map((w) => '<div class="tr" style="width:' + w + '%"><i></i></div>').join("") + '</div><div class="sw"></div>';
+  });
+
+  /* ---------------- beat 4: reloj + odometro ---------------- */
+  const clk = $("#s02-clk"), NS = "http://www.w3.org/2000/svg";
+  const mk = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); clk.appendChild(e); return e; };
+  for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6, big = i % 3 === 0; mk("line", { x1: 165 + Math.sin(a) * (big ? 132 : 138), y1: 165 - Math.cos(a) * (big ? 132 : 138), x2: 165 + Math.sin(a) * 150, y2: 165 - Math.cos(a) * 150, stroke: "rgba(255,255,255," + (big ? .8 : .45) + ")", "stroke-width": big ? 5 : 3, "stroke-linecap": "round" }); }
+  const ring = mk("circle", { cx: 165, cy: 165, r: 158, fill: "none", stroke: "rgba(255,255,255,.55)", "stroke-width": 4 });
+  const hH = mk("line", { x1: 165, y1: 165, x2: 165, y2: 100, stroke: "#fff", "stroke-width": 9, "stroke-linecap": "round" });
+  const hM = mk("line", { x1: 165, y1: 165, x2: 165, y2: 56, stroke: "#cfe2ff", "stroke-width": 6, "stroke-linecap": "round" });
+  mk("circle", { cx: 165, cy: 165, r: 11, fill: "#fff" });
+
+  const odo = $("#s02-odo");
+  const mkStrip = (vals) => '<div class="dg"><div class="st">' + vals.map((v) => "<div>" + v + "</div>").join("") + "</div></div>";
+  odo.innerHTML = mkStrip([0]) + mkStrip([0,1,2,3,4,5,6,7,8,9]) + '<div class="co">:</div>' + mkStrip([0,1,2,3,4,5,0]) + mkStrip([0,1,2,3,4,5,6,7,8,9,0]);
+  const strips = odo.querySelectorAll(".st");
+  const smooth = (x) => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+  const pos = (v, step, win) => { const f = Math.floor(v / step), r = v - f * step; return f + smooth((r - (step - win)) / win); };
+  const pr = { T: 0 };
+  function setT() {
+    const T = Math.max(0, pr.T);
+    strips[1].style.transform = "translateY(" + (-pos(T, 60, 10) * 84) + "px)";
+    strips[2].style.transform = "translateY(" + (-(pos(T % 60, 10, 3)) * 84) + "px)";
+    strips[3].style.transform = "translateY(" + (-(pos(T % 10, 1, 1)) * 84) + "px)";
+    hM.setAttribute("transform", "rotate(" + ((T * 6) % 360) + " 165 165)");
+    hH.setAttribute("transform", "rotate(" + (T / 720 * 360) + " 165 165)");
+  }
+  setT();
+
+  /* ---------------- lista de verificacion ---------------- */
+  const CK = ["Resumen", "Tarjetas", "Cuestionario"];
+  $("#s02-chk").innerHTML = '<div class="cnt"><span id="s02-n2">2/3</span><span id="s02-n3" style="opacity:0"><em class="ac-em">3/3</em></span></div>' +
+    CK.map((t, i) => '<div class="row" id="s02-r' + i + '" style="top:' + (110 + i * 68) + 'px"><div class="bx' + (i === 2 ? " last" : "") + '"><div class="fl"></div><svg viewBox="0 0 34 34"><path pathLength="1" d="M7 18l8 8 14-17"/></svg></div>' + t + '</div>').join("");
+
+  /* ======================== LINEA DE TIEMPO ======================== */
+  const tl = gsap.timeline({ paused: true });
+  const C = (w, n) => AC.cue(S, "b02", w, n || 0);
+  const cSit = C("situación"), cClase = C("clase"), cCap = C("capacitación"), cSes = C("sesión");
+  const cExp = C("explicó"), cConv = C("convertir"), cPers = C("personas");
+  const cRes = C("resumen"), cTar = C("tarjetas"), cCue = C("cuestionario");
+  const cHac = C("Hacerlo"), cHoras = C("horas"), cCasi = C("casi"), cMed = C("medias"), cSup = C("Supernotes"), cExi = C("existe");
+
+  // --- título de apertura
+  tl.set("#s02-t1", { opacity: 1 }, cSit - .1);
+  tl.fromTo("#s02-t1 .w", { yPercent: 115 }, { yPercent: 0, duration: 1.2, ease: "power3.out", stagger: .1 }, cSit - .1);
+  tl.to("#s02-t1 .w", { yPercent: -115, duration: .8, ease: "power2.in", stagger: .05 }, 2.55);
+  tl.set("#s02-t1", { opacity: 0 }, 3.7);
+
+  // --- beat 1: tres tarjetas de vidrio, una a una
+  [cClase, cCap, cSes].forEach((t, i) => {
+    tl.fromTo("#s02-sit" + i, { opacity: 0, y: 70, rotateY: i === 1 ? 0 : (i === 0 ? 38 : -38), scale: .9 }, { opacity: 1, y: 0, rotateY: 0, scale: 1, duration: 1.3, ease: "power3.out" }, t - .15);
+    tl.fromTo("#s02-sit" + i + " svg", { scale: .7, rotate: -14, transformOrigin: "50% 50%" }, { scale: 1, rotate: 0, duration: 1.3, ease: "expo.out" }, t - .05);
+  });
+  // se alejan para dejar paso al montón
+  [0, 1, 2].forEach((i) => tl.to("#s02-sit" + i, { opacity: 0, z: -420, y: -30, scale: .78, duration: 1.4, ease: "power2.inOut" }, cExp + .2 + i * .1));
+
+  // --- beat 2: burbujas, ejemplos y preguntas flotan en 3D y se acumulan
+  ITEMS.forEach((o, i) => {
+    const t = C(o.c[0], o.c[1]) + o.c[2] - .05, s = "#s02-it" + i;
+    const dx = (R() - .5) * 140, dy = 90 + R() * 50;
+    tl.fromTo(s, { opacity: 0, z: -620, x: dx, y: dy, scale: .68, rotateX: 34, rotateZ: o.r * 3 }, { opacity: 1, z: o.z, x: 0, y: 0, scale: 1, rotateX: 0, rotateZ: o.r, duration: 1.4, ease: "power3.out" }, t);
+  });
+
+  // --- beat 3: «convertir todo eso en algo...»: el montón se condensa en una sola pieza
+  ITEMS.forEach((o, i) => {
+    const s = "#s02-it" + i, t = cConv + .05 + i * .08;
+    tl.to(s, { x: 320 - o.x, y: 560 - o.y, z: 0, scale: .28, rotateZ: 0, duration: 1.5, ease: "power2.inOut" }, t);
+    tl.to(s, { opacity: 0, duration: .5, ease: "power1.in" }, t + 1.05);
+  });
+  tl.fromTo("#s02-tok", { opacity: 0, scale: .6, x: 30 }, { opacity: 1, scale: 1, x: 0, duration: 1.3, ease: "power3.out" }, cConv + 1.1);
+
+  // personas que van a repasar (a la derecha, sobre las fichas)
+  PPL_X.forEach((x, i) => tl.fromTo("#s02-p" + i, { opacity: 0, y: -30, scale: .7 }, { opacity: 1, y: 0, scale: 1, duration: 1.1, ease: "back.out(1.4)" }, cPers + i * .3));
+
+  // tres fichas fantasma; cada una trae su trazo de luz desde el montón
+  const lks = [];
+  [cRes, cTar, cCue].forEach((t, i) => {
+    const yi = GH[i].ya, p = [500, 560, 820, 560, 860, yi, 1150, yi];
+    tl.fromTo("#s02-g" + i, { opacity: 0, x: 90, rotateY: -32 }, { opacity: 1, x: 0, rotateY: 0, duration: 1.3, ease: "power3.out" }, t - .1);
+    lks.push(AC.link(tl, $("#s02-lk"), p, t + .2, 1.4, "#a9c8ff"));
+    AC.packet(tl, root, p, t + .45, 1.3, "power2.inOut");
+  });
+  lks.forEach((e) => tl.to(e, { attr: { opacity: 0 }, duration: .8, ease: "power2.inOut" }, cHac - .45));
+
+  // --- beat 4: «hacerlo a mano toma horas»
+  tl.to("#s02-tok", { opacity: 0, x: -40, scale: .92, duration: 1.2, ease: "power2.inOut" }, cHac + .2);
+  tl.fromTo("#s02-cg", { opacity: 0, scale: .78, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 1.4, ease: "power3.out" }, cHac - .05);
+  tl.to(pr, { T: 270, duration: 2.3, ease: "power2.inOut", onUpdate: setT }, cHac + .95);
+
+  // las fichas se llenan despacio y torpes (pasos), la última se queda corta
+  const bar = (g, b) => "#s02-g" + g + " .tr:nth-of-type(" + (b + 2) + ") i";
+  const fill = (g, b, a, t, d, to, st) => tl.to(bar(g, b), { scaleX: to, duration: d, ease: "steps(" + st + ")" }, t);
+  const f0 = cHac + .95;
+  fill(0, 0, 0, f0, .7, 1, 4); fill(0, 1, 0, f0 + .5, .6, 1, 4); fill(0, 2, 0, f0 + .9, .6, 1, 3);
+  fill(1, 0, 0, f0 + .6, .7, 1, 5); fill(1, 1, 0, f0 + 1.15, .7, 1, 4); fill(1, 2, 0, f0 + 1.65, .7, 1, 4);
+  fill(2, 0, 0, f0 + 1.5, .9, .55, 4); fill(2, 1, 0, f0 + 2.05, .35, .16, 2);
+  tl.to("#s02-g0 .gf", { opacity: 1, duration: .9, ease: "power2.out" }, f0 + 1.5);
+  tl.to("#s02-g0", { borderColor: "rgba(255,255,255,.35)", duration: .9 }, f0 + 1.5);
+  tl.to("#s02-g1 .gf", { opacity: 1, duration: .9, ease: "power2.out" }, f0 + 2.15);
+  tl.to("#s02-g1", { borderColor: "rgba(255,255,255,.35)", duration: .9 }, f0 + 2.15);
+  [0, 1].forEach((g) => tl.to("#s02-g" + g + " .ic", { backgroundColor: "rgba(255,255,255,.2)", color: "#fff", duration: .7 }, f0 + 1.7 + g * .65));
+
+  // «casi siempre se queda a medias»: lista de verificación 2/3 y tinte ámbar sutil
+  tl.fromTo("#s02-chk", { opacity: 0, x: -50, rotateY: 30 }, { opacity: 1, x: 0, rotateY: 0, duration: 1.3, ease: "power3.out" }, cCasi - .15);
+  const ck = (i, t) => {
+    tl.to("#s02-r" + i + " .fl", { opacity: 1, duration: .5, ease: "power2.out" }, t);
+    tl.to("#s02-r" + i + " .bx", { borderColor: "#e59a52", duration: .5 }, t);
+    tl.to("#s02-r" + i + " svg path", { strokeDashoffset: 0, duration: .8, ease: "power2.inOut" }, t + .15);
+  };
+  ck(0, cCasi + .4); ck(1, cCasi + 1.05);
+  tl.to("#s02-r2 .bx", { scale: 1.16, duration: .7, ease: "power2.inOut", yoyo: true, repeat: 1 }, cMed - .1);
+  tl.to("#s02-amb", { opacity: 1, duration: 1.8, ease: "power2.inOut" }, cHoras - .2);
+  tl.to("#s02-amb", { scale: 1.12, duration: 1.2, ease: "power2.inOut" }, cMed - .1);
+  tl.to(ring, { attr: { stroke: "#ffc58a" }, duration: 1.4, ease: "power2.inOut" }, cHoras - .2);
+  tl.to(hM, { attr: { stroke: "#ffd9b0" }, duration: 1.4 }, cHoras - .2);
+  tl.to("#s02-odo", { color: "#ffd9b0", duration: 1.4 }, cHoras - .2);
+  tl.to("#s02-face", { backgroundColor: "rgba(255,160,70,.24)", duration: 1.6 }, cHoras - .2);
+  tl.to("#s02-g2", { borderColor: "rgba(255,200,140,.8)", duration: 1.2, ease: "power2.inOut" }, cMed);
+
+  // --- beat 5: «SuprNotes existe para resolver justo eso»
+  tl.to("#s02-halo", { opacity: 1, duration: 1.6, ease: "power2.out" }, cSup);
+  tl.set("#s02-lock", { opacity: 1 }, cSup - .01);
+  tl.fromTo("#s02-lkic", { scale: .55, opacity: 0, y: 24, rotate: -8 }, { scale: 1, opacity: 1, y: 0, rotate: 0, duration: 1.5, ease: "back.out(1.25)" }, cSup);
+  tl.fromTo("#s02-lkflash", { scale: 1, opacity: .9 }, { scale: 1.9, opacity: 0, duration: 1.5, ease: "power2.out" }, cSup + .35);
+  tl.fromTo("#s02-lkw", { clipPath: "inset(0 100% 0 0)", x: -30, opacity: 0 }, { clipPath: "inset(0 0% 0 0)", x: 0, opacity: 1, duration: 1.4, ease: "power3.out" }, cSup + .5);
+  // el reloj se contrae y se vuelve «minutos»
+  tl.to("#s02-cg", { scale: .74, duration: 1.5, ease: "power2.inOut" }, cSup + .1);
+  tl.to(pr, { T: 2, duration: 1.5, ease: "power2.inOut", onUpdate: setT }, cSup + .1);
+  tl.to("#s02-amb", { opacity: 0, duration: 1.2, ease: "power2.inOut" }, cSup + .1);
+  tl.to("#s02-cool", { opacity: 1, duration: 1.4, ease: "power2.inOut" }, cSup + .3);
+  tl.to(ring, { attr: { stroke: "#7df0ff" }, duration: 1.2, ease: "power2.inOut" }, cSup + .2);
+  tl.to(hM, { attr: { stroke: "#7df0ff" }, duration: 1.2 }, cSup + .2);
+  tl.to("#s02-odo", { color: "#ffffff", duration: 1.2 }, cSup + .2);
+  tl.to("#s02-face", { backgroundColor: "rgba(255,255,255,0)", duration: 1.2 }, cSup + .2);
+  tl.to("#s02-cap1", { opacity: 0, duration: .8 }, cSup + .7);
+  tl.to("#s02-cap2", { opacity: 1, duration: .9 }, cSup + 1.0);
+
+  // las fichas se llenan solas con luz azul (una tras otra, con barrido)
+  const lightUp = (g, t) => {
+    const sel = "#s02-g" + g;
+    tl.fromTo(sel + " .sw", { x: -200, opacity: 1 }, { x: 760, duration: 1.4, ease: "power2.inOut" }, t);
+    tl.set(sel + " .sw", { opacity: 0 }, t + 1.45);
+    tl.to(sel + " .tr i", { scaleX: 1, backgroundColor: "#7df0ff", duration: 1.3, ease: "power2.inOut", stagger: .2 }, t);
+    tl.to(sel + " .gf", { opacity: 1, duration: 1, ease: "power2.out" }, t);
+    tl.to(sel, { borderStyle: "solid", borderColor: "rgba(255,255,255,.8)", boxShadow: " 0 0 46px 6px rgba(255,255,255,.07)", duration: 1.2, ease: "power2.out" }, t + .2);
+    tl.to(sel + " .ic", { backgroundColor: "#3976ff", color: "#fff", duration: .9 }, t + .3);
+  };
+  lightUp(0, cExi - .15); lightUp(1, cExi + .35); lightUp(2, cExi + .85);
+  [0, 1, 2].forEach((i) => tl.to("#s02-p" + i, { color: "#7df0ff", boxShadow: " 0 0 36px 4px rgba(255,255,255,.07)", duration: 1.2, ease: "power2.out" }, cExi + .9 + i * .2));
+  // la última casilla por fin se marca
+  const t3 = cExi + 1.5;
+  tl.to("#s02-r2 .bx", { borderColor: "#3976ff", borderStyle: "solid", duration: .5 }, t3);
+  tl.to("#s02-r2 .fl", { opacity: 1, duration: .6, ease: "power2.out" }, t3);
+  tl.to("#s02-r2 svg path", { strokeDashoffset: 0, duration: .9, ease: "power2.inOut" }, t3 + .15);
+  tl.to("#s02-n2", { opacity: 0, duration: .6 }, t3);
+  tl.to("#s02-n3", { opacity: 1, duration: .8 }, t3 + .1);
+
+  window.__timelines["s02-problema"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

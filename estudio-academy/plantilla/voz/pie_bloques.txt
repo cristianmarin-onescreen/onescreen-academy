@@ -1,0 +1,22 @@
+import re
+
+
+# Pronunciacion en la version dirigida (ElevenLabs): marcas, siglas y correos
+PRON = [
+    ("suprnotes punto ai", "Supr Nouts punto a i"), ("supernotes arroba", "Supr Nouts arroba"),
+    ("onescreensolutions punto com", "onescreen solutions punto com"),
+    ("MP4", "eme pe cuatro"), ("MKV", "eme ka ve"), ("WebM", "web eme"), ("AVI", "a ve i"), ("PDF", "pe de efe"),
+]
+
+
+def limpio(t):
+    t = re.sub(r"\[[^\]]*\]\s*", "", t)
+    t = t.replace("{SuprNotes}", "SuprNotes")
+    return re.sub(r"\*([^*]+)\*", r"", t).strip()
+
+
+def dirigido(t):
+    t = t.replace("{SuprNotes}", "Supr Nouts")
+    for a, b in PRON: t = t.replace(a, b)
+    t = re.sub(r"IA", "i-a", t)
+    return re.sub(r"\*([^*]+)\*", lambda m: m.group(1).upper(), t).strip()

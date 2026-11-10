@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s05 · Cinco salidas</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  @font-face { font-family: "Nevis"; src: url("assets/fonts/Nevis.ttf") format("truetype"); font-weight: 700; font-display: block; }
+  #s05 { position: absolute; inset: 0; }
+  #s05 .chip { width: 300px; height: 112px; left: 160px; display: flex; align-items: center; gap: 20px; padding: 0 26px; opacity: 0; }
+  #s05 .chip .ac-lbl { font-size: 32px; }
+  #s05 .out { width: 400px; height: 112px; left: 1360px; display: flex; align-items: center; gap: 18px; padding: 0 24px; opacity: 0; }
+  #s05 .out .ic { width: 66px; height: 66px; border-radius: 19px; display: grid; place-items: center; flex: none; background: rgba(255,255,255,.14); color: rgba(255,255,255,.55); }
+  #s05 .out .ac-lbl { font-size: 32px; }
+  #s05 .out .ac-sub { font-size: 18px; margin-top: 3px; }
+  #s05 .glow { position: absolute; inset: -6px; border-radius: 32px; border: 3px solid var(--c); opacity: 0; box-shadow:  0 0 40px 6px rgba(255,255,255,.07); pointer-events: none; }
+  #s05 .core { left: 960px; top: 540px; opacity: 0; }
+</style>
+
+<div id="s05" class="ac-root" data-composition-id="s05-cinco-salidas" data-width="1920" data-height="1080">
+  <div class="ac-title">
+    <div class="ln" id="s05-t1"><span class="w">Capacidad</span> <span class="w"><em>multimodal</em></span></div>
+    <div class="ln" id="s05-t2"><span class="w">Cinco</span> <span class="w"><em>salidas</em></span> <span class="w">en</span> <span class="w">paralelo</span></div>
+  </div>
+  <svg class="ac-links" id="s05-links" viewBox="0 0 1920 1080"></svg>
+  <div class="ac-core core" id="s05-core"><div class="ring r2"></div><div class="ring r1"></div><div class="burst" id="s05-burst"></div><div class="orb" id="s05-orb"></div><div class="name">SuprNotes</div></div>
+</div>
+
+<script>
+(function () {
+  const S = "s05", root = document.getElementById("s05"), links = document.getElementById("s05-links");
+  const MOD = [ {k:"texto", t:"Texto", w:"texto", y:315}, {k:"audio", t:"Audio", w:"audio", y:465}, {k:"imagen", t:"Imagen", w:"imagen", y:615}, {k:"video", t:"Video", w:"video", y:765} ];
+  const OUT = [
+    {k:"resumen", t:"Resumen", s:"lo esencial, ordenado", c:"#5c8dff", y:240, b:"b05a", w:"Primero"},
+    {k:"tarjetas", t:"Tarjetas", s:"para memorizar", c:"#4f8dff", y:390, b:"b05b", w:"Segundo"},
+    {k:"cuest", t:"Cuestionario", s:"para comprobar", c:"#16b8e8", y:540, b:"b05c", w:"Tercero"},
+    {k:"guia", t:"Guía de repaso", s:"antes de evaluar", c:"#ff7c4c", y:690, b:"b05d", w:"Cuarto"},
+    {k:"chat", t:"Chat con IA", s:"pregunta lo que falte", c:"#ff5fa8", y:840, b:"b05e", w:"quinto"}
+  ];
+  MOD.forEach((m, i) => {
+    const d = document.createElement("div"); d.className = "ac-glass chip"; d.id = "s05-m" + i; d.style.top = (m.y - 56) + "px";
+    d.innerHTML = AC.svg(m.k, 54) + '<div class="ac-lbl">' + m.t + '</div>'; root.appendChild(d);
+  });
+  OUT.forEach((o, i) => {
+    const d = document.createElement("div"); d.className = "ac-glass out"; d.id = "s05-o" + i; d.style.top = (o.y - 56) + "px"; d.style.setProperty("--c", o.c);
+    d.innerHTML = '<div class="glow"></div><div class="ic">' + AC.svg(o.k, 40) + '</div><div><div class="ac-lbl">' + o.t + '</div><div class="ac-sub">' + o.s + '</div></div>'; root.appendChild(d);
+  });
+
+  const tl = gsap.timeline({ paused: true });
+  const cMulti = AC.cue(S, "b05", "multimodal"), cPar = AC.cue(S, "b05", "paralelo"), cVeam = AC.cue(S, "b05", "Veámoslas");
+
+  // titulo 1: al decir "multimodal"; titulo 2: al decir "paralelo"
+  AC.line(tl, "#s05-t1", AC.blockStart(S, "b05") + .25, cPar - .5);
+  AC.line(tl, "#s05-t2", cPar - .05, null);
+
+  // nucleo
+  tl.fromTo("#s05-core", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.6)" }, .15);
+  tl.to("#s05-core .r1", { rotation: 360, duration: AC.sceneDur(S), ease: "none" }, 0);
+  tl.to("#s05-core .r2", { rotation: -360, duration: AC.sceneDur(S), ease: "none" }, 0);
+
+  // modalidades: cada una entra en su palabra y manda un paquete al nucleo
+  MOD.forEach((m, i) => {
+    const t = AC.cue(S, "b05", m.w) - .1;
+    tl.fromTo("#s05-m" + i, { x: -200, opacity: 0, rotateY: 55 }, { x: 0, opacity: 1, rotateY: 0, duration: .8, ease: "back.out(1.5)" }, t);
+    const p = [460, m.y, 620, m.y, 640, 540, 810, 540];
+    AC.link(tl, links, p, t + .35, .7, "#bcd6ff");
+    AC.packet(tl, root, p, t + .55, 1.0);
+    tl.fromTo("#s05-orb", { scale: 1 }, { scale: 1.1, duration: .3, ease: "power2.out", yoyo: true, repeat: 1 }, t + 1.5);
+  });
+
+  // paralelo: cinco lineas salen a la vez, las tarjetas aparecen apagadas
+  OUT.forEach((o, i) => {
+    const p = [1110, 540, 1250, 540, 1190, o.y, 1360, o.y];
+    tl.fromTo("#s05-o" + i, { x: -260, scale: .6, opacity: 0, rotateY: -50 }, { x: 0, scale: 1, opacity: .45, rotateY: 0, duration: .85, ease: "back.out(1.4)" }, cPar + .05 + i * .06);
+    AC.link(tl, links, p, cPar + .05, .8, "#7df0ff");
+    AC.packet(tl, root, p, cPar + .35, 1.1);   // los cinco al mismo tiempo = paralelo
+  });
+  tl.fromTo("#s05-burst", { scale: 1, opacity: .9 }, { scale: 2.6, opacity: 0, duration: 1.1, ease: "power2.out" }, cPar + .05);
+
+  // cada salida se enciende en su palabra
+  OUT.forEach((o, i) => {
+    const t = AC.cue(S, o.b, o.w) - .05, sel = "#s05-o" + i;
+    tl.to(sel, { opacity: 1, scale: 1.06, duration: .45, ease: "back.out(2)" }, t);
+    tl.to(sel + " .ic", { backgroundColor: o.c, color: "#fff", duration: .35 }, t);
+    tl.fromTo(sel + " .glow", { opacity: 0 }, { opacity: 1, duration: .3, ease: "power2.out" }, t);
+    // el resplandor se queda hasta que se enciende la siguiente (o hasta el cierre con las cinco encendidas)
+    const nx = OUT[i + 1];
+    if (nx) tl.to(sel + " .glow", { opacity: .0, duration: .5, ease: "power2.in" }, AC.cue(S, nx.b, nx.w) - .05);
+    else tl.to(sel + " .glow", { opacity: .35, duration: 1.2, ease: "power2.inOut" }, t + 1.2);
+    tl.to(sel, { scale: 1, duration: .6, ease: "power2.inOut" }, t + .6);
+    tl.fromTo(sel + " .ic svg", { scale: .6, rotate: -20 }, { scale: 1, rotate: 0, duration: .6, ease: "back.out(2.5)", transformOrigin: "50% 50%" }, t);
+  });
+  // al cierre del bloque todas quedan encendidas con respiro suave
+  window.__timelines["s05-cinco-salidas"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

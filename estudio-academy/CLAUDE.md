@@ -1,0 +1,110 @@
+# Estudio Academy — videos de curso de OneScreen Academy
+
+Punto de partida para cualquier video de **OneScreen Academy** (cursos de software: SuprNotes, Odoo, etc.).
+Primer caso terminado: **SuprNotes · Módulo 1** (6:37). Aprobado por Cris el 5-nov-2026 («me encanta»).
+
+## El acuerdo con Cris
+1. Cris pasa **un video crudo** (captura de pantalla de alguien explicando el software).
+2. Claude lo transcribe, escribe un **guion mejor** (no copia), lo voza, **recrea la interfaz con fidelidad** y lo anima como motion graphics. Entrega **MP4**.
+3. Cris solo opina en dos puntos: **aprobar el guion** y **aprobar el preview 720p**. Nada más se le pide.
+
+Los videos de Academy son 100 % motion graphics: **no hay planos grabados, no hay Premiere (.prproj), no hay color S-Log3**. No uses el flujo de 16 pasos de los videos comerciales (`estudio-video/`). Entregable = **render MP4** (+ otros formatos solo si Cris los pide).
+
+## Dónde vive cada cosa
+- **Esta carpeta (git):** reglas, plantilla y ejemplos. Nunca hay audio ni renders aquí.
+- **Cada módulo (disco D:):** `cursos\<Curso>-M<N>\` (ej. `SuprNotes-M1`). Nada en C: (está lleno).
+- `plantilla/` → copiar al módulo nuevo con `python estudio-academy/nuevo_modulo.py "<Curso>-M<N>"` (crea carpetas, copia herramientas, fuentes, CSS/JS, briefs).
+- `ejemplos/suprnotes-m1/` → las 17 composiciones terminadas (s05 = plantilla de hub con insertos; s11 = interfaz real recreada; s01/s12 = apertura y cierre con logos), `escenas.json`, el guion aprobado y los logos oficiales.
+
+## Flujo (en este orden)
+1. **Crudo → transcripción.** ffmpeg saca `audio.wav` y fotogramas (`crudo/frames`, hojas de contacto); ElevenLabs Scribe (`scribe_v1`, timestamps por palabra) → `scribe.json`. Mira los fotogramas: la interfaz del crudo puede ser **vieja**.
+2. **Interfaz real.** Con **Claude in Chrome** (Cris ya tiene sesión iniciada; **nunca escribas contraseñas ni cierres su sesión**) mide el software en vivo: textos exactos, coordenadas, colores, fuentes, SVG/íconos, logo oficial. Guarda capturas en `agentes/ref_ui/`. Lo que muestra el software vivo manda sobre el crudo: si difieren, el guion se ajusta a lo vivo (ej.: registro sin casilla de términos). Trampa de Chrome: la salida del JS se bloquea si trae `?` o `=` de URLs (quítalos).
+3. **Guion** (`guion_vN.md`). **No copia el crudo:** mejor orden, más explicativo, más largo si hace falta («fresco, no hay afán»). Narración completa, no un esquema. El narrador **no es Cris ni una persona**: es un módulo del curso, sin nombre, tuteo. Incluye ejemplos de uso (docente, estudiante, corporativo; ejemplo recurrente: clase de biología sobre depredadores). Cierra el módulo con «qué viene en el siguiente». **Cris aprueba el guion antes de generar voz.**
+4. **Voz** (`voz/`): `bloques.py` = guion por bloques con marcas (`[tag]` dirección, `*palabra*` énfasis → MAYÚSCULA, `{Marca}` pronunciación). `gen_voz.py` → ElevenLabs **`eleven_v4`**, voz **`ACADEMY_VOZ_ID`**, stability .4 / similarity .75 / style .5, `language_code` es. Clave en `ELEVENLABS_API_KEY` y voz en `ACADEMY_VOZ_ID`, ambas en el `.env` de la raíz que crea `python setup.py` (nunca en código ni en el chat). Pronunciaciones: SuprNotes → «Supr Nouts» (ver memoria `pronunciacion_marcas_voz`; añade las del software nuevo). **Una vez aprobada, la voz se congela** (`voz/aprobada/`) y no se regenera; correcciones solo de los bloques que Cris autorice (`gen_voz.py --correccion ids`, tomas en `voz/correcciones/tomas`).
+5. **Ritmo** (`ritmo.py`): recorta silencios entre frases (≥0,22 s a −40 dB → pausa de 0,20 s; **no bajar de 0,20 s**, se comen inicios de palabra suaves; aire entre tomas 0,16 s misma idea / 0,80 s entre secciones; `EXTRA` alarga pausas donde hay insertos). Genera `ritmo/narracion_v2.wav` + `tiempos.json` por palabra. De ahí salen todos los tiempos de animación.
+6. **Proyecto de video** (`video/`, HyperFrames **0.8.112**, GSAP 3.14.2 pausado): `hacer_tiempos.py` → `assets/tiempos.js` + `escenas.json` (adaptar la lista de escenas/bloques al módulo); `assets/academy.css|js` = sistema compartido (vidrio, núcleo, íconos SVG, `AC.cue(escena, bloque, palabra)` = tiempo local de una palabra; `AC.icue` para insertos); `armar_maestro.py [sNN]` escribe `index.html` (completo o una escena con su tramo de audio) y trae los **fondos por escena**; `arreglar_fuentes.py` mete `@font-face` en cada composición (el lint lo exige).
+7. **Escenas en paralelo con agentes.** Briefs en `agentes/` (`BRIEF_COMUN`, `BRIEF_ESCENAS`, y uno específico por escena compleja, ej. `BRIEF_S11_INTERFAZ`). Cada agente trabaja en su copia `agentes/<id>/` y copia solo su `compositions/<id>.html`. Tú ensamblas.
+8. **Check + render.** `npx --yes hyperframes@0.8.112 check .` (0 errores de lint/runtime; los avisos `content_overlap`/contraste a mitad de animación suelen ser falsos positivos: se juzga por fotogramas). `render -q draft` → 720p con ffmpeg → **preview**. Mira fotogramas de **todas** las escenas y de cada palabra clave **antes** de mandárselo a Cris (ver «Revisión» abajo).
+9. **Aprobación de Cris del preview** → render final 1920×1080 MP4 (4K solo si lo pide). Opcional y solo si lo pide: música/SFX (ElevenLabs), 9:16/4:5/1:1, subir a Drive.
+10. **Registro:** guarda la memoria del módulo (decisiones, rutas) y, si Cris dio correcciones nuevas, **añádelas a este archivo** (sección «Correcciones de Cris»).
+
+## Reglas de estilo (todas salen de correcciones reales de Cris)
+- **Vidrio**: tarjetas `backdrop-filter: blur(34px) saturate(1.5)`, borde blanco fino. Fondo **oscuro con viñeta** (Miguel prefirió esto).
+- **Fondo distinto por escena** (color + textura: puntos, diagonales, anillos, cruces, líneas de barrido, retícula). «Todo azul es monótono». Corte **directo** entre escenas (sin barridos ni fundidos); la última imagen de cada escena queda completa y limpia.
+- **Nada de neón.** Sin resplandores cian/rosa/naranja ni manchas de luz de colores detrás de todo. Brillo máximo: halo blanco al 7 %. Sombras **solo negras, cortas y suaves** (`0 8px 22px rgba(0,0,0,.2)`); jamás sombras azul marino/coloridas ni de 30 px+. Sin extrusión 3D en logos o textos. Hay scripts que lo corrigen en lote: `sombras_neutras.py`, `quitar_brillos.py`.
+- **Acentos variados** (azul, cian, verde azulado, coral, rosa) en vez de un solo color; no usar el color de acento como brillo.
+- **Márgenes de seguridad** (lienzo 1920×1080): ≥160 px a los lados, ≥120 px arriba/abajo, también con zoom/escala final.
+- **Ritmo calmado**: movimientos de 1,0–1,6 s con eases suaves (power2.inOut, expo.out), un evento principal por ~1 s, textos clave quietos ≥1,2 s, respiro tras cada beat, ráfagas decorativas nunca compiten con lo que se lee. Cris: «el timing se siente apresurado».
+- **Motion imaginativo y variado** en cada escena (diagramas que representan lo que dice la voz, 3D de vidrio, trazos que se dibujan, conteos, partículas con semilla, máscaras). Explicar > decorar. **Ignora `05_MOTION.md`** del estilo comercial. Nada de píldoras baratas ni MAYÚSCULAS tipo diapositiva.
+- **Tipografía**: títulos Rubik, cuerpo Manrope; «OneScreen» con el logo oficial (`logo-white.png`) al firmar o en Nevis Bold si va en texto; nunca «One Screen». La marca del software (SuprNotes) junto, sin partir.
+- **Logo del software = el oficial**, sacado del sitio (ícono de app + wordmark). Ícono: PNG con **esquinas redondeadas incluidas** (radio ≈22,5 %) y el símbolo **metido con margen** (≈56 % del ancho del recuadro); mostrar a ≤200 px (la fuente es de 180 px). Wordmark en Poppins 500 si no hay archivo.
+- **Interfaz recreada**: a tamaño real de viewport y escalada dentro de una ventana de navegador de vidrio (3 puntos + dirección que se escribe); animar con zoom suave, resto atenuado con blur, cursor con pulso de clic, campos que se llenan al decir su palabra, insignias de paso (1, 2, 3…). Datos ficticios (Camila Rojas, camila.rojas@ejemplo.com). Comparar contra las capturas de referencia lado a lado.
+- **Determinismo (HyperFrames):** una timeline GSAP pausada por composición, sin `Math.random` (PRNG con semilla), sin `repeat:-1`, sub-composiciones en `<template>` con `window.__timelines[id]`.
+
+## Revisión (lección del 5-nov: «no estás revisando a fondo»)
+Antes de entregar un preview: contact sheet de ≥20 fotogramas repartidos por **todas** las escenas + las palabras clave, mirados de verdad; revisar sombras, brillos, bordes del logo, solapes de texto, escenas vacías al inicio (puede ser solo la entrada del título), y el último cuadro de cada escena. Después de un arreglo en lote (regex), **renderiza y mira de nuevo**: un arreglo parcial deja residuos (ej.: quité neón pero quedaban sombras navy y el efecto 3D del wordmark).
+
+## Correcciones de Cris (se acumulan)
+- 5-nov: no copiar el crudo; narrador sin nombre; tarjetas A (glass) + fondo oscuro con viñeta; márgenes; ritmo calmado; sin Premiere; fondo distinto por escena; logo oficial; ícono con esquinas redondeadas y más adentro; sin brillos de neón ni sombras turbias.
+- 5-nov (M2–M6): medir la app viva ANTES de escribir el guion (los crudos muestran diseños viejos); música de curso y «soniditos pasito, nada exagerado»; el motion no debe sentirse apresurado.
+- 5–6-nov (Lessn): sin cifras de precios (decir «consulta con tu asesor comercial»); marca «Lessn» se dice «Leson»; lo no medible se aproxima y se avisa.
+
+- 6-nov (QuizWiz, tras ver los previews): **«Learning Hub» se dice «lernin job»**; **jamás dirigirse al usuario en femenino** (ni «lista», «certera», «ambigua seas»…): usar construcciones neutras («cuando todo esté listo», «si necesitas precisión») y, en las interfaces recreadas el usuario o estudiante ficticio es SIEMPRE «Camila Rojas» (avatar «CR»; a Cris le gusta): lo neutro es el guion, no el nombre de la pantalla; **no explicar dos veces lo mismo** (si un módulo tiene una escena de «visión general» y otra de «cada ajuste», la primera no enumera lo que detalla la segunda; lo mismo con «cómo compartir»); **cada ajuste, interruptor o función que se nombre debe explicarse** (qué hace y para qué), consultando el texto de ayuda (i) de la app viva; tarjetas e interruptores se encienden **solo cuando la voz los nombra** (no antes, no juntos); texto e íconos de una misma fila **alineados en un eje**; **sin desbordes de texto** en ninguna fase; **fondo de escena nunca casi negro** (elegir un color con presencia); las etiquetas flotantes deben estar ancladas a algo; los resaltados se miden sobre el elemento real recreado.
+
+- 6-nov (QuizWiz): **NO hacer renders en 720p ni «previews» en MP4 para que Cris revise: es perder tiempo.** Cris revisa en el **timeline del Studio de HyperFrames** (`npx hyperframes@0.8.112 preview --background --no-open --port <p>` en la carpeta `video` de cada módulo; abrir `http://localhost:<puerto>/#project/video`) y, cuando aprueba, se exporta **directo en 1080p** (`render -q standard`, `_render_final_*.sh`). Los renders `-q draft` solo sirven para mis hojas de contacto internas, nunca para entregárselos.
+
+## Trampas conocidas
+- Primer ensamblado con `%` en CSS (`100%`) rompe `str %`: usar reemplazo por tokens.
+- `hyperframes check` recibe solo la carpeta; un `prueba_*.html` suelto → `multiple_root_compositions`.
+- Voz: regenerar solo lo que Cris autorice; los cortes de silencio agresivos cambian palabras.
+- La landing del software con sesión iniciada redirige al dashboard: sin sesión, solo existe en el crudo.
+- Antes de borrar carpetas de fotogramas con comodines, usa un nombre de carpeta nuevo en vez de `rm`.
+
+## Lecciones de los módulos 2–6 (5-nov-2026, hechos de corrido con «apruébalo todo, no me digas nada hasta acabar»)
+- **Crudo → texto:** `python estudio-academy/crudo_a_texto.py "<video>" "cursos/<modulo>"` saca audio, fotogramas, hojas de contacto y transcripción con tiempos (`crudo/transcripcion.txt`).
+- **La interfaz viva manda y puede haber cambiado desde el crudo.** Los crudos de M2–M6 mostraban un diseño viejo (barra morada, «Mi Biblioteca» con pestañas, radar de Bloom…); la app viva ya era otra (barra blanca, asistente Suri, biblioteca con carpetas y kits, informe con anillo y barras). Se midió la app viva (`agentes/plantilla/BRIEF_UI_MEDIR_INTERFAZ.md`, agente con Chrome, solo lectura) y **los guiones se reescribieron para describir lo que el cliente ve hoy** (`_parche_guiones_live.py` del módulo). Orden correcto: medir la interfaz viva ANTES de escribir el guion y de construir escenas, para no rehacer.
+- **Cuidado con la medición:** en la app viva «Siguiente» en «Crear resumen inteligente» ya dispara la lectura por IA (gasta créditos) y abrir «Notas y fuentes» crea una «Nota sin título» en la clase; no pulsar generar/crear.
+- **Estructura por módulo:** `voz/bloques.py` (guion por bloques), `video/escenas_def.json` (escenas, bloques y tema de fondo por escena) → `hacer_tiempos.py` genera `tiempos.js` + `escenas.json`; `armar_maestro.py` ya lee los temas de ahí. `preparar_video.sh <N>` copia assets y narración al proyecto. `generar_modulo_md.py` produce `MODULO_<N>.md` (texto de narración + concepto por escena) que usan los agentes junto a `BRIEF_ESCENAS_ACADEMY.md`.
+- **Sincronía robusta:** `AC.cue` ahora tolera que el transcriptor escriba distinto (distancia de edición ≤2) y, si no encuentra la palabra, cae a un punto estimado del bloque. Las escenas nunca llevan segundos escritos a mano: así la voz se puede cambiar sin tocar animaciones.
+- **Si se agotan los créditos de ElevenLabs** (pasó el 5-nov: 8 de 270.284, reinicia el 19-nov): voz provisional con `gen_provisional.py` (edge-tts es-CO) y tiempos por palabra con `stt_local.py` (faster-whisper), ambos con `ritmo.py` (cae solo a local si Scribe falla). Dejan `voz/aprobada/PROVISIONAL.txt` con los pasos para poner la voz real: mover `aprobada` a `aprobada_provisional`, `python gen_voz.py` (solo genera lo que falte), copiar `tomas/` a `aprobada/tomas/`, `python ritmo.py`, `hacer_tiempos.py`, `preparar_video.sh`, re-renderizar. Revisar avisos `AC.cue` en consola con la voz real.
+- **Reparto de trabajo con agentes (corregido 6-nov):** **UN agente por escena** (como en M1, la vara aprobada; con 2–3 escenas por agente en M2–M6 la calidad bajó), cada uno en `agentes/<id>/` copiando solo su .html; cambios de guion a mitad de camino se mandan con SendMessage al agente (texto nuevo + `tiempos.js`/`narracion.wav` nuevos). Revisión final del montaje completo con hojas de ≥24 fotogramas por video.
+- `pathLength` en `<path>` no se respeta en este motor de render: para trazos que se dibujan usar `getTotalLength()`.
+
+## Música, soniditos y entrega final (5-nov-2026, pedido de Cris: «musiquita de curso, soniditos pasito, nada exagerado»)
+- `plantilla/mezclar_audio.py "<modulo>" [carpeta_video]` mezcla: voz + música de curso (bucle con fundido cruzado, ~13 LU bajo la voz y con ducking por la voz) + un sonido «swish» muy suave (~19 LU bajo la voz) al empezar cada escena. Deja la mezcla en `assets/narracion.wav` y la voz sola en `assets/narracion_voz.wav`. La música (`plantilla/musica/musica_curso_a.mp3`) y el swish salen de ElevenLabs (`/v1/music`, 120 s instrumental; `/v1/sound-generation`). Resultado medido: voz −18 LUFS, mezcla −17 LUFS, pico −2,7 dBFS.
+- **Orden:** voz real → `ritmo.py` → `hacer_tiempos.py` → `preparar_video.sh` → `mezclar_audio.py` → `armar_maestro.py` → `check` → `render_final.sh <N> <carpeta_video>` (render `-q standard` 1080p, preview 720p y copia a `cursos\_entregas\`). `prep` pisa `narracion.wav`: mezclar siempre después.
+- `AC.cue` ahora ubica palabras que el transcriptor escribe distinto buscando en el guion del bloque (`hacer_tiempos.py` mete las palabras del guion en `tiempos.js`) y reconoce marcas habladas (SuprNotes/«Supr Nouts», OneScreen). Revisar `AC.cue: no se encontro` en el log del render (debe quedar en 0 o casi).
+- Si los créditos de ElevenLabs están agotados pero hay «uso extra» activo, el API sigue respondiendo 200 aunque `character_count == character_limit`: probar con una toma corta antes de dar por perdidos los créditos.
+
+## Curso Lessn (6-nov-2026): un curso nuevo con el mismo método
+- Entrada: carpeta con los crudos del curso (descárgalos como prefieras). Carpetas `cursos/Lessn-M1…M4/` (nuevo_modulo.py + crudo_a_texto.py).
+- **Medir la app viva con sesión de Cris + navegador sin sesión:** el agente con Chrome navega todo (puede crear UNA lección de prueba y anotarla para que Cris la borre); lo que exige estar sin sesión (registro, onboarding) se ve con el navegador integrado de la app (`mcp__Claude_Browser__*`, aislado de Chrome) SIN crear cuenta; los pasos que requieren cuenta nueva se aproximan y se avisa. Brief: `plantilla/agentes/BRIEF_UI_LESSN.md`.
+- **Mapa de diferencias crudo vs app viva** (`UI_LESSN_COMUN.md`): marca «Lessn» (la voz dice «Leson»), creación en una sola pantalla, esquema como documento con chat de IA, editor completo, Canva, hoja de trabajo (NUEVO), Creador de Actividad (BETA), pestañas Creadas / De la biblioteca, biblioteca ES vacía (interruptor ES|EN), sin botón Guru, planes con cifras que no coinciden (decir «consulta con tu asesor comercial»). El guion se reescribió para cubrir el curso completo con la app de hoy, incluidas las funciones nuevas.
+- **Pronunciación de la marca:** `Lessn → Leson` en `bloques.py` (`PRON`), `lessn punto ai → leson punto a i`.
+- Suplemento de brief para agentes: `plantilla/agentes/BRIEF_ESCENAS_LESSN.md` (marca, paleta morado #8E51EF + verde #82C341, Google Sans Flex, referencias a SuprNotes terminado como vara de calidad). `render_final` para Lessn: `_render_final_lessn.sh`.
+- Entregables: `cursos\_entregas\Lessn_M1…M4_1080p.mp4` (4:03, 5:36, 4:21, 3:24) con voz oficial, música y sonidos suaves.
+- **Estado real a 6-nov-2026 (verificado en disco):** en `_entregas` hay Lessn M1, M2, M3 y **M5**; **Lessn M4 no tiene composiciones ni render** (pendiente). **QuizWiz M1–M3** (curso nuevo, crudos en `QuizWiz-crudos\`) tienen crudo, transcripción y plantilla pero `compositions/` vacío: sin empezar el guion.
+
+## Assets (regla de Cris, 6-nov-2026)
+Al empezar un curso se hace el inventario de assets (logo oficial, ícono, wordmark, íconos de la interfaz, fuentes, capturas) y se extrae todo lo posible de la plataforma web. **Lo que no se pueda sacar se le pide a Cris de una vez, al inicio, con la lista exacta**; nunca se inventa ni se redibuja un logo. Inventario en `video/assets/INVENTARIO.md`.
+
+## Cómo se usa (skill)
+El skill `academy-onescreen` (`.claude/skills/academy-onescreen/SKILL.md`) trae las puertas P0–P10 en orden y es lo que debe seguirse para cada módulo; este archivo es la fuente de reglas.
+
+## Módulo nuevo en un curso ya hecho: Lessn M4 «Hoja de trabajo y Creador de actividad» (6-nov-2026)
+- Cris pidió (importantísimo) un módulo propio para las dos funciones nuevas de Lessn. Se insertó como **Módulo 4** y el antiguo 4 pasó a **Módulo 5** (el último, con el examen): `mv Lessn-M4 Lessn-M5` (+ renombrar entregas y MODULO_*.md), `nuevo_modulo.py` para el nuevo M4, y se **corrigieron los textos de enlace**: M3 b14 («siguiente: hoja de trabajo y creador de actividad», tomas con `gen_voz.py --correccion b14`) y M5 b01 («módulo cinco, el último»); las escenas afectadas (cierre M3, apertura y examen M5) se pidieron por `SendMessage` al agente que las hizo. `escenas_def.json` de M5 con el título nuevo.
+- Para un módulo así, un agente con Chrome primero **usa las funciones de verdad** (`BRIEF_UI_LESSN_M4_NUEVAS.md`: crear hojas y actividades de prueba, probar el chat, exportar, jugar) y entrega un `UI_LESSN_M4.md` con «QUÉ DEBE APRENDER EL ALUMNO» y sorpresas/limitaciones; el guion sale de ahí. Lo que no pudo probar (5 de 8 formatos de actividad, DOCX) se explica solo con las descripciones oficiales y se avisa.
+- Limitaciones del Creador de actividad que el guion dice con claridad: interfaz solo en inglés (el contenido sí en español), se guarda en el NAVEGADOR (no en la cuenta), sin enlace para compartir.
+- Lección operativa: un agente puede atascarse (`stream watchdog`): relanzar con otro id/carpeta (`l4n-a2`) en vez de reutilizar la carpeta.
+
+## Reglas nuevas de Cris (6-nov-2026)
+- **No mencionar Odoo al cliente.** Se enseña OneScreen Academy; que esté montada en Odoo no se dice (voz, texto en pantalla, logos). Chequeo con grep en guion, bloques.py y compositions.
+- **Gastar poco:** nada de pruebas innecesarias ni agentes repetidos; una sola generación de voz por módulo; una ronda de revisor por video; máx. 2 iteraciones por escena salvo defecto duro.
+- Voz de Academy: la de `ACADEMY_VOZ_ID` (en `.env`); la clave, `ELEVENLABS_API_KEY`.
+
+## Curso LearningHub (9-nov-2026): sin crudo, 5 módulos entregados
+- Fuente única = app viva medida con Chrome (`BRIEF_UI_LEARNINGHUB.md`, `UI_LEARNINGHUB_COMUN.md`); reglas del curso en `cursos\LearningHub_CURSO.md`; entregables `_entregas\LearningHub_M1…M5_1080p.mp4`.
+- **Voz (correcciones de Cris):** los términos de interfaz en inglés van TAL CUAL en inglés (nada de «criéit a rum», «otomáticali yoin»: suenan a francés); **nunca *énfasis* sobre siglas o términos en inglés** (la dirigida los pone en MAYÚSCULAS y la voz deletrea: «código QR» → «C U R»); LearningHub → «Learning Hub» en inglés. Cuando una pronunciación falle, generar 4–5 muestras cortas de UNA frase y que Cris elija, y regenerar solo los bloques afectados.
+- **Fugas entre escenas:** nunca `tl.set(el,{visibility:"visible"})` (un trazo siguió visible en las escenas siguientes); en `fromTo` con opacidad inicial >0 usar `immediateRender:false`.
+- Sin rutas de BigBlueButton en pantalla (`html5client`, `playback/presentation`): URL ficticia `learning-hub.ai/b/…`. Personajes fijos por curso (docente Laura Méndez, estudiante Camila Rojas) definidos ANTES de lanzar agentes.
+- Ahorro: Cris revisa directo en el Studio; el agente revisor de motion es opcional cuando él lo pide.

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s05b · Tarjetas didácticas</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; }
+  #s05btarjetas { position: absolute; inset: 0; overflow: hidden; --a: #4f8dff; --c: #7df0ff; }
+  #s05btarjetas .s05b-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 78% 70% at 50% 46%, #1a47d0 0%, #0c2a96 34%, #061a66 62%, #020a2e 100%); }
+  #s05btarjetas .s05b-orb { position: absolute; width: 900px; height: 900px; border-radius: 50%; filter: blur(60px); }
+  #s05btarjetas .s05b-orb.o1 { left: -260px; top: -300px; opacity: .5; background: radial-gradient(circle, rgba(79,141,255,.7), rgba(79,141,255,0) 65%); }
+  #s05btarjetas .s05b-orb.o2 { left: 1180px; top: 420px; opacity: .42; background: radial-gradient(circle, rgba(125,240,255,.5), rgba(125,240,255,0) 65%); }
+  #s05btarjetas .s05b-grid { position: absolute; inset: -200px; background-image: radial-gradient(rgba(255,255,255,.17) 1.4px, transparent 1.6px); background-size: 44px 44px; opacity: .55; }
+  #s05btarjetas .s05b-vig { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 64% at 50% 50%, rgba(0,0,0,0) 38%, rgba(1,4,24,.55) 78%, rgba(0,2,16,.86) 100%); }
+
+  #s05btarjetas .ac-title { top: 128px; height: 84px; font-size: 62px; }
+  #s05btarjetas .ac-title .ln { height: 84px; padding-top: 4px; }
+
+  #s05btarjetas .s05b-grp { position: absolute; left: 960px; top: 590px; width: 0; height: 0; perspective: 1800px; }
+  #s05btarjetas .s05b-card { position: absolute; left: -270px; top: -165px; width: 540px; height: 330px; transform-style: preserve-3d; opacity: 0; }
+  #s05btarjetas .s05b-f { position: absolute; inset: 0; border-radius: 30px; -webkit-backface-visibility: hidden; backface-visibility: hidden; padding: 30px 38px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between;
+    border-color: rgba(255,255,255,.38); background: linear-gradient(145deg, rgba(150,190,255,.34), rgba(60,110,230,.16)); }
+  #s05btarjetas .s05b-f.bk { transform: rotateY(180deg); border-color: rgba(125,240,255,.7); background: linear-gradient(145deg, rgba(125,240,255,.30), rgba(70,130,255,.18)); }
+  #s05btarjetas .s05b-wm { position: absolute; right: 30px; top: 6px; font-family: "Rubik"; font-weight: 700; font-size: 150px; color: rgba(255,255,255,.12); line-height: 1; }
+  #s05btarjetas .s05b-in { display: flex; flex-direction: column; justify-content: space-between; height: 100%; opacity: 0; position: relative; }
+  #s05btarjetas .s05b-tag { display: flex; align-items: center; gap: 12px; font-family: "Rubik"; font-weight: 600; font-size: 24px; letter-spacing: .14em; text-transform: uppercase; color: #cfe0ff; }
+  #s05btarjetas .s05b-tag svg { width: 30px; height: 30px; }
+  #s05btarjetas .bk .s05b-tag { color: var(--c); }
+  #s05btarjetas .s05b-q { font-family: "Rubik"; font-weight: 600; font-size: 46px; letter-spacing: -0.02em; line-height: 1.12; }
+  #s05btarjetas .s05b-q .w { display: inline-block; }
+  #s05btarjetas .s05b-q.sm { font-size: 40px; }
+  #s05btarjetas .s05b-hint { font-weight: 600; font-size: 22px; opacity: .7; }
+  #s05btarjetas .s05b-ck { position: absolute; right: -16px; top: -16px; width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; background: var(--c); color: #04215f; box-shadow:  0 0 34px 6px rgba(255,255,255,.07); opacity: 0; transform: scale(.3); }
+  #s05btarjetas .s05b-ck svg { width: 36px; height: 36px; stroke-width: 4.5; }
+
+  #s05btarjetas .s05b-dots { position: absolute; left: -66px; top: 236px; width: 132px; height: 16px; display: flex; gap: 20px; justify-content: center; opacity: 0; }
+  #s05btarjetas .s05b-dots i { width: 16px; height: 16px; border-radius: 50%; background: rgba(255,255,255,.28); border: 2px solid rgba(255,255,255,.5); box-sizing: border-box; }
+  #s05btarjetas .s05b-cnt { position: absolute; left: -150px; top: 214px; width: 300px; height: 60px; display: flex; align-items: center; justify-content: center; gap: 14px; border-radius: 30px; opacity: 0; }
+  #s05btarjetas .s05b-cnt .ac-lbl { font-size: 28px; font-weight: 600; }
+
+  #s05btarjetas .s05b-mem { position: absolute; inset: 0; opacity: 0; }
+  #s05btarjetas .s05b-brain { position: absolute; left: 1120px; top: 460px; width: 260px; height: 260px; border-radius: 50%; display: grid; place-items: center; color: var(--c); border-radius: 50%; opacity: 0; }
+  #s05btarjetas .s05b-wave { position: absolute; left: 1120px; top: 460px; width: 260px; height: 260px; border-radius: 50%; border: 4px solid var(--c); opacity: 0; box-shadow:  0 0 30px 4px rgba(255,255,255,.07); }
+  #s05btarjetas .s05b-mast { position: absolute; left: 1085px; top: 790px; width: 330px; opacity: 0; }
+  #s05btarjetas .s05b-mast .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  #s05btarjetas .s05b-mast .ac-lbl { font-size: 28px; }
+  #s05btarjetas .s05b-mast .pc { font-family: "Rubik"; font-weight: 700; font-size: 34px; color: var(--c); }
+  #s05btarjetas .s05b-track { height: 18px; border-radius: 9px; background: rgba(255,255,255,.18); overflow: hidden; }
+  #s05btarjetas .s05b-fill { height: 100%; width: 100%; border-radius: 9px; background: linear-gradient(90deg, #4f8dff, #7df0ff); box-shadow:  0 0 22px rgba(255,255,255,.07); transform-origin: 0 50%; transform: scaleX(0); }
+  #s05btarjetas .s05b-cc { position: absolute; left: 1480px; width: 270px; height: 82px; display: flex; align-items: center; justify-content: center; border-radius: 24px; opacity: 0; }
+  #s05btarjetas .s05b-cc .ac-lbl { font-size: 30px; }
+
+  #s05btarjetas .s05b-ph { position: absolute; left: 1025px; top: 270px; width: 330px; height: 640px; border-radius: 58px; opacity: 0; }
+  #s05btarjetas .s05b-ph .scr { position: absolute; inset: 14px; border-radius: 46px; background: linear-gradient(180deg, rgba(8,30,120,.85), rgba(4,16,70,.9)); overflow: hidden; }
+  #s05btarjetas .s05b-ph .nt { position: absolute; left: 50%; top: 14px; width: 96px; height: 24px; margin-left: -48px; border-radius: 12px; background: rgba(2,8,40,.95); }
+  #s05btarjetas .s05b-ph .tm { position: absolute; right: 36px; top: 60px; font-family: "Rubik"; font-weight: 600; font-size: 26px; opacity: .85; }
+  #s05btarjetas .s05b-ph .hd { position: absolute; left: 0; right: 0; top: 110px; text-align: center; font-family: "Rubik"; font-weight: 600; font-size: 26px; letter-spacing: .12em; text-transform: uppercase; color: var(--c); }
+  #s05btarjetas .s05b-pc { position: absolute; left: 22px; right: 22px; top: 176px; height: 250px; border-radius: 26px; padding: 22px; box-sizing: border-box; display: flex; align-items: center; background: linear-gradient(145deg, rgba(150,190,255,.38), rgba(60,110,230,.2)); border: 1.5px solid rgba(255,255,255,.4); font-family: "Rubik"; font-weight: 600; font-size: 32px; line-height: 1.14; letter-spacing: -0.02em; }
+  #s05btarjetas .s05b-pb { position: absolute; left: 22px; right: 22px; top: 452px; display: flex; gap: 14px; }
+  #s05btarjetas .s05b-pb div { flex: 1; height: 62px; border-radius: 20px; display: grid; place-items: center; font-family: "Rubik"; font-weight: 600; font-size: 24px; background: rgba(255,255,255,.14); border: 1.5px solid rgba(255,255,255,.3); }
+  #s05btarjetas .s05b-pb div.ok { background: linear-gradient(90deg, #4f8dff, #7df0ff); color: #04215f; border-color: transparent; }
+  #s05btarjetas .s05b-pp { position: absolute; left: 22px; right: 22px; top: 548px; height: 12px; border-radius: 6px; background: rgba(255,255,255,.18); overflow: hidden; }
+  #s05btarjetas .s05b-pp i { display: block; height: 100%; width: 62%; border-radius: 6px; background: var(--c); }
+  #s05btarjetas .s05b-clock { position: absolute; left: 962px; top: 262px; width: 124px; height: 124px; border-radius: 50%; display: grid; place-items: center; opacity: 0; }
+  #s05btarjetas .s05b-clock svg.rg { position: absolute; inset: -4px; width: 132px; height: 132px; transform: rotate(-90deg); }
+  #s05btarjetas .s05b-clock .tx { text-align: center; line-height: 1; }
+  #s05btarjetas .s05b-clock .tx b { display: block; font-family: "Rubik"; font-weight: 700; font-size: 38px; }
+  #s05btarjetas .s05b-clock .tx span { font-weight: 700; font-size: 20px; opacity: .8; }
+  #s05btarjetas .s05b-mom { position: absolute; left: 1470px; width: 290px; height: 100px; display: flex; align-items: center; gap: 16px; padding: 0 22px; box-sizing: border-box; border-radius: 26px; opacity: 0; }
+  #s05btarjetas .s05b-mom .ic { width: 62px; height: 62px; border-radius: 18px; display: grid; place-items: center; flex: none; background: linear-gradient(135deg, #4f8dff, #7df0ff); color: #04215f; }
+  #s05btarjetas .s05b-mom .ac-lbl { font-size: 28px; }
+  #s05btarjetas .s05b-loop { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+</style>
+
+<div id="s05btarjetas" class="ac-root" data-composition-id="s05b-tarjetas" data-width="1920" data-height="1080">
+  <div class="s05b-bg"></div><div class="s05b-orb o1" data-layout-allow-overflow></div><div class="s05b-orb o2" data-layout-allow-overflow></div><div class="s05b-grid" id="s05b-grid"></div><div class="s05b-vig"></div>
+
+  <div class="ac-title"><div class="ln" id="s05b-t1"><span class="w">Tarjetas</span> <span class="w"><em>didácticas</em></span></div></div>
+
+  <svg class="s05b-loop" id="s05b-loop" viewBox="0 0 1920 1080" fill="none" stroke="#7df0ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path id="s05b-loopA" d="M560 335 A335 255 0 1 1 245.2 502.8" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" opacity=".75"/>
+    <path id="s05b-loopH" d="M254.3 516.2 L251.2 490.4 L229.1 504.2" opacity="0"/>
+  </svg>
+  <svg class="ac-links" id="s05b-links" viewBox="0 0 1920 1080"></svg>
+
+  <div class="s05b-grp" id="s05b-grp">
+    <div class="ac-glass s05b-cnt" id="s05b-cnt"><span class="ac-lbl" id="s05b-cntn">0</span><span class="ac-lbl">palabras</span></div>
+    <div class="s05b-dots" id="s05b-dots"><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <div class="s05b-mem" id="s05b-mem">
+    <svg class="ac-links" id="s05b-mlinks" viewBox="0 0 1920 1080"></svg>
+    <div class="s05b-wave" id="s05b-w1"></div><div class="s05b-wave" id="s05b-w2"></div><div class="s05b-wave" id="s05b-w3"></div>
+    <div class="ac-glass s05b-brain" id="s05b-brain"></div>
+    <div class="s05b-mast" id="s05b-mast"><div class="row"><span class="ac-lbl">Dominio</span><span class="pc" id="s05b-pc">0 %</span></div><div class="s05b-track"><div class="s05b-fill" id="s05b-fill"></div></div></div>
+    <div class="ac-glass s05b-cc" id="s05b-cc0" style="top:449px"><div class="ac-lbl">ecosistema</div></div>
+    <div class="ac-glass s05b-cc" id="s05b-cc1" style="top:549px"><div class="ac-lbl">depredador</div></div>
+    <div class="ac-glass s05b-cc" id="s05b-cc2" style="top:649px"><div class="ac-lbl">conservación</div></div>
+  </div>
+
+  <div class="ac-glass s05b-ph" id="s05b-ph"><div class="scr">
+    <div class="nt"></div><div class="tm">7:42</div><div class="hd">Repaso rápido</div>
+    <div class="s05b-pc">¿Qué es una especie en peligro?</div>
+    <div class="s05b-pb"><div>Aún no</div><div class="ok">¡Lo sé!</div></div>
+    <div class="s05b-pp"><i></i></div>
+  </div></div>
+  <div class="ac-glass s05b-clock" id="s05b-clock">
+    <svg class="rg" viewBox="0 0 132 132" fill="none" stroke="#7df0ff" stroke-width="7" stroke-linecap="round"><circle cx="66" cy="66" r="60" id="s05b-ring" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
+    <div class="tx"><b>5</b><span>min</span></div>
+  </div>
+  <div class="ac-glass s05b-mom" id="s05b-m0" style="top:420px"><div class="ic" id="s05b-m0i"></div><div class="ac-lbl">En el trayecto</div></div>
+  <div class="ac-glass s05b-mom" id="s05b-m1" style="top:570px"><div class="ic" id="s05b-m1i"></div><div class="ac-lbl">En la espera</div></div>
+</div>
+
+<script>
+(function () {
+  const S = "s05b-tarjetas", root = document.getElementById("s05btarjetas");
+  const grp = document.getElementById("s05b-grp");
+  const D = AC.insDur(S);
+  const cue = (w, n) => AC.icue(S, "b05b", w, n);
+
+  // ---------- tarjetas ----------
+  const CARDS = [
+    { q: ["¿Qué", "es", "un", "ecosistema?"], a: ["Seres", "vivos", "y", "su", "entorno,", "conectados", "entre", "sí."], sm: 0 },
+    { q: ["¿Qué", "es", "un", "depredador?"] },
+    { q: ["¿Qué", "es", "una", "especie", "en", "peligro?"], sm: 1 },
+    { q: ["¿Para", "qué", "sirve", "conservar?"] },
+    { q: ["¿Qué", "es", "una", "cadena", "trófica?"] },
+    { q: ["¿Qué", "come", "un", "carnívoro?"] }
+  ];
+  const wrap = (ws, extra) => ws.map((w, i) => '<span class="w">' + w + "</span>").join(" ");
+  const cards = CARDS.map((c, i) => {
+    const el = document.createElement("div"); el.className = "s05b-card"; el.id = "s05b-c" + i;
+    const ck = '<div class="s05b-ck">' + AC.svg("check", 36) + "</div>";
+    let h = '<div class="ac-glass s05b-f" data-layout-allow-overlap><div class="s05b-wm">?</div><div class="s05b-in" data-layout-allow-overlap><div class="s05b-tag">' + AC.svg("tarjetas", 30) + 'Pregunta</div>' +
+      '<div class="s05b-q' + (c.sm ? " sm" : "") + '">' + wrap(c.q) + '</div><div class="s05b-hint">' + (i === 0 ? "Voltea para ver la respuesta" : "Piensa antes de voltear") + "</div></div>" + (i ? ck : "") + "</div>";
+    if (c.a) h += '<div class="ac-glass s05b-f bk" data-layout-allow-overlap><div class="s05b-in" data-layout-allow-overlap><div class="s05b-tag">' + AC.svg("check", 30) + 'Respuesta</div><div class="s05b-q sm" id="s05b-ans">' +
+      '<span class="w">Seres</span> <span class="w"><em>vivos</em></span> <span class="w">y</span> <span class="w">su</span> <span class="w"><em>entorno</em>,</span> <span class="w">conectados</span> <span class="w">entre</span> <span class="w">sí.</span>' +
+      '</div><div class="s05b-hint">Breve: una sola idea</div></div>' + ck + "</div>";
+    el.innerHTML = h; grp.appendChild(el); return el;
+  });
+  const front = (i) => "#s05b-c" + i + " > .s05b-f:not(.bk) > .s05b-in";
+
+  // posiciones: abanico inicial y pila (d = profundidad)
+  const R = 760, ANG = [18, 6, -6, -18, -30, 30];
+  const fanPose = (i) => { const a = ANG[i] * Math.PI / 180; return { x: R * Math.sin(a), y: R * (1 - Math.cos(a)) - 60, rotation: ANG[i], z: 0, scale: 1, rotateY: 0 }; };
+  const P = [
+    { x: 0, y: 0, rotation: 0, z: 0 }, { x: 34, y: -26, rotation: 3, z: -90 }, { x: -30, y: -46, rotation: -3.5, z: -180 },
+    { x: 40, y: -62, rotation: 5, z: -270 }, { x: -34, y: -74, rotation: 4, z: -330 }, { x: 10, y: -80, rotation: -1, z: -360 }
+  ];
+  const ZI = (d) => 20 - d;
+
+  const tl = gsap.timeline({ paused: true });
+
+  // fondo: rejilla en deriva lenta (una sola direccion, sin vaiven)
+  tl.fromTo("#s05b-grid", { x: 0, y: 0 }, { x: 120, y: 120, duration: D, ease: "none" }, 0);
+
+  // ---------- t0: entra el abanico (lento) ----------
+  cards.forEach((el, i) => {
+    tl.set(el, { zIndex: 10 + [5, 4, 3, 2, 1, 0][i] }, 0);
+    tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, i * .04);
+  });
+
+  // ---------- "preguntas": una tarjeta sube al frente con su pregunta ----------
+  const tP = cue("preguntas");
+  AC.line(tl, "#s05b-t1", tP - .02, null);
+  cards.forEach((el, i) => {
+    const to = Object.assign({}, P[i]);
+    if (i === 0) to.scale = 1.1;
+    tl.set(el, { zIndex: ZI(i) + (i === 0 ? 5 : 0) }, tP);
+    tl.fromTo(el, Object.assign({}, fanPose(i), { scale: 1 }), Object.assign({ duration: 1.3, ease: "power2.inOut" }, to), tP + (i === 0 ? 0 : .05 * i));
+  });
+  tl.fromTo(front(0), { opacity: 0 }, { opacity: 1, duration: .6, ease: "power2.out" }, tP + .55);
+  tl.fromTo("#s05b-c0 .s05b-f:not(.bk) .s05b-q .w", { yPercent: 90, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .8, ease: "power3.out", stagger: .1 }, tP + .55);
+  tl.fromTo("#s05b-c0 .s05b-wm", { scale: .6, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "expo.out", transformOrigin: "100% 0%" }, tP + .55);
+
+  // ---------- "respuestas": la tarjeta se voltea (1.5 s) ----------
+  const tR = cue("respuestas");
+  tl.to("#s05b-c0", { rotateY: 180, duration: 1.5, ease: "power2.inOut" }, tR);
+  tl.to("#s05b-c0", { scale: 1.18, duration: .75, ease: "power2.out", yoyo: true, repeat: 1 }, tR);
+  tl.to(front(0), { opacity: 0, duration: .01 }, tR + .75);
+  tl.fromTo("#s05b-c0 .bk .s05b-in", { opacity: 0 }, { opacity: 1, duration: .6, ease: "power2.out" }, tR + .75);
+  tl.fromTo("#s05b-ans .w", { yPercent: 90, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .8, ease: "power3.out", stagger: .09 }, tR + .85);
+
+  // ---------- "breves": las palabras clave de la respuesta brillan ----------
+  const tB = cue("breves");
+  tl.fromTo("#s05b-ans em", { filter: "drop-shadow(0 0 0px rgba(255,255,255,.07)))" }, { filter: "drop-shadow(0 0 16px rgba(255,255,255,.07)))", duration: .8, ease: "power2.inOut", yoyo: true, repeat: 1, stagger: .3 }, tB + .9);
+
+  // ---------- "memorizar": el concepto se ancla en la memoria ----------
+  const tM = cue("memorizar"), tC = cue("conceptos");
+  tl.to(grp, { x: -330, duration: 1.3, ease: "power2.inOut" }, tM - .1);
+  tl.set("#s05b-mem", { opacity: 1 }, tM - .01);
+  const bn = document.getElementById("s05b-brain"); bn.innerHTML = AC.svg("cerebro", 130);
+  const bp = bn.querySelectorAll("svg path"); bp.forEach((p) => { p.setAttribute("pathLength", "1"); p.setAttribute("stroke-dasharray", "1"); p.setAttribute("stroke-dashoffset", "1"); });
+  tl.fromTo("#s05b-brain", { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" }, tM + .3);
+  tl.to(bp, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut", stagger: .12 }, tM + .5);
+  ["w1", "w2"].forEach((id, k) => {
+    tl.fromTo("#s05b-" + id, { scale: 1, opacity: .8 }, { scale: 2.1, opacity: 0, duration: 1.6, ease: "power2.out" }, tM + .8 + k * .6);
+  });
+  tl.fromTo("#s05b-mast", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .9, ease: "power2.out" }, tM + 1.0);
+  tl.to("#s05b-fill", { scaleX: .94, duration: 1.8, ease: "power2.inOut" }, tM + 1.1);
+  const pc = { v: 0 };
+  tl.to(pc, { v: 94, duration: 1.8, ease: "power2.inOut", onUpdate: () => { document.getElementById("s05b-pc").textContent = Math.round(pc.v) + " %"; } }, tM + 1.1);
+
+  // "conceptos": tres conceptos se enlazan al cerebro, uno a uno
+  [0, 1, 2].forEach((k) => {
+    const t = tC + k * .4, y = 490 + k * 100, p = [1370, 590, 1420, 590, 1430, y, 1480, y];
+    tl.fromTo("#s05b-cc" + k, { x: -50, scale: .7, opacity: 0 }, { x: 0, scale: 1, opacity: 1, duration: 1, ease: "expo.out" }, t);
+    AC.link(tl, document.getElementById("s05b-mlinks"), p, t - .05, .8, "#7df0ff");
+  });
+  tl.to("#s05b-mem", { opacity: 0, duration: .7, ease: "power2.inOut" }, 4.3);
+
+  // ---------- "ideales ... repasar": dos tarjetas dominadas, lentas ----------
+  const SW = [3.7, 4.38];
+  SW.forEach((ts, k) => {
+    const sel = "#s05b-c" + k;
+    tl.fromTo(sel + " .s05b-ck", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .5, ease: "back.out(2)" }, ts - .3);
+    tl.to(sel, { x: "-=70", y: "-=70", rotation: -4, duration: 1.2, ease: "power2.inOut" }, ts);
+    tl.to(sel + " .s05b-f", { opacity: 0, duration: .7, ease: "power2.in" }, ts + .2);
+    tl.set(sel, { zIndex: 1 }, ts + 1.25);
+    CARDS.forEach((c, j) => {
+      if (j <= k) return;
+      const d = j - k - 1, ps = P[Math.min(d, 5)];
+      tl.to("#s05b-c" + j, { x: ps.x, y: ps.y, rotation: ps.rotation, z: ps.z, duration: 1.0, ease: "power2.inOut" }, ts + .2);
+      tl.set("#s05b-c" + j, { zIndex: ZI(d) }, ts + .2);
+    });
+    const nx = k + 1;
+    tl.fromTo(front(nx), { opacity: 0 }, { opacity: 1, duration: .6, ease: "power2.out" }, ts + .35);
+    tl.fromTo("#s05b-c" + nx + " .s05b-f:not(.bk) .s05b-q .w", { yPercent: 70, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .7, ease: "power3.out", stagger: .06 }, ts + .35);
+  });
+
+  // ---------- "ratos libres": el telefono con la tarjeta y 5 minutos ----------
+  const tRa = cue("ratos"), tL = cue("libres");
+  AC.link(tl, document.getElementById("s05b-links"), [910, 590, 950, 590, 985, 590, 1025, 590], tRa, .7, "#7df0ff");
+  tl.fromTo("#s05b-ph", { y: 100, opacity: 0, rotateY: -25, scale: .92 }, { y: 0, opacity: 1, rotateY: 0, scale: 1, duration: .85, ease: "expo.out" }, tRa);
+  tl.fromTo("#s05b-clock", { scale: .4, opacity: 0 }, { scale: 1, opacity: 1, duration: .8, ease: "expo.out" }, tRa + .1);
+  tl.to("#s05b-ring", { strokeDashoffset: .25, duration: .9, ease: "power2.inOut" }, tRa + .2);
+  tl.fromTo("#s05b-ph .s05b-pc", { scale: .9, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, ease: "power3.out" }, tRa + .25);
+  tl.fromTo("#s05b-ph .s05b-pb div", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "power3.out", stagger: .1 }, tRa + .45);
+  document.getElementById("s05b-m0i").innerHTML = '<svg class="ac-ico" viewBox="0 0 48 48" width="40" height="40"><rect x="8" y="10" width="32" height="26" rx="6"/><path d="M8 24h32M16 36v4M32 36v4"/><circle cx="16" cy="30" r="1.5"/><circle cx="32" cy="30" r="1.5"/></svg>';
+  document.getElementById("s05b-m1i").innerHTML = '<svg class="ac-ico" viewBox="0 0 48 48" width="40" height="40"><path d="M14 7h20M14 41h20M16 7c0 10 8 12 8 17s-8 7-8 17M32 7c0 10-8 12-8 17s8 7 8 17"/></svg>';
+  [0, 1].forEach((k) => {
+    const t = tL - .02 + k * .04, y = 470 + k * 150, p = [1355, 590, 1400, 590, 1420, y, 1470, y];
+    tl.fromTo("#s05b-m" + k, { x: -60, opacity: 0, scale: .8 }, { x: 0, opacity: 1, scale: 1, duration: .65, ease: "expo.out" }, t);
+    AC.link(tl, document.getElementById("s05b-links"), p, t - .02, .6, "#7df0ff");
+  });
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines["s05b-tarjetas"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

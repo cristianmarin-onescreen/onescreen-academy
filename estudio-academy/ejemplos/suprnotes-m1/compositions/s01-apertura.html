@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s01 · Apertura</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  @font-face { font-family: "Nevis"; src: url("assets/fonts/Nevis.ttf") format("truetype"); font-weight: 700; font-display: block; }
+  #s01 { position: absolute; inset: 0; }
+  #s01 .m { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .04em .16em; margin: 0 -.04em; }
+  #s01 .w { display: inline-block; }
+  #s01 .ln { position: absolute; left: 0; width: 1920px; text-align: center; font-family: "Rubik"; font-weight: 700; color: #fff; white-space: nowrap; opacity: 0; }
+  #s01 .ln .gap { display: inline-block; width: .26em; }
+  #s01 #s01-l1 { top: 420px; height: 150px; font-size: 124px; letter-spacing: -0.045em; line-height: 1.12; }
+  #s01 #s01-l2 { top: 590px; height: 100px; font-size: 62px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.2; }
+  #s01 #s01-l2 .soft { color: rgba(225,236,255,.88); }
+
+  /* luz detras del wordmark */
+  #s01 #s01-glow { position: absolute; left: 260px; top: 330px; width: 1400px; height: 460px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(70,150,255,.55) 0%, rgba(60,120,255,.22) 40%, rgba(60,120,255,0) 70%); }
+
+  /* LOCKUP: OneScreen + wordmark SuprNotes en 3D */
+  #s01 #s01-lockup { position: absolute; inset: 0; transform-origin: 960px 560px; }
+  #s01 #s01-persp { position: absolute; inset: 0; perspective: 1700px; perspective-origin: 960px 560px; }
+  #s01 #s01-wmbox { position: absolute; left: 285px; top: 440px; width: 1600px; height: 240px; transform-style: preserve-3d; opacity: 0; }
+  #s01 .wm { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: "Rubik"; font-weight: 700; font-size: 236px; letter-spacing: -0.06em; line-height: 1; white-space: nowrap;
+    -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  #s01 .wm.bk { background-image: linear-gradient(180deg, #2f6bff 0%, #1236b8 55%, #08195f 100%); }
+  #s01 .wm.fr { background-image: linear-gradient(180deg, #ffffff 0%, #d8f8ff 14%, #8ff3ff 38%, #4f9cff 72%, #2c62ff 100%); }
+  #s01 .wm.hi { background-image: linear-gradient(180deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,0) 46%); }
+  #s01 .wm.sh { background-image: linear-gradient(100deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.95) 50%, rgba(255,255,255,0) 60%); background-size: 250% 100%; background-position: 100% 0; }
+  #s01 #s01-eyebrow { position: absolute; left: 0; width: 1920px; top: 392px; height: 64px; text-align: center; font-family: "Nevis"; font-weight: 700; font-size: 48px; letter-spacing: .03em; color: #a9c8ff; line-height: 1.2; }
+
+
+  /* ICONO OFICIAL DE SUPRNOTES (lockup 3D) */
+  #s01 #s01-appbox { position: absolute; left: 265px; top: 458px; width: 200px; height: 200px; transform-style: preserve-3d; opacity: 0; }
+  #s01 #s01-appbox .ly { position: absolute; inset: 0; }
+  #s01 #s01-appbox .ly img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+  #s01 #s01-appbox .ly.bk, #s01 .wm.bk { display: none; }
+  #s01 #s01-appbox .ly.bk img { filter: brightness(.38) saturate(1.1); }
+  #s01 #s01-appglow { display: none; position: absolute; left: 215px; top: 408px; width: 300px; height: 300px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(circle, rgba(170,60,255,.5) 0%, rgba(120,60,255,.2) 45%, rgba(120,60,255,0) 70%); }
+
+  /* SELLO */
+  #s01 #s01-seal { position: absolute; left: 840px; top: 400px; width: 240px; height: 240px; opacity: 0; }
+  #s01 #s01-seal .halo { position: absolute; left: -90px; top: -90px; width: 420px; height: 420px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(circle, rgba(125,240,255,.55) 0%, rgba(80,150,255,.28) 42%, rgba(80,150,255,0) 70%); }
+  #s01 #s01-seal .disc { left: 12px; top: 12px; width: 216px; height: 216px; border-radius: 50%; overflow: hidden; }
+  #s01 #s01-seal .sh { position: absolute; top: -20px; left: 0; width: 90px; height: 260px; transform: skewX(-18deg); opacity: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0)); }
+  #s01 #s01-seal svg.art { position: absolute; left: 0; top: 0; width: 240px; height: 240px; overflow: visible; }
+  #s01 #s01-seal .burst { position: absolute; left: 12px; top: 12px; width: 216px; height: 216px; border-radius: 50%; border: 3px solid rgba(160,240,255,.85); opacity: 0; }
+  #s01 .spark { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff; opacity: 0;
+    box-shadow:  0 0 14px 4px rgba(255,255,255,.07); }
+
+  /* CHIP MODULO */
+  #s01 #s01-chip { left: 160px; top: 770px; width: 400px; height: 140px; transform-origin: 0 0; opacity: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 44px 0 40px; border-radius: 30px; }
+  #s01 #s01-chip .lab { font-family: "Rubik"; font-weight: 600; font-size: 48px; letter-spacing: -0.03em; }
+  #s01 #s01-chip .num { font-family: "Rubik"; font-weight: 700; font-size: 128px; letter-spacing: -0.05em; line-height: 1; height: 140px; }
+  #s01 #s01-chip .num .m { padding-bottom: 0; height: 140px; }
+  #s01 #s01-chip .num .w { background: linear-gradient(180deg, #fff 0%, #8ff3ff 50%, #4f8dff 100%); -webkit-background-clip: text; background-clip: text; color: transparent; line-height: 140px; }
+
+  /* RECORRIDO (la base y lo que vendra) */
+  #s01 #s01-line { position: absolute; left: 560px; top: 838px; width: 1180px; height: 4px; border-radius: 2px; transform-origin: 0 50%;
+    background: linear-gradient(90deg, #7df0ff 0%, #4f8dff 40%, rgba(79,141,255,.55) 78%, rgba(79,141,255,0) 100%); box-shadow:  0 0 18px rgba(255,255,255,.07); }
+  #s01 .nd { position: absolute; top: 818px; width: 44px; height: 44px; margin-left: -22px; border-radius: 50%; opacity: 0; border: 3px solid rgba(160,230,255,.8);
+    background: rgba(255,255,255,.1); box-shadow:  0 0 22px rgba(255,255,255,.07); }
+  #s01 .tag { position: absolute; font-family: "Manrope"; font-weight: 700; font-size: 28px; color: #bcd6ff; line-height: 1.2; white-space: nowrap; }
+  #s01 .tag .m { padding-bottom: .2em; }
+
+  /* HITOS */
+  #s01 .card { top: 480px; width: 500px; height: 330px; opacity: 0; padding: 40px 36px; box-sizing: border-box; }
+  #s01 .card .ic { width: 104px; height: 104px; border-radius: 28px; display: grid; place-items: center; background: rgba(255,255,255,.12); color: rgba(255,255,255,.6); }
+  #s01 .card .ac-lbl { font-size: 37px; white-space: nowrap; margin-top: 34px; }
+  #s01 .card .ac-sub { font-size: 25px; margin-top: 10px; }
+  #s01 .card .glow { position: absolute; inset: -5px; border-radius: 32px; border: 3px solid #7df0ff; opacity: 0; box-shadow:  0 0 44px 6px rgba(255,255,255,.07); pointer-events: none; }
+
+  /* CIERRE */
+  #s01 #s01-cap { top: 700px; height: 90px; font-size: 58px; font-weight: 600; letter-spacing: -0.035em; line-height: 1.2; }
+  #s01 #s01-dc { top: 818px; height: 50px; font-size: 34px; font-weight: 600; font-family: "Manrope"; letter-spacing: 0; color: rgba(225,236,255,.9); line-height: 1.3; }
+  #s01 #s01-logo { position: absolute; left: 860px; top: 868px; width: 200px; height: auto; opacity: 0; }
+</style>
+
+<div id="s01" class="ac-root" data-composition-id="s01-apertura" data-width="1920" data-height="1080">
+  <div id="s01-glow"></div>
+
+  <div class="ln" id="s01-l1"><span class="m"><span class="w">Te</span></span><span class="gap"></span><span class="m"><span class="w">damos</span></span><span class="gap"></span><span class="m"><span class="w">la</span></span><span class="gap"></span><span class="m"><span class="w"><em class="ac-em">bienvenida</em></span></span></div>
+  <div class="ln" id="s01-l2"><span class="m"><span class="w soft">al</span></span><span class="gap"></span><span class="m"><span class="w soft">curso</span></span><span class="gap"></span><span class="m"><span class="w soft">de</span></span><span class="gap"></span><span class="m"><span class="w"><em class="ac-em">certificación</em></span></span></div>
+
+  <div id="s01-lockup">
+    <div id="s01-eyebrow"><span class="m"><span class="w">OneScreen</span></span></div>
+    <div id="s01-persp"><div id="s01-appglow"></div><div id="s01-appbox"></div><div id="s01-wmbox"></div></div>
+  </div>
+
+  <div id="s01-seal">
+    <div class="halo" id="s01-halo"></div>
+    <div class="ac-glass disc" id="s01-disc"><div class="sh" id="s01-sh"></div></div>
+    <svg class="art" id="s01-art" viewBox="0 0 240 240"></svg>
+    <div class="burst" id="s01-burst"></div>
+  </div>
+
+  <div class="ac-glass" id="s01-chip"><div class="lab">Módulo</div><div class="num"><span class="m"><span class="w" id="s01-n1">1</span></span></div></div>
+
+  <div id="s01-track" style="position:absolute;inset:0"><div id="s01-line" style="transform:scaleX(0)"></div>
+  <div class="tag" id="s01-tag1" style="left:560px; top:880px; width:300px;"><span class="m"><span class="w">La base</span></span></div>
+  <div class="tag" id="s01-tag2" style="left:1060px; top:880px;"><span class="m"><span class="w">Lo que vendrá después</span></span></div></div>
+
+  <div class="ln" id="s01-cap"><span class="m"><span class="w">Examen</span></span><span class="gap"></span><span class="m"><span class="w">de</span></span><span class="gap"></span><span class="m"><span class="w"><em class="ac-em">certificación</em></span></span></div>
+  <div class="ln" id="s01-dc"><span class="m"><span class="w">Directamente</span></span><span class="gap" style="width:.3em"></span><span class="m"><span class="w">con</span></span></div>
+  <img id="s01-logo" src="assets/logo-white.png" alt="OneScreen">
+</div>
+
+<script>
+(function () {
+  const S = "s01", B = "b01", root = document.getElementById("s01");
+  const c = (w, n) => AC.cue(S, B, w, n || 0);
+  const NS = "http://www.w3.org/2000/svg";
+  const rnd = AC.seeded(101);
+  AC.ICON.llave = '<circle cx="15" cy="24" r="9"/><path d="M24 24h18M36 24v8M42 24v5"/>';
+
+  /* ---------- wordmark: 9 capas de extrusion + frente de vidrio ---------- */
+  const wmbox = document.getElementById("s01-wmbox");
+  const LAYERS = 9;
+  for (let k = LAYERS; k >= 1; k--) { const d = document.createElement("div"); d.className = "wm bk"; d.textContent = "SuprNotes"; d.dataset.k = k; wmbox.appendChild(d); }
+  ["fr", "hi", "sh"].forEach((cl) => { const d = document.createElement("div"); d.className = "wm " + cl; d.textContent = "SuprNotes"; wmbox.appendChild(d); });
+  const bks = Array.from(wmbox.querySelectorAll(".bk"));
+
+
+  /* ---------- icono oficial: 6 capas de grosor + frente ---------- */
+  const appbox = document.getElementById("s01-appbox");
+  for (let k = 6; k >= 0; k--) { const d = document.createElement("div"); d.className = "ly" + (k ? " bk" : ""); d.dataset.k = k; d.innerHTML = '<img src="assets/sn-app-icon.png" alt="SuprNotes">'; appbox.appendChild(d); }
+  const aly = Array.from(appbox.querySelectorAll(".bk"));
+
+  /* ---------- sello: anillo festoneado, anillo interior, escudo con check ---------- */
+  const art = document.getElementById("s01-art");
+  art.innerHTML = '<defs><linearGradient id="s01-gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#7df0ff"/><stop offset="1" stop-color="#3d7bff"/></linearGradient></defs>';
+  let d = "";
+  for (let i = 0; i <= 240; i++) { const a = i / 240 * Math.PI * 2, r = 112 + 3.4 * Math.cos(a * 28); d += (i ? "L" : "M") + (120 + r * Math.cos(a)).toFixed(2) + " " + (120 + r * Math.sin(a)).toFixed(2); }
+  const mk = (tag, attrs) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); art.appendChild(e); return e; };
+  const ring1 = mk("path", { d: d + "Z", fill: "none", stroke: "url(#s01-gr)", "stroke-width": 3.4, "stroke-linejoin": "round", pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1 });
+  const ring2 = mk("circle", { cx: 120, cy: 120, r: 92, fill: "none", stroke: "rgba(190,235,255,.7)", "stroke-width": 1.8, pathLength: 1, "stroke-dasharray": 1, "stroke-dashoffset": 1, transform: "rotate(-90 120 120)" });
+  const g = mk("g", { transform: "translate(72 72) scale(2)", fill: "none", stroke: "url(#s01-gr)", "stroke-width": 2.5, "stroke-linecap": "round", "stroke-linejoin": "round" });
+  g.innerHTML = AC.ICON.escudo;
+  const shapes = Array.from(g.querySelectorAll("path")); shapes.forEach((p) => { p.setAttribute("pathLength", 1); p.setAttribute("stroke-dasharray", 1); p.setAttribute("stroke-dashoffset", 1); });
+
+  /* ---------- recorrido ---------- */
+  const NODES = [840, 1100, 1360, 1620];
+  NODES.forEach((x, i) => { const n = document.createElement("div"); n.className = "nd"; n.id = "s01-nd" + i; n.style.left = x + "px"; document.getElementById("s01-track").appendChild(n); });
+
+  /* ---------- hitos ---------- */
+  const CARDS = [
+    { k: "ojo", t: "Qué es SuprNotes", s: "Entender la herramienta", left: 160, w: "qué", n: 1, lit: "Supernotes", ln: 1 },
+    { k: "rayo", t: "Qué puede hacer por ti", s: "Lo que logras con ella", left: 710, w: "qué", n: 2, lit: "hacer" },
+    { k: "llave", t: "Cómo entrar", s: "Tu acceso paso a paso", left: 1260, w: "cómo", n: 0, lit: "entrar" }
+  ];
+  CARDS.forEach((o, i) => {
+    const e = document.createElement("div"); e.className = "ac-glass card"; e.id = "s01-c" + i; e.style.left = o.left + "px";
+    e.innerHTML = '<div class="glow"></div><div class="ic">' + AC.svg(o.k, 60) + '</div><div class="ac-lbl">' + o.t + '</div><div class="ac-sub">' + o.s + '</div>';
+    root.appendChild(e);
+  });
+
+  /* ---------- chispas con semilla ---------- */
+  function sparks(id, cx, cy, n) {
+    const out = [];
+    for (let i = 0; i < n; i++) { const e = document.createElement("div"); e.className = "spark"; e.style.left = cx + "px"; e.style.top = cy + "px"; root.appendChild(e);
+      const a = rnd() * Math.PI * 2, r = 150 + rnd() * 130; out.push({ e, dx: Math.cos(a) * r, dy: Math.sin(a) * r, dl: rnd() * .25 }); }
+    return out;
+  }
+  const sp1 = sparks(1, 960, 270, 10), sp2 = sparks(2, 960, 555, 12);
+  function fire(tl, arr, t) { arr.forEach((s) => { tl.fromTo(s.e, { x: 0, y: 0, opacity: 0, scale: 1 }, { x: s.dx, y: s.dy, opacity: 0, scale: .3, duration: 1.7, ease: "power2.out" }, t + s.dl);
+    tl.fromTo(s.e, { opacity: 0 }, { opacity: .9, duration: .25, ease: "power1.out" }, t + s.dl);
+    tl.to(s.e, { opacity: 0, duration: 1.2, ease: "power2.in" }, t + s.dl + .45); }); }
+
+  const tl = gsap.timeline({ paused: true });
+  const rise = (sel, t, dur) => tl.fromTo(sel, { yPercent: 118 }, { yPercent: 0, duration: dur || 1.2, ease: "expo.out" }, t);
+
+  /* ===== 1 · BIENVENIDA (0.08–2.9) ===== */
+  tl.set("#s01-l1", { opacity: 1 }, 0.05);
+  ["Te", "damos", "la", "bienvenida"].forEach((w, i) => rise("#s01-l1 .m:nth-child(" + (i * 2 + 1) + ") .w", c(w), 1.25));
+  tl.set("#s01-l2", { opacity: 1 }, c("al") - .01);
+  ["al", "curso", "de", "certificación"].forEach((w, i) => rise("#s01-l2 .m:nth-child(" + (i * 2 + 1) + ") .w", c(w), 1.2));
+
+  /* sello de certificacion: se dibuja en la palabra "certificación" */
+  const tc = c("certificación", 0);
+  tl.fromTo("#s01-seal", { opacity: 0, scale: .5, y: -250, x: 0 }, { opacity: 1, scale: .72, y: -250, duration: 1.4, ease: "expo.out" }, tc - .05);
+  tl.fromTo(ring1, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.5, ease: "power2.inOut" }, tc);
+  tl.fromTo(ring2, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: "power2.inOut" }, tc + .25);
+  tl.fromTo(shapes, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut", stagger: .35 }, tc + .6);
+  tl.fromTo("#s01-halo", { opacity: 0 }, { opacity: .55, duration: 1.4, ease: "power2.out" }, tc);
+  tl.fromTo("#s01-sh", { x: -120, opacity: 0 }, { x: 330, opacity: 1, duration: 1.5, ease: "power2.inOut" }, tc + 1.1);
+  tl.to("#s01-sh", { opacity: 0, duration: .3 }, tc + 2.4);
+  fire(tl, sp1, tc + .5);
+
+  /* ===== 2 · NOMBRE: OneScreen · SuprNotes (2.78–5.2) ===== */
+  // las lineas de bienvenida se disuelven con calma
+  tl.to(["#s01-l1", "#s01-l2"], { opacity: 0, scale: .97, filter: "blur(12px)", duration: 1.1, ease: "power2.inOut" }, 2.8);
+  rise("#s01-eyebrow .w", c("OneScreen", 0) + .2, 1.2);
+  const tw = c("Supernotes", 0);
+  tl.fromTo("#s01-glow", { opacity: 0 }, { opacity: 1, duration: 1.8, ease: "power2.out" }, tw);
+  tl.fromTo(wmbox, { rotateY: -46, rotateX: 22, z: -650, opacity: 0, y: 40 }, { rotateY: 0, rotateX: 0, z: 0, opacity: 1, y: 0, duration: 1.7, ease: "expo.out" }, tw + .12);
+  bks.forEach((b, i) => {
+    const k = +b.dataset.k;           // 1 = pegada al frente, 9 = la mas profunda
+    tl.fromTo(b, { z: -k * 150, x: -k * 14, y: k * 10 }, { z: 0, x: k * 1.25, y: k * 2.1, duration: 1.7, ease: "expo.out" }, tw + .12);
+  });
+
+  // icono oficial: entra con su propio giro 3D en la primera "SuprNotes", un instante antes del wordmark
+  const ta = tw - .1;
+  tl.fromTo("#s01-appglow", { opacity: 0 }, { opacity: 1, duration: 1.8, ease: "power2.out" }, ta);
+  tl.fromTo(appbox, { rotateY: 70, rotateX: -18, z: -600, opacity: 0, y: 40 }, { rotateY: 0, rotateX: 0, z: 0, opacity: 1, y: 0, duration: 1.7, ease: "expo.out" }, ta);
+  aly.forEach((b) => { const k = +b.dataset.k; tl.fromTo(b, { z: -k * 70, x: k * 8 }, { z: -k * 3, x: -k * .8, duration: 1.7, ease: "expo.out" }, ta); });
+  tl.fromTo("#s01-wmbox .sh", { backgroundPositionX: "100%" }, { backgroundPositionX: "0%", duration: 1.5, ease: "power2.inOut" }, tw + 1.5);
+
+  /* ===== 3 · MÓDULO 1 + la base de todo lo que vendrá (5.0–8.0) ===== */
+  const tm = c("módulo", 0);
+  tl.fromTo("#s01-chip", { opacity: 0, y: 60, scale: .94 }, { opacity: 1, y: 0, scale: 1, duration: 1.3, ease: "expo.out" }, tm);
+  rise("#s01-n1", c("uno", 0), 1.2);
+  const tb = c("base", 0);
+  tl.fromTo("#s01-line", { scaleX: 0 }, { scaleX: 1, duration: 1.7, ease: "power2.inOut" }, tb - .05);
+  rise("#s01-tag1 .w", tb + .15, 1.1);
+  // un paquete de luz recorre lo que sigue y enciende suavemente cada hito futuro
+  const tt = c("todo", 0), PD = 1.4, p = [560, 840, 960, 840, 1360, 840, 1760, 840];
+  AC.packet(tl, root, p, tt, PD, "none");
+  NODES.forEach((x, i) => {
+    const t = tt + (x - 560) / 1200 * PD;
+    tl.fromTo("#s01-nd" + i, { opacity: 0, scale: .4 }, { opacity: .7, scale: 1.25, duration: .5, ease: "power2.out" }, t - .1);
+    tl.to("#s01-nd" + i, { scale: 1, opacity: .5, duration: 1.0, ease: "power2.inOut" }, t + .4);
+  });
+  rise("#s01-tag2 .w", c("vendrá", 0), 1.2);
+
+  /* ===== 4 · reacomodo + los tres hitos (8.2–12.9) ===== */
+  const tr = 8.2, RD = 1.5;
+  tl.to("#s01-lockup", { y: -275, scale: .72, duration: RD, ease: "power2.inOut" }, tr);
+  tl.to("#s01-glow", { y: -275, scale: .8, duration: RD, ease: "power2.inOut" }, tr);
+  tl.to("#s01-seal", { x: 735, y: -335, scale: .5, duration: RD, ease: "power2.inOut" }, tr);
+  tl.to("#s01-chip", { y: -650, scale: .6, duration: RD, ease: "power2.inOut" }, tr);
+  tl.to("#s01-track", { opacity: 0, duration: 1.0, ease: "power2.inOut" }, tr);
+
+  CARDS.forEach((o, i) => {
+    const te = c(o.w, o.n), tlit = Math.max(c(o.lit, o.ln || 0), te + .5), sel = "#s01-c" + i;
+    tl.fromTo(sel, { opacity: 0, y: 80, rotateX: 24, transformPerspective: 1200 }, { opacity: .6, y: 0, rotateX: 0, duration: 1.3, ease: "expo.out" }, te);
+    tl.to(sel, { opacity: 1, duration: 1.0, ease: "power2.inOut" }, tlit);
+    tl.to(sel + " .ic", { backgroundColor: "#2f78ff", color: "#fff", duration: 1.0, ease: "power2.inOut" }, tlit);
+    tl.fromTo(sel + " .ic svg", { scale: .7, rotate: -14 }, { scale: 1, rotate: 0, duration: 1.1, ease: "back.out(1.6)", transformOrigin: "50% 50%" }, tlit);
+    tl.fromTo(sel + " .glow", { opacity: 0 }, { opacity: 1, duration: .9, ease: "power2.out" }, tlit);
+    tl.to(sel + " .glow", { opacity: .35, duration: 1.3, ease: "power2.inOut" }, tlit + 1.0);
+  });
+
+  /* ===== 5 · examen de certificación + firma OneScreen (13.0–18.3) ===== */
+  tl.to(CARDS.map((o, i) => "#s01-c" + i), { opacity: 0, y: 30, scale: .96, duration: 1.2, ease: "power2.inOut", stagger: .12 }, 13.0);
+  const te = c("examen", 0), tce = c("certificación", 1);
+  tl.to("#s01-seal", { x: 0, y: 35, scale: .9, duration: 1.4, ease: "power2.inOut" }, te - .45);
+  tl.set("#s01-cap", { opacity: 1 }, te - .01);
+  rise("#s01-cap .m:nth-child(1) .w", te, 1.2);
+  rise("#s01-cap .m:nth-child(3) .w", c("de", 3), 1.2);
+  rise("#s01-cap .m:nth-child(5) .w", tce, 1.3);
+  tl.to("#s01-halo", { opacity: .9, duration: 1.0, ease: "power2.out" }, tce);
+  tl.to("#s01-halo", { opacity: .5, duration: 1.4, ease: "power2.inOut" }, tce + 1.0);
+  tl.fromTo("#s01-burst", { scale: 1, opacity: .85 }, { scale: 1.9, opacity: 0, duration: 1.5, ease: "power2.out" }, tce);
+  tl.fromTo("#s01-sh", { x: -120, opacity: 0 }, { x: 330, opacity: 1, duration: 1.5, ease: "power2.inOut" }, tce + .1);
+  tl.to("#s01-sh", { opacity: 0, duration: .3 }, tce + 1.7);
+  fire(tl, sp2, tce);
+
+  const td = c("directamente", 0);
+  tl.set("#s01-dc", { opacity: 1 }, td - .01);
+  rise("#s01-dc .m:nth-child(1) .w", td, 1.2);
+  rise("#s01-dc .m:nth-child(3) .w", c("con", 0), 1.2);
+  tl.fromTo("#s01-logo", { opacity: 0, y: 24, scale: .92 }, { opacity: 1, y: 0, scale: 1, duration: 1.0, ease: "expo.out" }, c("OneScreen", 1));
+
+  window.__timelines["s01-apertura"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

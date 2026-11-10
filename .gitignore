@@ -1,0 +1,12 @@
+# Secretos: nunca al repo
+.env
+.env.*
+!.env.example
+*.key
+# Trabajo de cada curso (crudos, audio, renders): local
+cursos/
+node_modules/
+__pycache__/
+*.pyc
+*.mp4
+*.wav

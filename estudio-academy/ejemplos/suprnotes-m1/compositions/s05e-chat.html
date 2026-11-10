@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s05e · Chat con IA</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  #s05echat { position: absolute; inset: 0; overflow: hidden; --pk: #ff5fa8; --cy: #7df0ff; }
+  #s05echat .s05e-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 78% 70% at 50% 46%, #1a47d0 0%, #0c2a96 34%, #061a66 62%, #020a2e 100%); }
+  #s05echat .s05e-grid { position: absolute; inset: -200px; background-image: radial-gradient(rgba(255,255,255,.17) 1.4px, transparent 1.6px); background-size: 44px 44px; opacity: .55; }
+  #s05echat .s05e-orbg { display: none; position: absolute; border-radius: 50%; filter: blur(70px); }
+  #s05echat .s05e-og1 { width: 900px; height: 900px; left: 800px; top: 120px; background: radial-gradient(circle, rgba(255,95,168,.50), rgba(255,95,168,0) 65%); }
+  #s05echat .s05e-og2 { width: 800px; height: 800px; left: -60px; top: 300px; background: radial-gradient(circle, rgba(125,240,255,.34), rgba(125,240,255,0) 65%); }
+  #s05echat .s05e-vig { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 64% at 50% 50%, rgba(0,0,0,0) 38%, rgba(1,4,24,.55) 78%, rgba(0,2,16,.86) 100%); }
+
+  #s05echat .ac-title { top: 118px; height: 96px; font-size: 64px; }
+  #s05echat .ac-title .ln { height: 96px; padding-top: 6px; opacity: 1; }
+
+  /* ventana de chat */
+  #s05echat .s05e-win { left: 510px; top: 250px; width: 900px; height: 710px; opacity: 0; }
+  #s05echat .s05e-hd { position: absolute; left: 0; right: 0; top: 0; height: 84px; border-bottom: 1.5px solid rgba(255,255,255,.2); }
+  #s05echat .s05e-hdt { position: absolute; left: 96px; top: 14px; }
+  #s05echat .s05e-hdt .ac-lbl { font-size: 26px; }
+  #s05echat .s05e-hds { position: relative; height: 24px; margin-top: 3px; }
+  #s05echat .s05e-hds span { position: absolute; left: 0; top: 0; white-space: nowrap; font-weight: 600; font-size: 17px; opacity: .78; display: flex; align-items: center; gap: 8px; }
+  #s05echat .s05e-hds .s2 { opacity: 0; color: var(--cy); }
+  #s05echat .s05e-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cy); box-shadow:  0 0 12px 3px rgba(255,255,255,.07); }
+  #s05echat .s05e-av { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; flex: none;
+    background: radial-gradient(circle at 35% 30%, #fff 0%, #ffd3e7 26%, #ff5fa8 68%, #c21f78 100%); box-shadow:  0 0 22px 5px rgba(255,255,255,.07); }
+  #s05echat .s05e-av svg { width: 24px; height: 24px; fill: #fff; stroke: none; filter: drop-shadow(0 0 3px rgba(255,255,255,.07))); }
+  #s05echat .s05e-hav { position: absolute; left: 32px; top: 18px; opacity: 0; }
+
+  /* IA grande (antes de las burbujas) */
+  #s05echat .s05e-ai { position: absolute; left: 0; top: 84px; width: 900px; height: 520px; opacity: 1; }
+  #s05echat .s05e-ai svg.net { position: absolute; inset: 0; width: 900px; height: 520px; overflow: visible; }
+  #s05echat .s05e-big { position: absolute; left: 375px; top: 175px; width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; opacity: 0;
+    background: radial-gradient(circle at 35% 30%, #fff 0%, #ffd3e7 24%, #ff5fa8 66%, #b81c70 100%); box-shadow:  0 0 60px 6px rgba(255,255,255,.07), 0 0 60px 6px rgba(255,255,255,.07); }
+  #s05echat .s05e-big b { font-family: "Rubik"; font-weight: 700; font-size: 60px; letter-spacing: -.03em; color: #8c0f55; }
+  #s05echat .s05e-ring { position: absolute; border-radius: 50%; border: 2.5px dashed rgba(255,255,255,.5); opacity: 0; }
+  #s05echat .s05e-r1 { width: 250px; height: 250px; left: 325px; top: 125px; }
+  #s05echat .s05e-r2 { width: 350px; height: 350px; left: 275px; top: 75px; border-color: rgba(125,240,255,.4); }
+  #s05echat .s05e-bur { position: absolute; width: 150px; height: 150px; left: 375px; top: 175px; border-radius: 50%; border: 4px solid rgba(255,255,255,.85); opacity: 0; }
+  #s05echat .s05e-node { position: absolute; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: #fff; opacity: 0; box-shadow:  0 0 16px 5px rgba(255,255,255,.07); }
+
+  /* burbujas */
+  #s05echat .s05e-b { position: absolute; font-family: "Manrope"; font-weight: 600; font-size: 27px; line-height: 1.32; border-radius: 22px; padding: 14px 24px; white-space: nowrap; opacity: 0; }
+  #s05echat .s05e-bai { background: rgba(255,255,255,.17); border: 1.5px solid rgba(255,255,255,.3); border-top-left-radius: 8px; }
+  #s05echat .s05e-bme { right: 32px; background: linear-gradient(135deg, #d92f86, #ff5fa8); border: 1.5px solid rgba(255,255,255,.35); border-top-right-radius: 8px; font-weight: 700; box-shadow:  0px 10px 30px rgba(0,0,0,0.25); }
+  #s05echat .s05e-g { left: 94px; top: 104px; }
+  #s05echat .s05e-gav { position: absolute; left: 32px; top: 104px; opacity: 0; }
+  #s05echat .s05e-s1 { top: 192px; }
+  #s05echat .s05e-s2 { top: 280px; }
+  #s05echat .s05e-ans { position: absolute; left: 32px; top: 372px; width: 836px; height: 200px; }
+  #s05echat .s05e-ans .s05e-av { position: absolute; left: 0; top: 0; opacity: 0; }
+  #s05echat .s05e-ans .s05e-b { left: 62px; top: 0; white-space: normal; width: fit-content; max-width: 706px; }
+  #s05echat .s05e-aw { display: inline-block; opacity: 0; }
+  #s05echat .s05e-hl { color: #fff; font-weight: 700; }
+  #s05echat .s05e-typ { display: flex; align-items: center; gap: 12px; width: auto !important; white-space: nowrap !important; padding: 16px 24px !important; font-size: 20px !important; }
+  #s05echat .s05e-typ i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; background: #fff; margin-right: 4px; }
+  #s05echat .s05e-chip { position: absolute; left: 62px; top: 122px; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 18px 0 14px; border-radius: 14px; opacity: 0;
+    background: linear-gradient(135deg, rgba(125,240,255,.28), rgba(125,240,255,.1)); border: 1.5px solid rgba(125,240,255,.75); box-shadow:  0 0 26px 3px rgba(255,255,255,.07); font-family: "Rubik"; font-weight: 600; font-size: 21px; letter-spacing: -.01em; }
+  #s05echat .s05e-chip svg { width: 24px; height: 24px; color: var(--cy); stroke-width: 3; }
+
+  /* entrada de texto */
+  #s05echat .s05e-in { position: absolute; left: 28px; right: 28px; top: 622px; height: 64px; border-radius: 20px; background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.28); }
+  #s05echat .s05e-in .ph { position: absolute; left: 26px; top: 0; line-height: 64px; font-size: 23px; font-weight: 600; opacity: .5; }
+  #s05echat .s05e-in .tx { position: absolute; left: 26px; right: 80px; top: 0; line-height: 64px; font-size: 25px; font-weight: 600; white-space: nowrap; overflow: hidden; }
+  #s05echat .s05e-caret { display: inline-block; width: 3px; height: 30px; background: var(--pk); vertical-align: -6px; margin-left: 3px; opacity: 0; }
+  #s05echat .s05e-send { position: absolute; right: 10px; top: 10px; width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: linear-gradient(135deg, #d92f86, #ff5fa8); }
+  #s05echat .s05e-send svg { width: 26px; height: 26px; color: #fff; stroke-width: 3.4; }
+
+  /* documento */
+  #s05echat .s05e-doc { left: 160px; top: 300px; width: 440px; height: 520px; opacity: 0; }
+  #s05echat .s05e-doc .tile { position: absolute; left: 28px; top: 24px; width: 56px; height: 56px; border-radius: 17px; display: grid; place-items: center; background: rgba(125,240,255,.22); color: var(--cy); }
+  #s05echat .s05e-doc .ht { position: absolute; left: 102px; top: 22px; }
+  #s05echat .s05e-doc .ht .ac-lbl { font-size: 28px; }
+  #s05echat .s05e-doc .ht .ac-sub { font-size: 17px; margin-top: 2px; }
+  #s05echat .s05e-doc .hr { position: absolute; left: 28px; right: 28px; top: 100px; height: 1.5px; background: rgba(255,255,255,.22); }
+  #s05echat .s05e-doc h4 { position: absolute; left: 32px; top: 120px; margin: 0; font-family: "Rubik"; font-weight: 600; font-size: 25px; letter-spacing: -.02em; }
+  #s05echat .s05e-doc p { position: absolute; left: 32px; width: 376px; margin: 0; font-size: 21px; font-weight: 600; line-height: 30px; color: rgba(255,255,255,.88); }
+  #s05echat .s05e-doc .hl { background: linear-gradient(rgba(255,95,168,.5), rgba(255,95,168,.5)) no-repeat 0 100%; background-size: 0% 100%; color: #fff; -webkit-box-decoration-break: clone; box-decoration-break: clone; padding: 0 3px; margin: 0 -3px; }
+  #s05echat .s05e-doc .sk { position: absolute; left: 32px; height: 11px; border-radius: 6px; background: rgba(255,255,255,.2); }
+  #s05echat .s05e-docring { position: absolute; inset: -6px; border-radius: 34px; border: 3px solid var(--cy); box-shadow:  0 0 44px 6px rgba(255,255,255,.07); opacity: 0; pointer-events: none; }
+  #s05echat .s05e-cap { left: 160px; top: 846px; width: 440px; height: 60px; display: flex; align-items: center; gap: 14px; padding: 0 22px; border-radius: 20px; opacity: 0; font-family: "Rubik"; font-weight: 600; font-size: 21px; letter-spacing: -.01em; }
+  #s05echat .s05e-cap svg { width: 30px; height: 30px; flex: none; color: var(--cy); stroke-width: 3; }
+
+  #s05echat svg.s05e-links { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: visible; }
+  #s05echat .s05e-port { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--cy); opacity: 0; box-shadow:  0 0 16px 5px rgba(255,255,255,.07); }
+</style>
+
+<div id="s05echat" class="ac-root" data-composition-id="s05e-chat" data-width="1920" data-height="1080">
+  <div class="s05e-bg"></div>
+  <div class="s05e-orbg s05e-og1" id="s05e-og1"></div>
+  <div class="s05e-orbg s05e-og2" id="s05e-og2"></div>
+  <div class="s05e-grid" id="s05e-grid"></div>
+  <div class="s05e-vig"></div>
+
+  <div class="ac-title">
+    <div class="ln" id="s05e-t1"><span class="w" id="s05e-w0">Chat</span> <span class="w" id="s05e-w1">con</span> <span class="w" id="s05e-w2"><em>inteligencia</em></span> <span class="w" id="s05e-w3"><em>artificial</em></span></div>
+  </div>
+
+  <!-- documento fuente -->
+  <div class="ac-glass s05e-doc" id="s05e-doc">
+    <div class="tile" id="s05e-dtile"></div>
+    <div class="ht"><div class="ac-lbl">Tu clase</div><div class="ac-sub">Biología · Depredadores</div></div>
+    <div class="hr"></div>
+    <h4>Los depredadores</h4>
+    <p style="top:176px">Un depredador caza a otras especies para alimentarse.</p>
+    <p style="top:262px"><span class="hl" id="s05e-hl">Al controlar las presas, evita que una población crezca sin límite.</span></p>
+    <p style="top:348px">Así se mantiene el equilibrio del ecosistema.</p>
+    <div class="sk" style="top:448px;width:340px"></div>
+    <div class="sk" style="top:472px;width:250px"></div>
+    <div class="s05e-docring" id="s05e-docring"></div>
+  </div>
+  <div class="ac-glass s05e-cap" id="s05e-cap"></div>
+
+  <!-- ventana de chat -->
+  <div class="ac-glass s05e-win" id="s05e-win">
+    <div class="s05e-hd">
+      <div class="s05e-av s05e-hav" id="s05e-hav"></div>
+      <div class="s05e-hdt"><div class="ac-lbl">Asistente de SuprNotes</div>
+        <div class="s05e-hds"><span class="s1" id="s05e-hs1">Asistente de estudio</span><span class="s2" id="s05e-hs2"><i class="s05e-dot"></i>Leyendo tu clase</span></div></div>
+    </div>
+
+    <div class="s05e-ai" id="s05e-ai">
+      <svg class="net" id="s05e-net" viewBox="0 0 900 520"></svg>
+      <div class="s05e-ring s05e-r2" id="s05e-r2"></div>
+      <div class="s05e-ring s05e-r1" id="s05e-r1"></div>
+      <div class="s05e-bur" id="s05e-bur"></div>
+      <div class="s05e-big" id="s05e-big"><b>IA</b></div>
+    </div>
+
+    <div class="s05e-av s05e-gav" id="s05e-gav"></div>
+    <div class="s05e-b s05e-bai s05e-g" id="s05e-g">Hola, ya leí tu clase. ¿Qué quieres saber?</div>
+    <div class="s05e-b s05e-bme s05e-s1" id="s05e-s1">Hay algo que no entendí.</div>
+    <div class="s05e-b s05e-bme s05e-s2" id="s05e-s2">¿Por qué es clave el depredador?</div>
+
+    <div class="s05e-ans" id="s05e-ans">
+      <div class="s05e-av" id="s05e-aav"></div>
+      <div class="s05e-b s05e-bai s05e-typ" id="s05e-typ"><span><i></i><i></i><i></i></span><span>escribiendo…</span></div>
+      <div class="s05e-b s05e-bai" id="s05e-ab"></div>
+      <div class="s05e-chip" id="s05e-chip"></div>
+    </div>
+
+    <div class="s05e-in">
+      <div class="ph" id="s05e-ph">Escribe tu pregunta…</div>
+      <div class="tx"><span id="s05e-tx"></span><span class="s05e-caret" id="s05e-caret"></span></div>
+      <div class="s05e-send" id="s05e-send"></div>
+    </div>
+  </div>
+
+  <svg class="s05e-links" id="s05e-links" viewBox="0 0 1920 1080"></svg>
+</div>
+
+<script>
+(function () {
+  const ID = "s05e-chat", B = "b05e", root = document.getElementById("s05echat"), links = document.getElementById("s05e-links");
+  const c = (w, n) => AC.icue(ID, B, w, n || 0);
+  const SPARK = '<svg viewBox="0 0 48 48"><path d="M24 4l4.6 15.4L44 24l-15.4 4.6L24 44l-4.6-15.4L4 24l15.4-4.6z"/></svg>';
+  ["s05e-hav", "s05e-gav", "s05e-aav"].forEach((i) => (document.getElementById(i).innerHTML = SPARK));
+  document.getElementById("s05e-dtile").innerHTML = AC.svg("doc", 34);
+  document.getElementById("s05e-chip").innerHTML = AC.svg("doc", 24) + "<span>Fuente: tu clase</span>";
+  document.getElementById("s05e-cap").innerHTML = AC.svg("escudo", 30) + "<span>La IA responde solo con tu clase</span>";
+  document.getElementById("s05e-send").innerHTML = '<svg class="ac-ico" viewBox="0 0 48 48"><path d="M10 24h26M25 12l12 12-12 12"/></svg>';
+
+  // respuesta por palabras
+  const ANS = "Porque controla a sus presas: evita que crezcan sin límite y mantiene el equilibrio del ecosistema.";
+  const ab = document.getElementById("s05e-ab");
+  ab.innerHTML = ANS.split(" ").map((w) => '<span class="s05e-aw">' + w + "</span>").join(" ");
+
+  // red de la IA (semilla fija)
+  const rnd = AC.seeded(23), CX = 450, CY = 250, net = document.getElementById("s05e-net"), ai = document.getElementById("s05e-ai");
+  const NS = "http://www.w3.org/2000/svg", N = 6, pts = [];
+  for (let i = 0; i < N; i++) {
+    const a = (i / N) * Math.PI * 2 + (rnd() - .5) * .45 + .3, r = .8 + rnd() * .3;
+    pts.push({ x: CX + Math.cos(a) * 330 * r, y: CY + Math.sin(a) * 200 * r });
+  }
+  const lines = [];
+  const mk = (x1, y1, x2, y2, op, w) => {
+    const l = document.createElementNS(NS, "path"); l.setAttribute("d", "M" + x1 + " " + y1 + " L" + x2 + " " + y2);
+    l.setAttribute("stroke", "#ffd3e7"); l.setAttribute("stroke-width", w); l.setAttribute("stroke-linecap", "round"); l.setAttribute("fill", "none");
+    l.setAttribute("pathLength", "1"); l.setAttribute("stroke-dasharray", "1"); l.setAttribute("stroke-dashoffset", "1"); l.setAttribute("opacity", op);
+    net.appendChild(l); lines.push(l); return l;
+  };
+  pts.forEach((p) => mk(CX, CY, p.x, p.y, ".75", "2.5"));
+  pts.forEach((p, i) => mk(p.x, p.y, pts[(i + 1) % N].x, pts[(i + 1) % N].y, ".32", "2"));
+  const nodes = pts.map((p, i) => { const d = document.createElement("div"); d.className = "s05e-node"; d.style.left = p.x + "px"; d.style.top = p.y + "px"; ai.appendChild(d); return d; });
+
+  const tl = gsap.timeline({ paused: true });
+  const D = 7.295;
+
+  // fondo: derivas lentas (tambien sutiles hasta el ultimo cuadro)
+  tl.fromTo("#s05e-grid", { x: 0, y: 0 }, { x: 140, y: 140, duration: D, ease: "none" }, 0);
+  tl.fromTo("#s05e-og1", { x: 0, y: 0 }, { x: -110, y: 50, duration: D, ease: "sine.inOut" }, 0);
+  tl.fromTo("#s05e-og2", { x: 0, y: 0 }, { x: 110, y: -40, duration: D, ease: "sine.inOut" }, 0);
+
+  // ---- "chat": la ventana de vidrio se levanta y el titulo sube palabra por palabra
+  tl.fromTo("#s05e-win", { y: 90, opacity: 0, rotateX: -22, scale: .93, transformPerspective: 1500 }, { y: 0, opacity: 1, rotateX: 0, scale: 1, duration: 1.3, ease: "expo.out" }, .04);
+  [["s05e-w0", "chat"], ["s05e-w1", "con"], ["s05e-w2", "inteligencia"], ["s05e-w3", "artificial"]].forEach(([id, w]) => {
+    tl.fromTo("#" + id, { yPercent: 170 }, { yPercent: 0, duration: .9, ease: "expo.out" }, Math.max(.06, c(w) - .06));
+  });
+
+  // ---- "inteligencia": nace la IA; "artificial": se tiende su red (simple)
+  const t1 = c("inteligencia") - .04, t2 = c("artificial") - .04;
+  tl.fromTo("#s05e-big", { scale: .2, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.1, ease: "expo.out" }, t1);
+  tl.fromTo("#s05e-r1", { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.0, ease: "expo.out" }, t1 + .15);
+  tl.fromTo("#s05e-r2", { scale: .5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.1, ease: "expo.out" }, t1 + .3);
+  tl.to("#s05e-r1", { rotation: 120, duration: 1.6, ease: "none" }, t1 + .15);
+  tl.to("#s05e-r2", { rotation: -100, duration: 1.6, ease: "none" }, t1 + .3);
+  tl.fromTo("#s05e-bur", { scale: 1, opacity: 0 }, { opacity: .8, duration: .05 }, t2);
+  tl.to("#s05e-bur", { scale: 2.6, opacity: 0, duration: 1.3, ease: "power2.out" }, t2 + .05);
+  nodes.forEach((n, i) => tl.fromTo(n, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, ease: "expo.out" }, t2 + .1 + i * .07));
+  lines.forEach((l, i) => tl.to(l, { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" }, t2 + .05 + (i < N ? i * .07 : .35 + (i - N) * .05)));
+
+  // ---- "Una conversacion": la IA viaja al encabezado y entra el saludo
+  const tc = c("conversación") - .05, tf = c("Una") - .22;
+  tl.to(lines, { opacity: 0, duration: .5, ease: "power2.inOut" }, tf);
+  tl.to(nodes, { opacity: 0, scale: 0, duration: .5, ease: "power2.inOut" }, tf);
+  tl.to(["#s05e-r1", "#s05e-r2"], { opacity: 0, scale: .4, duration: .6, ease: "power2.inOut" }, tf);
+  tl.to("#s05e-big", { x: -394, y: -292, scale: .32, duration: 1.0, ease: "power2.inOut" }, tf);
+  tl.to("#s05e-big", { opacity: 0, duration: .2 }, tf + .85);
+  tl.fromTo("#s05e-hav", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, ease: "expo.out" }, tf + .85);
+  tl.fromTo("#s05e-gav", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .7, ease: "expo.out" }, tc);
+  tl.fromTo("#s05e-g", { y: 24, x: -30, opacity: 0, scale: .92, transformOrigin: "0% 0%" }, { y: 0, x: 0, opacity: 1, scale: 1, duration: 1.0, ease: "expo.out" }, tc);
+  tl.fromTo("#s05e-s1", { y: 26, x: 36, opacity: 0, scale: .92, transformOrigin: "100% 0%" }, { y: 0, x: 0, opacity: 1, scale: 1, duration: .9, ease: "expo.out" }, tc + .55);
+
+  // ---- "sobre ese mismo contenido": el documento, luego los hilos, luego el sello
+  const ts = c("sobre") + .05, te = c("ese") + .02, tk = c("contenido") - .02;
+  tl.to("#s05e-win", { x: 350, duration: 1.3, ease: "power2.inOut" }, ts);
+  tl.fromTo("#s05e-doc", { x: -240, opacity: 0, rotateY: 55, scale: .92, transformPerspective: 1300 }, { x: 0, opacity: 1, rotateY: 0, scale: 1, duration: 1.4, ease: "expo.out" }, ts + .1);
+  const PORTS = [[600, 392, 860, 430], [600, 592, 860, 604], [600, 770, 860, 730]];
+  PORTS.forEach((p, i) => {
+    const path = [p[0], p[1], p[0] + 110, p[1], p[2] - 110, p[3], p[2], p[3]];
+    AC.link(tl, links, path, te + .35 + i * .18, 1.0, "#7df0ff", "s05e-th" + i);
+    [[p[0], p[1]], [p[2], p[3]]].forEach((e, k) => {
+      const d = document.createElement("div"); d.className = "s05e-port"; d.style.left = e[0] + "px"; d.style.top = e[1] + "px"; root.appendChild(d);
+      tl.fromTo(d, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: .5, ease: "expo.out" }, te + .35 + i * .18 + (k ? .9 : 0));
+    });
+  });
+  tl.fromTo("#s05e-docring", { opacity: 0 }, { opacity: 1, duration: .8, ease: "power2.out" }, te + .1);
+  tl.to("#s05e-docring", { opacity: .4, duration: 1.2, ease: "power2.inOut" }, te + 1.5);
+  tl.fromTo("#s05e-cap", { y: 26, opacity: 0, scale: .94 }, { y: 0, opacity: 1, scale: 1, duration: 1.1, ease: "expo.out" }, tk + .1);
+  tl.to("#s05e-hs1", { opacity: 0, duration: .5, ease: "power2.inOut" }, tk + .3);
+  tl.to("#s05e-hs2", { opacity: .95, duration: .6, ease: "power2.inOut" }, tk + .5);
+
+  // ---- "preguntar": el estudiante teclea a ritmo legible
+  const Q = "¿Por qué es clave el depredador?", tq0 = c("para") - .12, tq1 = tq0 + .72;
+  tl.set("#s05e-ph", { opacity: 0 }, tq0 - .02);
+  tl.set("#s05e-caret", { opacity: 1 }, tq0 - .02);
+  const tp = { n: 0 }, tx = document.getElementById("s05e-tx");
+  tl.to(tp, { n: Q.length, duration: tq1 - tq0, ease: "none", onUpdate: () => { tx.textContent = Q.slice(0, Math.round(tp.n)); } }, tq0);
+
+  // se envia; la IA "escribe"; la luz de la fuente viaja hasta la respuesta
+  const tsend = tq1 + .02;
+  tl.set("#s05e-caret", { opacity: 0 }, tsend);
+  tl.set("#s05e-tx", { opacity: 0 }, tsend);
+  tl.fromTo("#s05e-send", { scale: 1 }, { scale: .85, duration: .15, ease: "power2.out", yoyo: true, repeat: 1 }, tsend - .08);
+  tl.fromTo("#s05e-s2", { y: 330, x: 20, opacity: 0, scale: .94, transformOrigin: "100% 100%" }, { y: 0, x: 0, opacity: 1, scale: 1, duration: .9, ease: "expo.out" }, tsend);
+  const tty = tsend + .15;
+  tl.fromTo("#s05e-aav", { scale: .3, opacity: 0 }, { scale: 1, opacity: 1, duration: .6, ease: "expo.out" }, tty);
+  tl.fromTo("#s05e-typ", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: .5, ease: "expo.out" }, tty);
+  tl.fromTo("#s05e-typ i", { y: 0 }, { y: -7, duration: .22, ease: "power2.out", yoyo: true, repeat: 1, stagger: .12 }, tty + .15);
+
+  const tb = tty + .1;                        // la fuente se ilumina y manda su luz
+  tl.to("#s05e-hl", { backgroundSize: "100% 100%", duration: .6, ease: "power2.inOut" }, tb);
+  tl.to("#s05e-docring", { opacity: 1, duration: .5 }, tb);
+  const BEAM = [600, 592, 770, 592, 800, 672, 954, 672];
+  const bm = document.createElementNS(NS, "path"); bm.setAttribute("d", AC.pathD(BEAM)); bm.setAttribute("fill", "none"); bm.setAttribute("stroke", "#ffd3e7");
+  bm.setAttribute("stroke-width", "8"); bm.setAttribute("stroke-linecap", "round"); bm.setAttribute("pathLength", "1"); bm.setAttribute("stroke-dasharray", "1 2"); bm.setAttribute("stroke-dashoffset", "1");
+  bm.setAttribute("opacity", "0"); bm.style.filter = "drop-shadow(0 0 10px rgba(255,255,255,.07)) drop-shadow(0 0 22px rgba(255,255,255,.07))"; links.appendChild(bm);
+  tl.set(bm, { opacity: .95 }, tb + .05);
+  tl.to(bm, { strokeDashoffset: 0, duration: .55, ease: "power2.inOut" }, tb + .05);
+  tl.to(bm, { opacity: 0, duration: .5, ease: "power2.inOut" }, tb + .5);
+  AC.packet(tl, root, BEAM, tb + .05, .6, "power2.inOut");
+
+  const ta = tb + .36;                        // llega la respuesta
+  tl.to("#s05e-typ", { opacity: 0, y: -8, duration: .2, ease: "power2.in" }, ta - .12);
+  tl.fromTo("#s05e-ab", { y: 16, opacity: 0, scale: .94, transformOrigin: "0% 0%" }, { y: 0, opacity: 1, scale: 1, duration: .5, ease: "expo.out" }, ta);
+  tl.to("#s05e-ab .s05e-aw", { opacity: 1, duration: .15, stagger: .02, ease: "none" }, ta + .05);
+  tl.fromTo("#s05e-chip", { y: -10, opacity: 0, scale: .85, transformOrigin: "0% 0%" }, { y: 0, opacity: 1, scale: 1, duration: .5, ease: "expo.out" }, ta + .4);
+  tl.fromTo("#s05e-ab", { boxShadow: "0 0 0 0 rgba(255,95,168,0)" }, { boxShadow: " 0 0 34px 4px rgba(255,255,255,.07)", duration: .6, ease: "power2.out" }, ta + .4);
+  tl.to("#s05e-docring", { opacity: .7, duration: .6 }, ta + .4);
+  console.log("s05e eventos: tq0", tq0.toFixed(2), "send", tsend.toFixed(2), "ans", ta.toFixed(2), "chip", (ta + .55).toFixed(2));
+
+  window.__timelines[ID] = tl;
+})();
+</script>
+</template>
+</body>
+</html>

@@ -1,0 +1,179 @@
+{
+ "escenas": [
+  {
+   "id": "s01",
+   "nombre": "apertura",
+   "bloques": [
+    "b01"
+   ],
+   "inicio": 0.0,
+   "fin": 18.293,
+   "dur": 18.293
+  },
+  {
+   "id": "s02",
+   "nombre": "problema",
+   "bloques": [
+    "b02"
+   ],
+   "inicio": 18.293,
+   "fin": 44.149,
+   "dur": 25.856
+  },
+  {
+   "id": "s03",
+   "nombre": "que-es",
+   "bloques": [
+    "b03"
+   ],
+   "inicio": 44.149,
+   "fin": 57.749,
+   "dur": 13.6
+  },
+  {
+   "id": "s04",
+   "nombre": "distinto",
+   "bloques": [
+    "b04"
+   ],
+   "inicio": 57.749,
+   "fin": 78.773,
+   "dur": 21.024
+  },
+  {
+   "id": "s05",
+   "nombre": "cinco-salidas",
+   "bloques": [
+    "b05",
+    "b05a",
+    "b05b",
+    "b05c",
+    "b05d",
+    "b05e"
+   ],
+   "inicio": 78.773,
+   "fin": 143.672,
+   "dur": 64.899
+  },
+  {
+   "id": "s06",
+   "nombre": "tecnologia",
+   "bloques": [
+    "b06"
+   ],
+   "inicio": 143.672,
+   "fin": 157.101,
+   "dur": 13.429
+  },
+  {
+   "id": "s07",
+   "nombre": "regla-de-oro",
+   "bloques": [
+    "b07a",
+    "b07b",
+    "b07c",
+    "b07d"
+   ],
+   "inicio": 157.101,
+   "fin": 200.899,
+   "dur": 43.798
+  },
+  {
+   "id": "s08",
+   "nombre": "docente",
+   "bloques": [
+    "b08"
+   ],
+   "inicio": 200.899,
+   "fin": 234.893,
+   "dur": 33.994
+  },
+  {
+   "id": "s09",
+   "nombre": "estudiante",
+   "bloques": [
+    "b09"
+   ],
+   "inicio": 234.893,
+   "fin": 261.379,
+   "dur": 26.486
+  },
+  {
+   "id": "s10",
+   "nombre": "empresa",
+   "bloques": [
+    "b10"
+   ],
+   "inicio": 261.379,
+   "fin": 286.691,
+   "dur": 25.312
+  },
+  {
+   "id": "s11",
+   "nombre": "registro",
+   "bloques": [
+    "b11a",
+    "b11b",
+    "b11c",
+    "b11d",
+    "b11e",
+    "b11f"
+   ],
+   "inicio": 286.691,
+   "fin": 375.501,
+   "dur": 88.81
+  },
+  {
+   "id": "s12",
+   "nombre": "cierre",
+   "bloques": [
+    "b12"
+   ],
+   "inicio": 375.501,
+   "fin": 397.18,
+   "dur": 21.679
+  }
+ ],
+ "insertos": [
+  {
+   "id": "s05a-resumen",
+   "bloque": "b05a",
+   "palabra": "versión",
+   "inicio": 97.36,
+   "fin": 104.575,
+   "dur": 7.215
+  },
+  {
+   "id": "s05b-tarjetas",
+   "bloque": "b05b",
+   "palabra": "preguntas",
+   "inicio": 107.715,
+   "fin": 115.156,
+   "dur": 7.441
+  },
+  {
+   "id": "s05c-cuestionario",
+   "bloque": "b05c",
+   "palabra": "cuestionario",
+   "inicio": 116.796,
+   "fin": 122.324,
+   "dur": 5.528
+  },
+  {
+   "id": "s05d-guia",
+   "bloque": "b05d",
+   "palabra": "documento",
+   "inicio": 125.124,
+   "fin": 132.937,
+   "dur": 7.813
+  },
+  {
+   "id": "s05e-chat",
+   "bloque": "b05e",
+   "palabra": "chat",
+   "inicio": 134.677,
+   "fin": 141.972,
+   "dur": 7.295
+  }
+ ]
+}

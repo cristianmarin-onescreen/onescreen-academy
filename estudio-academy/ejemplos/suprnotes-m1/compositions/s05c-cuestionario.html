@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>s05c · Cuestionario</title></head>
+<body>
+<template>
+<style>
+  @font-face { font-family: "Rubik"; src: url("assets/fonts/Rubik-Variable.ttf") format("truetype"); font-weight: 300 900; font-display: block; }
+  @font-face { font-family: "Manrope"; src: url("assets/fonts/Manrope-variable-latin.woff2") format("woff2"); font-weight: 200 800; font-display: block; }
+  @font-face { font-family: "Nevis"; src: url("assets/fonts/Nevis.ttf") format("truetype"); font-weight: 700; font-display: block; }
+  #s05ccuestionario { position: absolute; inset: 0; overflow: hidden; --a: #16b8e8; --c: #7df0ff; }
+  #s05ccuestionario .s05c-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 78% 70% at 50% 46%, #1a47d0 0%, #0c2a96 34%, #061a66 62%, #020a2e 100%); }
+  #s05ccuestionario .s05c-tint { position: absolute; left: 260px; top: 120px; width: 1400px; height: 1000px; border-radius: 50%; background: radial-gradient(circle, rgba(22,184,232,.42), rgba(22,184,232,0) 62%); filter: blur(40px); opacity: .7; }
+  #s05ccuestionario .s05c-grid { position: absolute; inset: -200px; background-image: radial-gradient(rgba(255,255,255,.17) 1.4px, transparent 1.6px); background-size: 44px 44px; opacity: .55; }
+  #s05ccuestionario .s05c-vig { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 64% at 50% 50%, rgba(0,0,0,0) 38%, rgba(1,4,24,.55) 78%, rgba(0,2,16,.86) 100%); }
+  #s05ccuestionario .ac-title { top: 120px; }
+  #s05ccuestionario .s05c-flash { position: absolute; left: 466px; top: 698px; width: 988px; height: 84px; border-radius: 24px; background: radial-gradient(ellipse, rgba(125,240,255,.9), rgba(22,184,232,0) 70%); opacity: 0; transform-origin: 50% 50%; pointer-events: none; }
+
+  #s05ccuestionario .s05c-wrap { position: absolute; inset: 0; }
+  #s05ccuestionario .s05c-card { left: 410px; top: 290px; width: 1100px; height: 640px; opacity: 0; transform-origin: 50% 100%; }
+  #s05ccuestionario .s05c-hd { position: absolute; left: 466px; top: 326px; width: 988px; height: 34px; display: flex; align-items: center; justify-content: space-between; opacity: 0; }
+  #s05ccuestionario .s05c-hd .t { font-weight: 600; font-size: 22px; letter-spacing: .14em; color: var(--c); }
+  #s05ccuestionario .s05c-dots { display: flex; gap: 14px; }
+  #s05ccuestionario .s05c-dot { width: 22px; height: 22px; border-radius: 50%; border: 3px solid rgba(255,255,255,.55); position: relative; }
+  #s05ccuestionario .s05c-dot.on { background: var(--a); border-color: var(--c); box-shadow:  0 0 16px 2px rgba(255,255,255,.07); }
+  #s05ccuestionario .s05c-q { position: absolute; left: 466px; top: 384px; width: 988px; height: 100px; font-weight: 600; font-size: 40px; line-height: 1.2; letter-spacing: -0.02em; }
+  #s05ccuestionario .s05c-q .w { display: inline-block; opacity: 0; }
+  #s05ccuestionario .s05c-opt { position: absolute; left: 466px; width: 988px; height: 84px; border-radius: 24px; display: flex; align-items: center; gap: 24px; padding: 0 24px; opacity: 0;
+    background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04)); border: 2px solid rgba(255,255,255,.26); }
+  #s05ccuestionario .s05c-opt .bd { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; flex: none; font-weight: 700; font-size: 26px; background: rgba(255,255,255,.16); border: 2px solid rgba(255,255,255,.4); }
+  #s05ccuestionario .s05c-opt .tx { font-weight: 700; font-size: 31px; flex: 1; opacity: 0; white-space: nowrap; }
+  #s05ccuestionario .s05c-opt .st { width: 52px; height: 52px; flex: none; opacity: 0; }
+  #s05ccuestionario .s05c-opt .st svg { width: 52px; height: 52px; fill: none; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+  #s05ccuestionario .s05c-opt .hl { position: absolute; inset: -2px; border-radius: 24px; opacity: 0; pointer-events: none; }
+  #s05ccuestionario .s05c-opt.ok .hl { border: 3px solid var(--c); background: linear-gradient(100deg, rgba(22,184,232,.55), rgba(125,240,255,.2)); box-shadow:  0 0 46px 6px rgba(255,255,255,.07); }
+  #s05ccuestionario .s05c-opt.no .hl { border: 3px solid #ff7a8f; background: rgba(255,90,120,.2); box-shadow:  0 0 26px 2px rgba(255,255,255,.07); }
+  #s05ccuestionario .s05c-opt > * { position: relative; }
+
+  #s05ccuestionario .s05c-cur { position: absolute; left: 0; top: 0; width: 64px; height: 64px; opacity: 0; filter: drop-shadow(0 8px 14px rgba(0,0,0,.3)); }
+  #s05ccuestionario .s05c-rip { position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 4px solid var(--c); opacity: 0; }
+
+  #s05ccuestionario .s05c-score { left: 1340px; top: 290px; width: 420px; height: 640px; opacity: 0; display: flex; flex-direction: column; align-items: center; }
+  #s05ccuestionario .s05c-score .lb { margin-top: 44px; font-weight: 600; font-size: 22px; letter-spacing: .14em; color: var(--c); }
+  #s05ccuestionario .s05c-ringbox { position: relative; width: 280px; height: 280px; margin-top: 56px; }
+  #s05ccuestionario .s05c-ringbox svg { position: absolute; inset: 0; width: 280px; height: 280px; transform: rotate(-90deg); overflow: visible; }
+  #s05ccuestionario .s05c-num { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 700; font-size: 86px; letter-spacing: -0.04em; }
+  #s05ccuestionario .s05c-num small { font-size: 40px; opacity: .6; font-weight: 600; }
+  #s05ccuestionario .s05c-score .ft { margin-top: 56px; text-align: center; font-weight: 600; font-size: 34px; line-height: 1.15; letter-spacing: -0.02em; opacity: 0; padding: 0 30px; }
+  #s05ccuestionario .s05c-cf { position: absolute; left: 1550px; top: 540px; width: 14px; height: 14px; opacity: 0; border-radius: 3px; }
+</style>
+
+<div id="s05ccuestionario" class="ac-root" data-composition-id="s05c-cuestionario" data-width="1920" data-height="1080">
+  <div class="s05c-bg"></div><div class="s05c-tint" id="s05c-tint"></div><div class="s05c-grid" id="s05c-grid"></div><div class="s05c-vig"></div>
+  <div class="ac-title"><div class="ln" id="s05c-t"><span class="w"><em>Cuestionario</em></span></div></div>
+
+  <div class="s05c-wrap" id="s05c-wrap">
+    <div class="ac-glass s05c-card" id="s05c-card"></div>
+    <div class="s05c-hd" id="s05c-hd"><div class="t ac-lbl">PREGUNTA 2 DE 3</div>
+      <div class="s05c-dots"><div class="s05c-dot on" id="s05c-d1"></div><div class="s05c-dot" id="s05c-d2"></div><div class="s05c-dot" id="s05c-d3"></div></div></div>
+    <div class="s05c-q ac-lbl" id="s05c-q"></div>
+    <div class="s05c-flash" id="s05c-flash"></div>
+    <div class="s05c-rip" id="s05c-rip"></div>
+    <svg class="s05c-cur" id="s05c-cur" viewBox="0 0 48 48"><path d="M8 4l30 18-13 3 8 15-6 3-8-15-9 9z" fill="#fff" stroke="#06205f" stroke-width="2.6" stroke-linejoin="round"/></svg>
+  </div>
+
+  <div class="ac-glass s05c-score" id="s05c-score">
+    <div class="lb ac-lbl">TU PUNTAJE</div>
+    <div class="s05c-ringbox">
+      <svg viewBox="0 0 280 280">
+        <defs><linearGradient id="s05c-gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16b8e8"/><stop offset="1" stop-color="#7df0ff"/></linearGradient></defs>
+        <circle cx="140" cy="140" r="115" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="22"/>
+        <circle id="s05c-arc" cx="140" cy="140" r="115" fill="none" stroke="url(#s05c-gr)" stroke-width="22" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" style="filter: drop-shadow(0 0 14px rgba(255,255,255,.07)))"/>
+      </svg>
+      <div class="s05c-num ac-lbl"><span><span id="s05c-n">0</span><small>/10</small></span></div>
+    </div>
+    <div class="ft ac-lbl" id="s05c-ft">¡Lo entendiste!</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const S = "s05c-cuestionario", root = document.getElementById("s05ccuestionario"), wrap = document.getElementById("s05c-wrap");
+  const D = AC.insDur(S), cu = (w) => AC.icue(S, "b05c", w);
+  const OPTS = [
+    { L: "A", t: "Produce su propio alimento con la luz del sol", y: 508, st: "no" },
+    { L: "B", t: "Descompone los restos de plantas y animales", y: 604 },
+    { L: "C", t: "Caza otras especies y regula sus poblaciones", y: 700, st: "ok" },
+    { L: "D", t: "Vive solo en zonas protegidas por el hombre", y: 796 }
+  ];
+  const Q = "¿Qué papel cumple un depredador en el ecosistema?";
+  document.getElementById("s05c-q").innerHTML = Q.split(" ").map((w) => '<span class="w">' + w + "</span>").join(" ");
+  OPTS.forEach((o, i) => {
+    const d = document.createElement("div"); d.className = "s05c-opt" + (o.st ? " " + o.st : ""); d.id = "s05c-o" + i; d.style.top = o.y + "px";
+    const stI = o.st === "ok"
+      ? '<svg viewBox="0 0 48 48" stroke="#fff"><path id="s05c-ck" d="M10 25l9 9 19-20" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>'
+      : o.st === "no" ? '<svg viewBox="0 0 48 48" stroke="#ff9aaa">' + AC.ICON.equis + "</svg>" : "";
+    d.innerHTML = '<div class="hl"></div><div class="bd ac-lbl">' + o.L + '</div><div class="tx">' + o.t + '</div><div class="st">' + stI + "</div>";
+    wrap.appendChild(d);
+  });
+  // confeti de luz (semilla fija)
+  const rnd = AC.seeded(505), CF = [], COL = ["#16b8e8", "#7df0ff", "#ffffff", "#a9c8ff", "#3976ff"];
+  for (let i = 0; i < 34; i++) {
+    const e = document.createElement("div"); e.className = "s05c-cf"; e.style.background = COL[i % COL.length];
+    if (i % 3 === 0) { e.style.borderRadius = "50%"; e.style.boxShadow = " 0 0 12px 3px rgba(255,255,255,.07)"; }
+    root.appendChild(e); CF.push({ e, a: rnd() * Math.PI * 2, r: 120 + rnd() * 150, rot: (rnd() - .5) * 720 });
+  }
+
+  const tl = gsap.timeline({ paused: true });
+  const tCue = cu("cuestionario"), tPreg = cu("Preguntas"), tComp = cu("comprobar"), tVer = cu("verdad"), tEnt = cu("entendio");
+
+  // fondo: deriva lineal muy lenta durante todo el inserto
+  tl.fromTo("#s05c-grid", { x: 0, y: 0 }, { x: 50, y: 50, duration: D, ease: "none" }, 0);
+  tl.fromTo("#s05c-tint", { scale: .95 }, { scale: 1.05, duration: D, ease: "none" }, 0);
+
+  // "cuestionario": titulo y tarjeta de vidrio con cabecera y filas vacias
+  const t0 = Math.max(tCue, .03);
+  AC.line(tl, "#s05c-t", t0, null);
+  tl.fromTo("#s05c-card", { y: 120, rotateX: 30, opacity: 0, scale: .92 }, { y: 0, rotateX: 0, opacity: 1, scale: 1, duration: 1.3, ease: "expo.out", transformPerspective: 1400 }, t0);
+  tl.fromTo("#s05c-hd", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .9, ease: "power2.out" }, .45);
+  OPTS.forEach((o, i) => tl.fromTo("#s05c-o" + i, { y: 40, opacity: 0, rotateX: -25 }, { y: 0, opacity: 1, rotateX: 0, duration: 1.0, ease: "expo.out", transformPerspective: 900 }, .5 + i * .14));
+
+  // "Preguntas": se escribe la pregunta y despues el texto de las opciones en cascada suave
+  tl.fromTo("#s05c-q .w", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: .9, ease: "expo.out", stagger: .07 }, tPreg);
+  OPTS.forEach((o, i) => tl.fromTo("#s05c-o" + i + " .tx", { x: -36, opacity: 0 }, { x: 0, opacity: 1, duration: .9, ease: "expo.out" }, tPreg + .55 + i * .14));
+
+  // "comprobar": el cursor llega, A falla (tiembla suave, ✗); luego C acierta
+  const P = { A: [880, 552], C: [1060, 746] };
+  tl.set("#s05c-cur", { x: 1200, y: 470 }, 0);
+  tl.to("#s05c-cur", { opacity: 1, duration: .4, ease: "power2.out" }, tComp - .2);
+  tl.to("#s05c-cur", { x: P.A[0], y: P.A[1], duration: .85, ease: "power2.inOut" }, tComp - .1);
+  const tA = tComp + .8;   // clic en A (~2.56)
+  tl.to("#s05c-cur", { scale: .85, duration: .12, ease: "power2.in", transformOrigin: "10% 10%" }, tA - .1);
+  tl.to("#s05c-cur", { scale: 1, duration: .25, ease: "power2.out" }, tA + .02);
+  tl.fromTo("#s05c-rip", { x: P.A[0], y: P.A[1], scale: .5, opacity: .9 }, { scale: 4.5, opacity: 0, duration: .8, ease: "power2.out", immediateRender: false }, tA);
+  tl.to("#s05c-o0 .hl", { opacity: 1, duration: .3, ease: "power2.out" }, tA);
+  tl.fromTo("#s05c-o0 .st", { opacity: 0, scale: .4, rotate: -30 }, { opacity: 1, scale: 1, rotate: 0, duration: .6, ease: "expo.out", immediateRender: false }, tA + .05);
+  tl.fromTo("#s05c-o0", { x: 0 }, { keyframes: { x: [0, -12, 10, -7, 4, 0] }, duration: .7, ease: "power2.out", immediateRender: false }, tA + .05);
+  tl.to("#s05c-o0 .hl", { opacity: .5, duration: .8, ease: "power2.inOut" }, tA + .8);
+  tl.to("#s05c-o0", { opacity: .85, duration: .8, ease: "power2.inOut" }, tA + .8);
+  // hacia C
+  const tC = tVer + .15;   // clic en C
+  tl.to("#s05c-cur", { x: P.C[0], y: P.C[1], duration: .95, ease: "power2.inOut" }, tA + .35);
+  tl.to("#s05c-cur", { scale: .85, duration: .12, ease: "power2.in", transformOrigin: "10% 10%" }, tC - .05);
+  tl.to("#s05c-cur", { scale: 1, duration: .25, ease: "power2.out" }, tC + .07);
+  tl.fromTo("#s05c-rip", { x: P.C[0], y: P.C[1], scale: .5, opacity: .9 }, { scale: 5, opacity: 0, duration: .9, ease: "power2.out", immediateRender: false }, tC + .02);
+
+  // la correcta se ilumina con calma: check y destello
+  const tOk = tC + .08;
+  tl.to("#s05c-o2 .hl", { opacity: 1, duration: .6, ease: "power2.out" }, tOk);
+  tl.fromTo("#s05c-o2", { scale: 1 }, { scale: 1.03, duration: .9, ease: "expo.out", immediateRender: false }, tOk);
+  tl.to("#s05c-o2 .st", { opacity: 1, duration: .2 }, tOk);
+  tl.to("#s05c-ck", { strokeDashoffset: 0, duration: .6, ease: "power2.out" }, tOk + .05);
+  tl.fromTo("#s05c-flash", { scale: .6, opacity: 1 }, { scale: 1.5, opacity: 0, duration: 1.0, ease: "power2.out", immediateRender: false }, tOk);
+  tl.to("#s05c-tint", { opacity: 1, duration: .8, ease: "power2.out" }, tOk);
+  tl.to("#s05c-o1, #s05c-o3", { opacity: .8, duration: .8, ease: "power2.inOut" }, tOk + .2);
+  tl.fromTo("#s05c-d2", { scale: 1 }, { scale: 1.25, duration: .7, ease: "expo.out", immediateRender: false }, tOk + .3);
+  tl.set("#s05c-d2", { className: "s05c-dot on" }, tOk + .3);
+  tl.to("#s05c-cur", { opacity: 0, duration: .6, ease: "power2.in" }, tOk + .5);
+
+  // "entendio": la tarjeta cede espacio, el anillo se llena despacio y cuenta, confeti de luz
+  const tS = tEnt - .48;
+  tl.to("#s05c-wrap", { x: -250, duration: 1.2, ease: "power2.inOut" }, tS);
+  tl.fromTo("#s05c-score", { x: 120, opacity: 0, rotateY: -35, scale: .9 }, { x: 0, opacity: 1, rotateY: 0, scale: 1, duration: 1.2, ease: "expo.out", transformPerspective: 1400, immediateRender: false }, tS + .2);
+  const T0 = tS + .4, TF = 1.15, cnt = { v: 0 };
+  tl.to("#s05c-arc", { strokeDashoffset: .2, duration: TF, ease: "power2.inOut" }, T0);
+  tl.to(cnt, { v: 8, duration: TF, ease: "power2.inOut", onUpdate: () => { document.getElementById("s05c-n").textContent = Math.round(cnt.v); } }, T0);
+  tl.fromTo("#s05c-ft", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: "expo.out", immediateRender: false }, T0 + .6);
+  CF.forEach((c) => {
+    const tt = T0 + TF - .35, dx = Math.cos(c.a) * c.r * 1.1, dy = Math.sin(c.a) * c.r * .9;
+    tl.fromTo(c.e, { x: 0, y: 0, opacity: 1, scale: .4, rotation: 0 }, { x: dx, y: dy, scale: 1, rotation: c.rot, duration: 1.0, ease: "expo.out", immediateRender: false }, tt);
+    tl.to(c.e, { opacity: 0, duration: .4, ease: "power1.in" }, tt + .5);
+  });
+  tl.fromTo("#s05c-score", { boxShadow: " 0px 16px 34px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 rgba(22,184,232,0)" }, { boxShadow: " 0px 16px 34px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,.45), 0 0 60px rgba(255,255,255,.07)", duration: 1.0, ease: "power2.out", immediateRender: false }, T0 + TF - .5);
+
+  window.__timelines["s05c-cuestionario"] = tl;
+})();
+</script>
+</template>
+</body>
+</html>
