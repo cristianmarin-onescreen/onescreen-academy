@@ -86,6 +86,11 @@ else:
     ayuda = {"Windows": "winget install Gyan.FFmpeg   (luego abre una terminal nueva)", "Darwin": "brew install ffmpeg"}.get(SO, "sudo apt install ffmpeg")
     mal("ffmpeg no está instalado", ayuda)
 
+if shutil.which("bash") or shutil.which("sh"): ok("bash (los scripts .sh del flujo)")
+else:
+    mal("bash no está instalado (los scripts preparar_video.sh y render_final.sh lo necesitan)",
+        {"Windows": "winget install Git.Git   (trae Git Bash; abre una terminal nueva)"}.get(SO, "instala bash con tu gestor de paquetes"))
+
 if not (node and npx):
     print("\nInstala Node.js, abre una terminal NUEVA y vuelve a correr: python setup.py")
     sys.exit(1)
