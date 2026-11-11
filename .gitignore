@@ -5,6 +5,7 @@
 *.key
 # Trabajo de cada curso (crudos, audio, renders): local
 cursos/
+assets-marca/
 node_modules/
 __pycache__/
 *.pyc

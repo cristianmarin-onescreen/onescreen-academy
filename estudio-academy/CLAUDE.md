@@ -86,6 +86,7 @@ Antes de entregar un preview: contact sheet de ≥20 fotogramas repartidos por *
 - **Estado real a 6-nov-2026 (verificado en disco):** en `_entregas` hay Lessn M1, M2, M3 y **M5**; **Lessn M4 no tiene composiciones ni render** (pendiente). **QuizWiz M1–M3** (curso nuevo, crudos en `QuizWiz-crudos\`) tienen crudo, transcripción y plantilla pero `compositions/` vacío: sin empezar el guion.
 
 ## Assets (regla de Cris, 6-nov-2026)
+**Primera fuente: `assets-marca/` en la raíz del repo** (la baja `python traer_assets.py` desde la carpeta de Drive de marca: logos de OneScreen y de cada software, vectores SVG, manual de marca). Cópialos de ahí a `video/assets/` del módulo.
 Al empezar un curso se hace el inventario de assets (logo oficial, ícono, wordmark, íconos de la interfaz, fuentes, capturas) y se extrae todo lo posible de la plataforma web. **Lo que no se pueda sacar se le pide a Cris de una vez, al inicio, con la lista exacta**; nunca se inventa ni se redibuja un logo. Inventario en `video/assets/INVENTARIO.md`.
 
 ## Cómo se usa (skill)

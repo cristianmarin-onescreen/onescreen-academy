@@ -24,7 +24,8 @@ Este repo es el proceso completo para hacer **videos de curso de OneScreen Acade
 - Claves solo en `.env` o variables de entorno. Jamás en código, briefs o commits.
 - No subas crudos, audio, renders ni datos de clientes: `cursos/` está ignorado a propósito.
 - La voz aprobada se congela y no se regenera sin permiso (cuesta caracteres de ElevenLabs).
-- No hay fuente **Nevis** ni los logos de terceros en el repo (licencias): los logos del software de cada curso se sacan de su sitio oficial; si falta la fuente Nevis, las composiciones caen a la fuente del sistema, o consigue el archivo `Nevis.ttf` y ponlo en `estudio-academy/plantilla/video/assets/fonts/`.
+- **Assets de marca:** `python traer_assets.py` (lo corre `setup.py`) baja de Drive a `assets-marca/` los logos de OneScreen (azul, blanco, negro, púrpura), los de los softwares (SuprNotes, Lessn, QuizWiz, Scrybe, Gurú, Orbit Blue), los vectores SVG (`Vectorizados/`) y el manual de marca PDF. Esa carpeta es la fuente de logos: úsala en P0b antes de pedir nada a nadie; `assets-marca/INDICE.md` lista lo disponible. Nunca inventes ni redibujes un logo. Git la ignora.
+- Falta la fuente **Nevis** (licencia): sin ella «OneScreen» en texto cae a otra fuente; si la persona tiene `Nevis.ttf`, va en `estudio-academy/plantilla/video/assets/fonts/`.
 
 ## Voz (resumen; detalle en `estudio-academy/CLAUDE.md`, sección «Voz»)
 Siempre ElevenLabs `eleven_v4` con la voz «Francisco - Estudio» (`ACADEMY_VOZ_ID` en `.env`), guion dirigido con etiquetas (`[warm]`, `[short pause]`…), marcas respeleadas en español y **términos en inglés escritos `{en:...}` para que se digan en inglés**, sin respelling ni énfasis.

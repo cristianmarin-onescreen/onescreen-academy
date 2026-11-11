@@ -9,7 +9,8 @@ Qué hace:
   1. Verifica Python, Node.js y ffmpeg (y te dice cómo instalar lo que falte).
   2. Instala HyperFrames 0.8.112 (el motor de video) y su Chrome de render.
   3. Instala los skills de HyperFrames para Claude Code (te pregunta antes).
-  4. Te pide la API key de ElevenLabs (se escribe oculta, no se ve) y la guarda SOLO en `.env`
+  4. Baja los logos, vectores y el manual de marca de Drive a `assets-marca/`.
+  5. Te pide la API key de ElevenLabs (se escribe oculta, no se ve) y la guarda SOLO en `.env`
      de esta carpeta (git la ignora). Prueba que funcione y te deja elegir la voz de tu cuenta.
 La clave nunca se imprime, no va en el código y no se sube a ningún lado salvo a api.elevenlabs.io."""
 import getpass, json, os, platform, shutil, subprocess, sys, urllib.error, urllib.request
@@ -172,6 +173,14 @@ if clave and not SOLO_VERIFICAR:
     guardar_env(env); ok("Guardado en .env (ignorado por git)")
 elif not clave and SOLO_VERIFICAR:
     mal("No hay API key de ElevenLabs (corre python setup.py)")
+
+# ---------------------------------------------------------------- assets de marca
+titulo("Assets de marca (logos, vectores, manual) desde Drive")
+if SOLO_VERIFICAR:
+    ok("assets-marca/ presente") if os.path.isdir(os.path.join(AQUI, "assets-marca")) else mal("Faltan los assets de marca (corre python setup.py)")
+else:
+    r = subprocess.run([sys.executable, os.path.join(AQUI, "traer_assets.py")])
+    ok("Assets de marca en assets-marca/") if r.returncode == 0 else mal("No se pudieron bajar los assets de marca", "Reintenta: python traer_assets.py")
 
 # ---------------------------------------------------------------- extras
 if not SOLO_VERIFICAR:

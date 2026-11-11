@@ -35,5 +35,5 @@ Claude sigue `CLAUDE.md` y el skill `academy-onescreen`.
 Tus cursos viven en `cursos/` (ignorado por git).
 
 ## Notas
-- Faltan a propósito la fuente **Nevis** y los logos de terceros (licencias). Ver `CLAUDE.md`.
+- Los logos y el manual de marca NO están en el repo: `setup.py` / `python traer_assets.py` los baja de la carpeta compartida de Drive a `assets-marca/`. La fuente **Nevis** falta (licencia). Ver `CLAUDE.md`.
 - Hecho para el flujo de Cristian Marín y el equipo de OneScreen LATAM; los textos están en español.
