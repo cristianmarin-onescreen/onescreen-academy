@@ -15,6 +15,7 @@ La clave nunca se imprime, no va en el código y no se sube a ningún lado salvo
 import getpass, json, os, platform, shutil, subprocess, sys, urllib.error, urllib.request
 
 HF = "hyperframes@0.8.112"
+VOZ_OFICIAL = "LIeln6cQyrBADSs7jUXR"   # «Francisco - Estudio» (voz clonada de la cuenta de OneScreen; el ID solo sirve con esa cuenta)
 AQUI = os.path.dirname(os.path.abspath(__file__))
 ENV = os.path.join(AQUI, ".env")
 SOLO_VERIFICAR = "--check" in sys.argv
@@ -108,7 +109,7 @@ else:
 titulo("3/4 Skills de HyperFrames para Claude Code")
 if SIN_SKILLS or SOLO_VERIFICAR:
     print("  (omitido)")
-elif pedir_si("  Instalar los skills de HyperFrames (hyperframes, animación, audio...)? Se agregan a tu configuración de IA"):
+elif pedir_si("  Instalar los skills de HyperFrames (hyperframes, animación, audio...)? Se agregan a tu configuración de IA (recomendado)"):
     r = subprocess.run([npx, "--yes", HF, "skills"])
     ok("Skills instalados") if r.returncode == 0 else mal("Los skills no se instalaron (puedes reintentar: npx %s skills)" % HF)
 else:
@@ -145,6 +146,12 @@ if clave and not SOLO_VERIFICAR:
         voces = api("/v1/voices", clave).get("voices", [])
     except Exception:
         voces = []
+    if not voz and any(v["voice_id"] == VOZ_OFICIAL for v in voces):
+        voz = VOZ_OFICIAL; print("  Encontré la voz oficial de Academy en tu cuenta: Francisco - Estudio.")
+    elif not voz and not voces:
+        voz = VOZ_OFICIAL; print("  No pude listar voces; uso la voz oficial de Academy (Francisco - Estudio).")
+    elif not voz:
+        print("  La voz oficial de Academy (Francisco - Estudio) NO está en esta cuenta: elige otra o pide la cuenta correcta.")
     if voces and not (voz and any(v["voice_id"] == voz for v in voces)) and sys.stdin.isatty():
         propias = [v for v in voces if v.get("category") in ("cloned", "professional", "generated")] or voces
         print("\n  Voces de tu cuenta (elige la del curso; las clonadas van primero):")
@@ -160,6 +167,19 @@ if clave and not SOLO_VERIFICAR:
     guardar_env(env); ok("Guardado en .env (ignorado por git)")
 elif not clave and SOLO_VERIFICAR:
     mal("No hay API key de ElevenLabs (corre python setup.py)")
+
+# ---------------------------------------------------------------- extras
+if not SOLO_VERIFICAR:
+    titulo("Extras")
+    if pedir_si("  Instalar respaldos locales (edge-tts y faster-whisper) por si se acaban los créditos de ElevenLabs? (pesado)", False):
+        r = subprocess.run([sys.executable, "-m", "pip", "install", "edge-tts", "faster-whisper"])
+        ok("Respaldos instalados") if r.returncode == 0 else mal("No se instalaron los respaldos (opcional)")
+    else:
+        print("  Omitido (opcional: pip install edge-tts faster-whisper).")
+    print("\n  Diagnóstico de HyperFrames (los avisos de Docker, whisper-cpp, Kokoro y MusicGen son opcionales):")
+    r = ejecutar([npx, "--yes", HF, "doctor"])
+    print("\n".join("   " + l for l in (r.stdout or "").splitlines()))
+    print("\n  Manual (una vez): instala la extensión «Claude in Chrome» y entra a tu sesión del software que vas a explicar.")
 
 # ---------------------------------------------------------------- fin
 print("\n" + "=" * 60)

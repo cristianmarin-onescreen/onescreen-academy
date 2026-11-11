@@ -1,5 +1,6 @@
 # Guion aprobado (v3 + registro v4). Marcas: [tag]=direccion (solo en la version dirigida),
-# *palabra*=enfasis (MAYUSCULA en la dirigida), {SuprNotes}=se pronuncia "Supr Nouts" en la dirigida.
+# *palabra*=enfasis (MAYUSCULA en la dirigida), {SuprNotes}=marca que se respelea segun PRON (abajo) en la dirigida,
+# {en:Home Room}=termino en INGLES: se dice tal cual, sin respelear ni enfatizar (se escribe igual en limpio y dirigido).
 import re
 
 BLOQUES = [
@@ -31,12 +32,36 @@ BLOQUES = [
 ]
 
 
+# Marcas y siglas respeleadas SOLO en la version dirigida (lo que oye ElevenLabs). El guion limpio y la pantalla llevan el nombre real.
+# Agrega aqui las marcas del software de cada curso. Terminos de interfaz en ingles NO van aqui: usa {en:...}.
+PRON = {
+    "SuprNotes": "Supr Nouts", "QuizWiz": "Cuis Wis", "Lessn": "leson", "Scrybe": "escraib",
+    "Sage": "seich", "Google": "Gúgol", "LearningHub": "Learning Hub",
+}
+# Siglas que se respelean solas en la dirigida (con "IA" la voz decia "AI" en ingles)
+SIGLAS = {"IA": "i-a", "QR": "cu erre", "PDF": "pe de efe", "Google": "Gúgol"}
+
+
 def limpio(t):
     t = re.sub(r"\[[^\]]*\]\s*", "", t)
-    t = t.replace("{SuprNotes}", "SuprNotes")
+    t = re.sub(r"\{en:([^}]+)\}", r"\1", t)
+    t = re.sub(r"\{([^}]+)\}", r"\1", t)
     return re.sub(r"\*([^*]+)\*", r"\1", t).strip()
 
 
 def dirigido(t):
-    t = t.replace("{SuprNotes}", "Supr Nouts")
-    return re.sub(r"\*([^*]+)\*", lambda m: m.group(1).upper(), t).strip()
+    # 1) ingles tal cual: se protege para que nada lo respelee ni lo pase a MAYUSCULAS (la voz deletrearia las siglas)
+    guardados = []
+
+    def guardar(m):
+        guardados.append(m.group(1))
+        return "@@%d@@" % (len(guardados) - 1)
+    t = re.sub(r"\{en:([^}]+)\}", guardar, t)
+    # 2) marcas del software
+    t = re.sub(r"\{([^}]+)\}", lambda m: PRON.get(m.group(1), m.group(1)), t)
+    # 3) siglas
+    for sigla, voz in SIGLAS.items():
+        t = re.sub(r"\b%s\b" % sigla, voz, t)
+    # 4) enfasis -> MAYUSCULA (salvo si envuelve un termino en ingles protegido)
+    t = re.sub(r"\*([^*]+)\*", lambda m: m.group(1) if "@@" in m.group(1) else m.group(1).upper(), t)
+    return re.sub(r"@@(\d+)@@", lambda m: guardados[int(m.group(1))], t).strip()
